@@ -98,7 +98,7 @@ CREATE TABLE REGISTO_EVENTOS(
 	[Id] INTEGER PRIMARY KEY,
 	[Timestamp] TIMESTAMP NOT NULL,
 	[TipoEvento_Descricao] VARCHAR(64) NOT NULL REFERENCES TIPO_EVENTO(Descricao),
-	[DispositivoSeguranca_Mac] VARCHAR(64) NOT NULL REFERENCES DISPOSITIVO_SEGURANCA(Dispositivo_Mac)/* Analisar pq se calhar era melhor estar ligado ao dispositivo*/
+	[DispositivoSeguranca_Mac] VARCHAR(6) NOT NULL REFERENCES DISPOSITIVO_SEGURANCA(Dispositivo_Mac)/* Analisar pq se calhar era melhor estar ligado ao dispositivo*/
 );
 
 CREATE TABLE UTILIZADOR_REGISTO_EVENTOS(
