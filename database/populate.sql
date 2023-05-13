@@ -1,3 +1,4 @@
+USE WasteNot_Warning;
 -- SAMPLE WASTE NOT WARNING DATA
 
 INSERT INTO NIVEL_PERMISSAO(Nivel) VALUES ('utilizador comum');
@@ -26,7 +27,7 @@ VALUES
 INSERT INTO AREA_RESTRITA_HORARIO_MONITORIZACAO (AreaRestrita_Id, HorarioMonitorizacao_Id)
 VALUES
 (1, 1),
-(1, 2)
+(1, 2),
 (2, 2);
 
 INSERT INTO AREA_RESTRITA_CONTACTA_UTILIZADOR (AreaRestrita_Id, Utilizador_Id, HoraInicio, HoraFim)
