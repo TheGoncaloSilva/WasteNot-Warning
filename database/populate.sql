@@ -5,24 +5,24 @@ INSERT INTO NIVEL_PERMISSAO(Nivel) VALUES ('utilizador comum');
 INSERT INTO NIVEL_PERMISSAO(Nivel) VALUES ('administrador');
 INSERT INTO NIVEL_PERMISSAO(Nivel) VALUES ('utilizador externo');
 
-INSERT INTO UTILIZADOR (Id, Nome, Password, Telefone, DataNascimento, NivelPermissao_Nivel)
+INSERT INTO UTILIZADOR (Nome, Password, Telefone, DataNascimento, NivelPermissao_Nivel)
 VALUES
-(1, 'João Silva', 'pass123', 123456789, '1990-01-01', 'utilizador comum'),
-(2, 'Maria Santos', 'pass456', 987654321, '1995-05-05', 'administrador'),
-(3, 'Pedro Oliveira', 'pass789', 111111111, '2000-10-10', 'utilizador externo'),
-(4, 'Ana Silva', 'pass321', 333333333, '1992-02-02', 1),
-(5, 'Luís Ferreira', 'pass654', 444444444, '1998-08-08', 2);
+('João Silva', 'pass123', 123456789, '1990-01-01', 'utilizador comum'),
+('Maria Santos', 'pass456', 987654321, '1995-05-05', 'administrador'),
+('Pedro Oliveira', 'pass789', 111111111, '2000-10-10', 'utilizador externo'),
+('Ana Silva', 'pass321', 333333333, '1992-02-02', 'utilizador comum'),
+('Luís Ferreira', 'pass654', 444444444, '1998-08-08', 'utilizador externo');
 
-INSERT INTO HORARIO_MONITORIZACAO (Id, HoraInicio, HoraFim, Estado)
+INSERT INTO HORARIO_MONITORIZACAO (HoraInicio, HoraFim, Estado)
 VALUES
-(1, '00:00:00', '07:00:00', 1),
-(2, '19:00:00', '23:00:00', 0);
+('00:00:00', '07:00:00', 1),
+('19:00:00', '23:00:00', 0);
 
-INSERT INTO AREA_RESTRITA (Id, DESCRICAO, LOCALIZACAO)
+INSERT INTO AREA_RESTRITA (DESCRICAO, LOCALIZACAO)
 VALUES
-(1, 'Sala de Reuniões', 'Edifício A, 3º Andar'),
-(2, 'Laboratório de Informática', 'Edifício B, 2º Andar'),
-(3, 'Sala de Convívio', 'Edifício C, 1º Andar');
+('Sala de Reuniões', 'Edifício A, 3º Andar'),
+('Laboratório de Informática', 'Edifício B, 2º Andar'),
+('Sala de Convívio', 'Edifício C, 1º Andar');
 
 INSERT INTO AREA_RESTRITA_HORARIO_MONITORIZACAO (AreaRestrita_Id, HorarioMonitorizacao_Id)
 VALUES
@@ -44,11 +44,11 @@ VALUES
 (3, 4),
 (3, 5);
 
-INSERT INTO HORARIO_EXCLUSAO (Id, DataInicio, DataFim)
+INSERT INTO HORARIO_EXCLUSAO (DataInicio, DataFim)
 VALUES
-(1, '2023-05-20 08:00:00', '2023-05-20 12:00:00'),
-(2, '2023-05-21 14:00:00', '2023-05-21 18:00:00'),
-(3, '2023-05-22 09:00:00', '2023-05-22 13:00:00');
+('2023-05-20 08:00:00', '2023-05-20 12:00:00'),
+('2023-05-21 14:00:00', '2023-05-21 18:00:00'),
+('2023-05-22 09:00:00', '2023-05-22 13:00:00');
 
 INSERT INTO AREA_RESTRITA_HORARIO_EXCLUSAO (AreaRestrita_Id, HorarioExclusao_Id)
 VALUES
@@ -62,13 +62,13 @@ VALUES
 ('Em Progresso'),
 ('Concluída');
 
-INSERT INTO MANUTENCOES(Id, DataInicio, DataFim, Comentatio, EstadoManutencao_Descricao, AreaRestrita_Id) 
+INSERT INTO MANUTENCOES(DataInicio, DataFim, Comentatio, EstadoManutencao_Descricao, AreaRestrita_Id) 
 VALUES 
-    (1, '2023-05-01', '2023-05-03', 'Manutenção preventiva', 'Concluída', 1),
-    (2, '2023-05-10', '2023-05-10', 'Troca de peças', 'Pendente', 2),
-    (3, '2023-05-12', '2023-05-13', 'Limpeza geral', 'Em andamento', 3),
-    (4, '2023-05-08', '2023-05-09', 'Substituição do sensor', 'Concluída', 3),
-    (5, '2023-05-04', '2023-05-05', 'Atualização de software', 'Concluída', 2);
+    ('2023-05-01', '2023-05-03', 'Manutenção preventiva', 'Concluída', 1),
+    ('2023-05-10', '2023-05-10', 'Troca de peças', 'Pendente', 2),
+    ('2023-05-12', '2023-05-13', 'Limpeza geral', 'Em Progresso', 3),
+    ('2023-05-08', '2023-05-09', 'Substituição do sensor', 'Concluída', 3),
+    ('2023-05-04', '2023-05-05', 'Atualização de software', 'Concluída', 2);
 
 INSERT INTO DISPOSITIVO(Mac, IP, Modelo, Fabricante) 
 VALUES 
@@ -108,17 +108,23 @@ VALUES
     ('Intrusão detectada'),
     ('Temperatura elevada'),
     ('Leitura biométrica válida'),
-    ('Alarme disparado'),
     ('Sensor de presença acionado');
 
 INSERT INTO TIPO_EVENTO (Descricao)
-VALUES ('Acesso permitido'),('Acesso negado'), ('Alarme disparado'), ('Sensor de movimento ativado'), ('Sensor de porta aberta');
+VALUES	('Acesso permitido'), 
+		('Acesso negado'), 
+		('Alarme disparado'), 
+		('Sensor de movimento ativado'), 
+		('Sensor de porta aberta');
 
-INSERT INTO REGISTO_EVENTOS (Id, [Timestamp], TipoEvento_Descricao, DispositivoSeguranca_Mac)
-VALUES (1, '2023-05-13 10:00:07', 'Acesso permitido', 'IJKL56'), 
-       (2, '2023-05-13 10:05:13', 'Acesso negado', 'IJKL56'), 
-       (3, '2023-05-13 11:00:6', 'Sensor de movimento ativado', 'MNOP78'), 
-       (4, '2023-05-13 21:09:51', 'Alarme disparado', 'MNOP78');
+INSERT INTO REGISTO_EVENTOS ([Timestamp], TipoEvento_Descricao, DispositivoSeguranca_Mac)
+VALUES ('2023-05-13 10:00:07', 'Acesso permitido', 'IJKL56'), 
+       ('2023-05-13 10:05:13', 'Acesso negado', 'IJKL56'), 
+       ('2023-05-13 11:00:6', 'Sensor de movimento ativado', 'MNOP78'), 
+       ('2023-05-13 21:09:51', 'Alarme disparado', 'MNOP78');
 
 INSERT INTO UTILIZADOR_REGISTO_EVENTOS (Utilizador_Id, RegistoEventos_Id)
-VALUES (1, 1), (2, 2), (3, 3), (4, 4), (5, 5);
+VALUES	(1, 1), 
+		(2, 2), 
+		(3, 3), 
+		(4, 4);
