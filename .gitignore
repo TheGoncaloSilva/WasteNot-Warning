@@ -380,3 +380,7 @@ InteropTests/NativeTests/out
 # 'git update-index --assume-unchanged <filename>' will allow ignoring changes for tracked files.
 **/ScratchProject/
 
+# Added by us
+.vs
+obj
+bin
