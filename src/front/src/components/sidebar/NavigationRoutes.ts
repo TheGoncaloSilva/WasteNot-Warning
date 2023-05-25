@@ -19,6 +19,13 @@ export default {
       },
     },
     {
+      name: 'users',
+      displayName: 'Users',
+      meta: {
+        icon: 'vuestic-iconset-user',
+      },
+    },
+    {
       name: 'statistics',
       displayName: 'menu.statistics',
       meta: {
