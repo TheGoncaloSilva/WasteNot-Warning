@@ -1,6 +1,8 @@
 from flask import Flask
+from flask_cors import CORS
 import queries
 app = Flask(__name__)
+CORS(app)
 
 databaseInteraction = queries.DatabaseInteraction()
 
