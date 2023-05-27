@@ -3,7 +3,7 @@
     <div class="flex xs12 lg6 xl6">
       <va-card v-if="lineChartDataGenerated">
         <va-card-title>
-          <h1>Event History</h1>
+          <h1>{{ t('dashboard.charts.trendyTrends') }}</h1>
           <div>
             <va-button
               class="ma-1"
@@ -34,21 +34,11 @@
     <div class="flex xs12 sm6 md6 lg3 xl3">
       <va-card class="d-flex">
         <va-card-title>
-          <h1>System Status</h1>
+          <h1>{{ t('dashboard.charts.loadingSpeed') }}</h1>
+          <va-button icon="print" plain @click="printChart" />
         </va-card-title>
-        <va-card-content v-if="reloadArming">
-          
-            <div class="system-arm-section">
-              <button class="outer-button" :class="{ 'armed': isArmed, 'disarmed': !isArmed }" v-if="reloadArming">
-                <button class="inner-button" :class="{ 'armed': isArmed, 'disarmed': !isArmed }" @click="toggleArmedStatus" v-if="reloadArming">
-                  {{ isArmed ? 'Disarm' : 'Arm' }}
-                </button>
-                <span :class="{ 'armed': isArmed, 'disarmed': !isArmed }">
-                  {{ isArmed ? 'Armed' : 'Disarmed' }}
-                </span>
-              </button>
-            </div>
-          
+        <va-card-content v-if="doughnutChartDataGenerated">
+          <va-chart ref="doughnutChart" class="chart chart--donut" :data="doughnutChartDataGenerated" type="doughnut" />
         </va-card-content>
       </va-card>
     </div>
@@ -60,8 +50,9 @@
 </template>
 
 <script setup lang="ts">
+  import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { lineChartData } from '../../../data/charts'
+  import { doughnutChartData, lineChartData } from '../../../data/charts'
   import { useChartData } from '../../../data/charts/composables/useChartData'
   import { usePartOfChartData } from './composables/usePartOfChartData'
   import VaChart from '../../../components/va-charts/VaChart.vue'
@@ -69,11 +60,11 @@
 
   const { t } = useI18n()
 
-  const dataGenerated = useChartData(lineChartData, 0.7)
+  const doughnutChart = ref()
 
-  let isArmed = true
-  let reloadArming = true
-  
+  const dataGenerated = useChartData(lineChartData, 0.7)
+  const doughnutChartDataGenerated = useChartData(doughnutChartData)
+
   const {
     dataComputed: lineChartDataGenerated,
     minIndex,
@@ -101,79 +92,10 @@
       windowObjectReference?.close()
     }
   }
-
-  function toggleArmedStatus(): any {
-    console.log(isArmed)
-    isArmed = !isArmed;
-    reloadArming = false;
-    reloadArming = true;
-  }
-  
 </script>
 
 <style scoped>
   .chart {
     height: 400px;
-  }
-  .system-arm-section{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .outer-button {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 270px;
-    height: 270px;
-    border-radius: 50%;
-    font-size: 18px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-
-  .inner-button {
-    position: absolute;
-    top: 25%;
-    left: 25%;
-    width: 50%;
-    height: 50%;
-    border-radius: 50%;
-    background-color: red;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-
-  .armed .inner-button {
-    background-color: green;
-  }
-
-  .disarmed .inner-button {
-    background-color: grey;
-  }
-
-  .armed span {
-    color: green;
-  }
-
-  .disarmed span {
-    color: grey;
-  }
-
-  .outer-button:hover {
-    opacity: 0.8;
-  }
-
-  .outer-button:focus {
-    outline: none;
   }
 </style>
