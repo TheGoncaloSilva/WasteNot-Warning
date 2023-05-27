@@ -121,7 +121,10 @@ INSERT INTO REGISTO_EVENTOS ([Timestamp], TipoEvento_Descricao, DispositivoSegur
 VALUES ('2023-05-13 10:00:07', 'Acesso permitido', 'IJKL56'), 
        ('2023-05-13 10:05:13', 'Acesso negado', 'IJKL56'), 
        ('2023-05-13 11:00:6', 'Sensor de movimento ativado', 'MNOP78'), 
-       ('2023-05-13 21:09:51', 'Alarme disparado', 'MNOP78');
+       ('2023-05-13 21:09:51', 'Alarme disparado', 'MNOP78'),
+       ('2023-05-22 10:00:00', 'Sensor de movimento ativado', 'MNOP78'),
+       ('2023-05-04 12:00:00', 'Intrusão detectada', 'EFGH34')
+       ;
 
 INSERT INTO UTILIZADOR_REGISTO_EVENTOS (Utilizador_Id, RegistoEventos_Id)
 VALUES	(1, 1), 

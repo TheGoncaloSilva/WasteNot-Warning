@@ -23,7 +23,8 @@ class DatabaseInteraction:
                     """, "returns_table" : False
                     },
         
-        "remove_user": {"query": "DELETE FROM UTILIZADOR WHERE Id = ?", "returns_table": False}
+        "remove_user": {"query": "DELETE FROM UTILIZADOR WHERE Id = ?", "returns_table": False},
+        "get_events": {"query": "SELECT * FROM REGISTO_EVENTOS", "returns_table" : True},
     }
     
     
@@ -77,6 +78,9 @@ class DatabaseInteraction:
         
     def remove_user(self, user_id):
         self.__execute_query("remove_user",user_id)
+
+    def get_events(self):
+        return self.__execute_query("get_users")
     
     
     

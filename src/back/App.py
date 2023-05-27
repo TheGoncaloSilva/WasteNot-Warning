@@ -29,5 +29,9 @@ def delete_user(user_id):
     response.status_code = 200
     return response
 
+@app.route('/events')
+def get_events():
+    return databaseInteraction.get_events()
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
