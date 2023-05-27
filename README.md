@@ -77,6 +77,7 @@ Grupo p1g6:
 * Quando inserido um registo de eventos, tem de ser verificado o tipo e é de um dispositivo que pertence a uma área restrita, se for. O sistema tem de verificar se está dentro das regras para ser acionado (dentro do horário da área e fora de exclusão ou manutenção), se estiver, aciona (trigger)
 * Temos que ter uma aplicação (CLI) externa para falsificar a ocorrência de um evento por um dispositivo
 * **Trigger** para quando se adiciona um evento, se o timestamp não for fornecido, ele preencher sozinho
+* Script para carregar a base de dados inteira para o docker
 
 ## Ferramentas a incorporar
 
