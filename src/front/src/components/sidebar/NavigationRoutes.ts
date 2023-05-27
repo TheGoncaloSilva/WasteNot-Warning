@@ -26,6 +26,13 @@ export default {
       },
     },
     {
+      name: 'dashboard_stock',
+      displayName: 'dashboard_stock',
+      meta: {
+        icon: 'vuestic-iconset-dashboard',
+      },
+    },
+    {
       name: 'statistics',
       displayName: 'menu.statistics',
       meta: {
