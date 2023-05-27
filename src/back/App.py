@@ -29,5 +29,18 @@ def delete_user(user_id):
     response.status_code = 200
     return response
 
+@app.route('/user/last_events', methods=['GET'])
+def get_last_user_events():
+    user_id = request.args.get('user_id', type=int)
+    nevents = request.args.get('nevents', type=int)
+    
+    return databaseInteraction.get_user_last_events(user_id,nevents)
+
+@app.route('/user/restricted_areas_by_user', methods=['GET'])
+def get_areas_restritas_by_user():
+    user_id = request.args.get('user_id', type=int)
+    
+    return databaseInteraction.get_user_restricted_areas(user_id)
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

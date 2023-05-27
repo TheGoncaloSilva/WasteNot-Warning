@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { UTILIZADOR } from './interfaces';
+import { LAST_USER_EVENTS, UTILIZADOR } from './interfaces';
 
 class BaseCommunication {
     private baseURL: string;
@@ -95,6 +95,16 @@ class BEAPI extends BaseCommunication
     async removeUser(Id: number)
     {
       return await super.delete('users/' + Id, null, null);
+    }
+
+    async getUserLastEvents(usr_id: number , nevents: number): Promise<LAST_USER_EVENTS[]>
+    {
+      return await super.get('user/last_events','user_id='+usr_id,'nevents='+nevents);
+    }
+
+    async getUserRestrictedAreas(usr_id: number)
+    {
+      return await super.get('user/restricted_areas_by_user', 'user_id='+usr_id);
     }
 }
 
