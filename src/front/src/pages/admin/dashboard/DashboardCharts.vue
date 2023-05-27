@@ -35,7 +35,7 @@
     <div class="flex xs12 sm6 md6 lg3 xl3">
       <va-card class="d-flex">
         <va-card-title>
-          <h1>{{ t('dashboard.charts.loadingSpeed') }}</h1>
+          <h1>Estatísticas das ocorrências</h1>
         </va-card-title>
         <va-card-content v-if="doughnutChartDataGenerated">
           <va-chart ref="doughnutChart" class="chart chart--donut" :data="doughnutChartDataGenerated" type="doughnut" />
@@ -63,7 +63,7 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { doughnutChartData, lineChartData, getPieChartData } from '../../../data/charts'
+  import { getDoughnutChartData, lineChartData, getPieChartData } from '../../../data/charts'
   import { useChartData } from '../../../data/charts/composables/useChartData'
   import { usePartOfChartData } from './composables/usePartOfChartData'
   import VaChart from '../../../components/va-charts/VaChart.vue'
@@ -72,7 +72,7 @@
   const { t } = useI18n()
 
   const dataGenerated = useChartData(lineChartData, 0.7)
-  const doughnutChartDataGenerated = useChartData(doughnutChartData)
+  const doughnutChartDataGenerated = useChartData(await getDoughnutChartData())
   const pieChartDataGenerated = useChartData(await getPieChartData())
   
   const {

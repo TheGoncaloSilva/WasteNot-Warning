@@ -12,3 +12,25 @@ export const doughnutChartData: TDoughnutChartData = {
     },
   ],
 }
+
+export const getDoughnutChartData = async () => {
+
+  return await (async() => {
+    const nExcluded = await BE_API.getNumberOfEventsInExcludedTime();
+    const nMaintenance = await BE_API.getNumberOfEventsInMaintenance();
+    const nActive = await BE_API.getNumberOfEventsInActiveSchedule();
+    console.log("hello", nActive[0])
+    let doughnutChartData: TDoughnutChartData = {
+      labels: ['Sistema ativado', 'Sistema em manutenção', 'Sistema Desarmado'],
+      datasets: [
+        {
+          label: "Número de Ocorrências",
+          backgroundColor: ['danger', 'info', 'primary'],
+          data: [nActive[0]['row_count'], nMaintenance[0]['row_count'], nExcluded[0]['row_count']],
+        }
+      ]
+    };
+  
+    return doughnutChartData;
+  })();
+};
