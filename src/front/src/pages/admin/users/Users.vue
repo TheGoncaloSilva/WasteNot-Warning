@@ -1,23 +1,22 @@
-<script setup lang="ts">
-  import { ref } from 'vue'
-  import { useI18n } from 'vue-i18n'
-  import data from '../../../data/tables/markup-table/data.json'
+<script lang="ts">
+import { ref, onMounted } from 'vue'
+import { BE_API } from '../../../services/backend-api/backend-api'
+import { UTILIZADOR } from '../../../services/backend-api/interfaces';
 
-  const { t } = useI18n()
-
-  const users = ref(data.slice(0, 8))
-
-  function getStatusColor(status: string) {
-    if (status === 'paid') {
-      return 'success'
+export default {
+  
+  data() {
+    return {
+      users: [] as UTILIZADOR[]
     }
-
-    if (status === 'processing') {
-      return 'info'
-    }
-
-    return 'danger'
   }
+  ,
+  mounted() {
+    (async() => {
+      this.users = await BE_API.getUsers();
+    })();
+  }
+}
 </script>
 
 <template>
@@ -39,13 +38,11 @@
             </thead>
 
             <tbody>
-              <tr v-for="user in users" :key="user.id">
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.country }}</td>
-                <td>
-                  <va-badge :text="user.status" :color="getStatusColor(user.status)" />
-                </td>
+              <tr v-for="user in users">
+                <td>{{ user.Nome }}</td>
+                <td>{{ user.Telefone }}</td>
+                <td>{{ user.DataNascimento }}</td>
+                <td>{{ user.NivelPermissao_Nivel }}</td>
               </tr>
             </tbody>
           </table>
