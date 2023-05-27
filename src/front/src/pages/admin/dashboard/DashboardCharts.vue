@@ -35,15 +35,16 @@
       <va-card class="d-flex">
         <va-card-title>
           <h1>System Status</h1>
+          <va-button icon="warning" plain @click="triggerAlarm" />
         </va-card-title>
-        <va-card-content v-if="reloadArming">
-          
+        <va-card-content>
+
             <div class="system-arm-section">
-              <button class="outer-button" :class="{ 'armed': isArmed, 'disarmed': !isArmed }" v-if="reloadArming">
-                <button class="inner-button" :class="{ 'armed': isArmed, 'disarmed': !isArmed }" @click="toggleArmedStatus" v-if="reloadArming">
+              <button :class="['outer-button', {'armed': isArmed && !alarmTriggered, 'disarmed': !isArmed && !alarmTriggered , 'triggered': alarmTriggered}]">
+                <button :class="['inner-button', {'armed': isArmed && !alarmTriggered, 'disarmed': !isArmed && !alarmTriggered , 'triggered': alarmTriggered}]" @click="toggleArmedStatus">
                   {{ isArmed ? 'Disarm' : 'Arm' }}
                 </button>
-                <span :class="{ 'armed': isArmed, 'disarmed': !isArmed }">
+                <span :class="{'armed': isArmed && !alarmTriggered, 'disarmed': !isArmed && !alarmTriggered , 'triggered': alarmTriggered}">
                   {{ isArmed ? 'Armed' : 'Disarmed' }}
                 </span>
               </button>
@@ -60,6 +61,7 @@
 </template>
 
 <script setup lang="ts">
+  import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { lineChartData } from '../../../data/charts'
   import { useChartData } from '../../../data/charts/composables/useChartData'
@@ -71,8 +73,8 @@
 
   const dataGenerated = useChartData(lineChartData, 0.7)
 
-  let isArmed = true
-  let reloadArming = true
+  let alarmTriggered = ref(false)
+  let isArmed = ref(true)
   
   const {
     dataComputed: lineChartDataGenerated,
@@ -102,11 +104,14 @@
     }
   }
 
-  function toggleArmedStatus(): any {
-    console.log(isArmed)
-    isArmed = !isArmed;
-    reloadArming = false;
-    reloadArming = true;
+  function toggleArmedStatus() {
+    isArmed.value = !isArmed.value;
+    alarmTriggered.value = false
+  }
+
+  function triggerAlarm(){
+    if(!isArmed.value)
+      alarmTriggered.value = true
   }
   
 </script>
@@ -115,7 +120,7 @@
   .chart {
     height: 400px;
   }
-  .system-arm-section{
+  .system-arm-section {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -137,6 +142,19 @@
     transition: background-color 0.3s;
   }
 
+  /* Updated CSS for the outer button */
+  .outer-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: transparent;
+    z-index: -1;
+  }
+
   .inner-button {
     position: absolute;
     top: 25%;
@@ -144,7 +162,6 @@
     width: 50%;
     height: 50%;
     border-radius: 50%;
-    background-color: red;
     color: white;
     font-size: 18px;
     font-weight: bold;
@@ -157,8 +174,23 @@
     background-color: green;
   }
 
+  .armed .outer-button {
+    background-color: green;
+  }
+  .triggered .outer-button {
+    background-color: red;
+  }
+
   .disarmed .inner-button {
     background-color: grey;
+  }
+
+  .disarmed .outer-button {
+    background-color: grey;
+  }
+
+  .triggered .inner-button {
+    background-color: red;
   }
 
   .armed span {
@@ -167,6 +199,10 @@
 
   .disarmed span {
     color: grey;
+  }
+
+  .triggered span {
+    color: red;
   }
 
   .outer-button:hover {
