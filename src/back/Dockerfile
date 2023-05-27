@@ -25,5 +25,3 @@ RUN pip install -r requirements.txt
 RUN apt-get -y clean
 
 COPY . .
-
-ENTRYPOINT ["python3",  "App.py"]
