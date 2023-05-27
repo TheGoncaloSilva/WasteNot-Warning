@@ -48,16 +48,12 @@ class DatabaseInteraction:
         raise Exception("Unable to establish a connection with the SQL Server.")
 
     def __execute_query(self, query_name, *args):
-        query_mapping = {
-            "get_users": "SELECT * FROM UTILIZADOR",
-            # Add more queries here
-        }
 
-        if query_name not in query_mapping:
+        if query_name not in DatabaseInteraction.query_mapping:
             raise ValueError(f"Unknown query: {query_name}")
 
         if self.cursor:
-            query = query_mapping[query_name]
+            query = DatabaseInteraction.query_mapping[query_name]
             cursor = self.cursor.execute(query, args)
             columns = [column[0] for column in cursor.description]
             results = []
