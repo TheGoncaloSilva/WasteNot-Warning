@@ -3,20 +3,22 @@ import time
 
 config = {
     'Driver': '{ODBC Driver 17 for SQL Server}',
-    'Server': 'localhost',
+    'Server': '172.16.0.4,1433',  # Specify the SQL Server instance and port
     'Database': 'WasteNot_Warning',
     'UID': 'sa',
     'PWD': 'StrongP@ssw0rd123'
 }
 
+
 class DatabaseInteraction:
     def __init__(self):
+        print(pyodbc.drivers())
         self.cursor = None
-        #try:
-        #    conn = self.establish_connection_with_retry()
-        #    self.cursor = conn.cursor()
-        #except Exception as e:
-        #    print(f"An error occurred: {str(e)}")
+        try:
+            conn = self.establish_connection_with_retry()
+            self.cursor = conn.cursor()
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
 
     def establish_connection_with_retry(self):
         max_retries = 2  # Maximum number of retries
