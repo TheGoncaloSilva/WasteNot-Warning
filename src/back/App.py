@@ -42,5 +42,11 @@ def get_areas_restritas_by_user():
     
     return databaseInteraction.get_user_restricted_areas(user_id)
 
+
+@app.route('/events/get_events_count_by_category', methods=['GET'])
+def get_events_count_by_category():
+    
+    return databaseInteraction.get_events_count_by_category()
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

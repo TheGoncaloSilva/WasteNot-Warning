@@ -1,4 +1,5 @@
 <template>
+
   <div class="row row-equal">
     <div class="flex xs12 lg6 xl6">
       <va-card v-if="lineChartDataGenerated">
@@ -46,31 +47,34 @@
     <div class="flex xs12 sm6 md6 lg3 xl3">
       <va-card class="d-flex">
         <va-card-title>
-          <h1>{{ t('dashboard.charts.loadingSpeed') }}</h1>
-          <va-button icon="print" plain @click="printChart" />
+          <h1>Distribuição de eventos</h1>
         </va-card-title>
-        <va-card-content v-if="pieChartDataGenerated">
-          <va-chart ref="pieChart" class="chart chart--pie" :data="pieChartDataGenerated" type="pie" />
-        </va-card-content>
+
+          <va-card-content v-if="pieChartDataGenerated">
+              <va-chart ref="pieChart" class="chart chart--pie" :data="pieChartDataGenerated" type="pie" />
+          </va-card-content>
+
       </va-card>
     </div>
 
   </div>
+
 </template>
 
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { doughnutChartData, lineChartData, pieChartData } from '../../../data/charts'
+  import { doughnutChartData, lineChartData, getPieChartData } from '../../../data/charts'
   import { useChartData } from '../../../data/charts/composables/useChartData'
   import { usePartOfChartData } from './composables/usePartOfChartData'
   import VaChart from '../../../components/va-charts/VaChart.vue'
+
 
   const { t } = useI18n()
 
   const dataGenerated = useChartData(lineChartData, 0.7)
   const doughnutChartDataGenerated = useChartData(doughnutChartData)
-  const pieChartDataGenerated = useChartData(pieChartData)
+  const pieChartDataGenerated = useChartData(await getPieChartData())
   
   const {
     dataComputed: lineChartDataGenerated,
@@ -80,25 +84,6 @@
     setDatasetIndex,
   } = usePartOfChartData(dataGenerated)
 
-  function printChart() {
-    const windowObjectReference = window.open('', 'Print', 'height=600,width=800') as Window
-
-    const img = windowObjectReference.document.createElement('img')
-
-    img.src = `${(document.querySelector('.chart--donut canvas') as HTMLCanvasElement | undefined)?.toDataURL(
-      'image/png',
-    )}`
-
-    img.onload = () => {
-      windowObjectReference?.document.body.appendChild(img)
-    }
-
-    windowObjectReference.print()
-
-    windowObjectReference.onafterprint = () => {
-      windowObjectReference?.close()
-    }
-  }
   
 </script>
 

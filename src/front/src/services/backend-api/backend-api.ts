@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { LAST_USER_EVENTS, UTILIZADOR } from './interfaces';
+import { EVENTS_COUNT_BY_CATEGORY, LAST_USER_EVENTS, UTILIZADOR } from './interfaces';
 
 class BaseCommunication {
     private baseURL: string;
@@ -105,6 +105,11 @@ class BEAPI extends BaseCommunication
     async getUserRestrictedAreas(usr_id: number)
     {
       return await super.get('user/restricted_areas_by_user', 'user_id='+usr_id);
+    }
+
+    async getEventsCountByCategory(): Promise<EVENTS_COUNT_BY_CATEGORY[]>
+    {
+      return await super.get('events/get_events_count_by_category');
     }
 }
 

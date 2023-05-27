@@ -1,6 +1,8 @@
 <template>
   <div class="dashboard">
-    <dashboard-charts />
+    <Suspense>
+      <dashboard-charts />
+    </Suspense>
 
     <dashboard-info-block />
 

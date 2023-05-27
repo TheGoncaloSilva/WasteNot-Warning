@@ -22,3 +22,8 @@ export interface LAST_USER_EVENTS {
     Modelo: string;
     Fabricante: string;
 };
+
+export interface EVENTS_COUNT_BY_CATEGORY {
+    TipoEvento_Descricao: string;
+    neventos: number;
+}
