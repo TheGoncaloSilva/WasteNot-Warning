@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { EVENTS_COUNT_BY_CATEGORY, LAST_USER_EVENTS, UTILIZADOR } from './interfaces';
+import { EVENTS_COUNT_BY_CATEGORY, LAST_USER_EVENTS, NUMBER_STATS, UTILIZADOR } from './interfaces';
 
 class BaseCommunication {
     private baseURL: string;
@@ -110,6 +110,21 @@ class BEAPI extends BaseCommunication
     async getEventsCountByCategory(): Promise<EVENTS_COUNT_BY_CATEGORY[]>
     {
       return await super.get('events/get_events_count_by_category');
+    }
+
+    async getNumberOfEventsInExcludedTime(): Promise<NUMBER_STATS[]>
+    {
+      return await super.get('events/get_number_of_events_in_excluded_time');
+    }
+
+    async getNumberOfEventsInMaintenance(): Promise<NUMBER_STATS[]>
+    {
+      return await super.get('events/get_number_of_events_in_maintenance');
+    }
+
+    async getNumberOfEventsInActiveSchedule(): Promise<NUMBER_STATS[]>
+    {
+      return await super.get('events/get_number_of_events_in_active_schedule');
     }
 }
 

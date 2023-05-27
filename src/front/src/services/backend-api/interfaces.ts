@@ -27,3 +27,7 @@ export interface EVENTS_COUNT_BY_CATEGORY {
     TipoEvento_Descricao: string;
     neventos: number;
 }
+
+export interface NUMBER_STATS {
+    row_count: number;
+}

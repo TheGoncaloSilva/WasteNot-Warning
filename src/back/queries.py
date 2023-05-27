@@ -29,7 +29,10 @@ class DatabaseInteraction:
         "get_user_restricted_areas" : {"query" : "SELECT * FROM GetAreasRestritasByUserId(?)" , "returns_table" : True},
         "get_events_count_by_category" : {
             "query" : "SELECT * FROM events_count_by_category" , "returns_table" : True
-        }
+        },
+        "get_number_of_events_in_excluded_time": {"query": "EXEC GetRowCountOfEventsInExclusionTime", "returns_table" : True},
+        "get_number_of_events_in_maintenance": {"query": "EXEC GetRowCountOfEventsInRepairingSchedule", "returns_table" : True},
+        "get_number_of_events_in_active_schedule": {"query": "EXEC GetRowCountOfEventsInActiveSchedule", "returns_table" : True},
         
     }
     
@@ -97,5 +100,13 @@ class DatabaseInteraction:
     def get_events_count_by_category(self):
         return self.__execute_query("get_events_count_by_category")
     
+    def get_number_of_events_in_excluded_time(self):
+        return self.__execute_query("get_number_of_events_in_excluded_time")
+    
+    def get_number_of_events_in_maintenance(self):
+        return self.__execute_query("get_number_of_events_in_maintenance")
+    
+    def get_number_of_events_in_active_schedule(self):
+        return self.__execute_query("get_number_of_events_in_active_schedule")
     
     

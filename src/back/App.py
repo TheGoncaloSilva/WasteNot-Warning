@@ -11,6 +11,9 @@ databaseInteraction = queries.DatabaseInteraction()
 def hello_geek():
     return '<h1>Hello from Flask & Docker</h2>'
 
+"""
+Users
+"""
 @app.route('/users')
 def get_users():
     return databaseInteraction.get_users()
@@ -29,10 +32,6 @@ def delete_user(user_id):
     response.status_code = 200
     return response
 
-@app.route('/events')
-def get_events():
-    return databaseInteraction.get_events()
-
 @app.route('/user/last_events', methods=['GET'])
 def get_last_user_events():
     user_id = request.args.get('user_id', type=int)
@@ -46,11 +45,29 @@ def get_areas_restritas_by_user():
     
     return databaseInteraction.get_user_restricted_areas(user_id)
 
+"""
+Events
+"""
+@app.route('/events')
+def get_events():
+    return databaseInteraction.get_events()
 
 @app.route('/events/get_events_count_by_category', methods=['GET'])
 def get_events_count_by_category():
     
     return databaseInteraction.get_events_count_by_category()
+
+@app.route('/events/get_number_of_events_in_excluded_time', methods=['GET'])
+def get_number_of_events_in_excluded_time():
+    return databaseInteraction.get_number_of_events_in_excluded_time()
+
+@app.route('/events/get_number_of_events_in_maintenance', methods=['GET'])
+def get_number_of_events_in_maintenance():
+    return databaseInteraction.get_number_of_events_in_maintenance()
+
+@app.route('/events/get_number_of_events_in_active_schedule', methods=['GET'])
+def get_number_of_events_in_active_schedule():
+    return databaseInteraction.get_number_of_events_in_active_schedule()
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
