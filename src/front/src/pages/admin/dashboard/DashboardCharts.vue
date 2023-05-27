@@ -36,7 +36,6 @@
       <va-card class="d-flex">
         <va-card-title>
           <h1>{{ t('dashboard.charts.loadingSpeed') }}</h1>
-          <va-button icon="print" plain @click="printChart" />
         </va-card-title>
         <va-card-content v-if="doughnutChartDataGenerated">
           <va-chart ref="doughnutChart" class="chart chart--donut" :data="doughnutChartDataGenerated" type="doughnut" />
