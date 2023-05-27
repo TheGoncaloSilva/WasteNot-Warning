@@ -42,10 +42,10 @@
             <div class="system-arm-section">
               <button :class="['outer-button', {'armed': isArmed && !alarmTriggered, 'disarmed': !isArmed && !alarmTriggered , 'triggered': alarmTriggered}]">
                 <button :class="['inner-button', {'armed': isArmed && !alarmTriggered, 'disarmed': !isArmed && !alarmTriggered , 'triggered': alarmTriggered}]" @click="toggleArmedStatus">
-                  {{ isArmed ? 'Disarm' : 'Arm' }}
+                  {{ getSystemStatus() }}
                 </button>
                 <span :class="{'armed': isArmed && !alarmTriggered, 'disarmed': !isArmed && !alarmTriggered , 'triggered': alarmTriggered}">
-                  {{ isArmed ? 'Armed' : 'Disarmed' }}
+                  {{ getSystemStatus() }}
                 </span>
               </button>
             </div>
@@ -110,8 +110,18 @@
   }
 
   function triggerAlarm(){
-    if(!isArmed.value)
+    if(isArmed.value)
       alarmTriggered.value = true
+  }
+
+  function getSystemStatus(): String {
+    console.log(alarmTriggered.value)
+    if (alarmTriggered.value)
+      return 'Triggered';
+    else if (isArmed.value)
+      return 'Armed'
+    else
+      return 'Disarmed'
   }
   
 </script>
