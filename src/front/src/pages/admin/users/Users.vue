@@ -156,7 +156,7 @@ export default {
               <td>{{ user.Telefone }}</td>
               <td>{{ user.DataNascimento }}</td>
               <td>{{ user.NivelPermissao_Nivel }}</td>
-              <td><span><va-icon @click="edit(user.Id)" name="edit" color="warning" style="margin-right: 10px">edit</va-icon><va-icon @click="remove(user.Id)" name="remove" color="danger">delete</va-icon></span></td>
+              <td><span><!--<va-icon @click="edit(user.Id)" name="edit" color="warning" style="margin-right: 10px">edit</va-icon>--><va-icon @click="remove(user.Id)" name="remove" color="danger">delete</va-icon></span></td>
             </tr>
 
           </tbody>
