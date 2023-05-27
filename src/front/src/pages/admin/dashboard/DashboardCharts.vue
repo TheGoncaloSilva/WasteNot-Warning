@@ -46,22 +46,11 @@
     <div class="flex xs12 sm6 md6 lg3 xl3">
       <va-card class="d-flex">
         <va-card-title>
-          <h1>System Status</h1>
-          <va-button icon="warning" plain @click="triggerAlarm" />
+          <h1>{{ t('dashboard.charts.loadingSpeed') }}</h1>
+          <va-button icon="print" plain @click="printChart" />
         </va-card-title>
-        <va-card-content>
-
-            <div class="system-arm-section">
-              <button :class="['outer-button', {'armed': isArmed && !alarmTriggered, 'disarmed': !isArmed && !alarmTriggered , 'triggered': alarmTriggered}]">
-                <button :class="['inner-button', {'armed': isArmed && !alarmTriggered, 'disarmed': !isArmed && !alarmTriggered , 'triggered': alarmTriggered}]" @click="toggleArmedStatus">
-                  {{ getSystemStatus() }}
-                </button>
-                <span :class="{'armed': isArmed && !alarmTriggered, 'disarmed': !isArmed && !alarmTriggered , 'triggered': alarmTriggered}">
-                  {{ getSystemStatus() }}
-                </span>
-              </button>
-            </div>
-          
+        <va-card-content v-if="pieChartDataGenerated">
+          <va-chart ref="pieChart" class="chart chart--pie" :data="pieChartDataGenerated" type="pie" />
         </va-card-content>
       </va-card>
     </div>
@@ -72,19 +61,16 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { doughnutChartData, lineChartData } from '../../../data/charts'
+  import { doughnutChartData, lineChartData, pieChartData } from '../../../data/charts'
   import { useChartData } from '../../../data/charts/composables/useChartData'
   import { usePartOfChartData } from './composables/usePartOfChartData'
   import VaChart from '../../../components/va-charts/VaChart.vue'
-  import DashboardContributorsChart from './DashboardContributorsList.vue'
 
   const { t } = useI18n()
 
   const dataGenerated = useChartData(lineChartData, 0.7)
   const doughnutChartDataGenerated = useChartData(doughnutChartData)
-
-  let alarmTriggered = ref(false)
-  let isArmed = ref(true)
+  const pieChartDataGenerated = useChartData(pieChartData)
   
   const {
     dataComputed: lineChartDataGenerated,
@@ -112,26 +98,6 @@
     windowObjectReference.onafterprint = () => {
       windowObjectReference?.close()
     }
-  }
-
-  function toggleArmedStatus() {
-    isArmed.value = !isArmed.value;
-    alarmTriggered.value = false
-  }
-
-  function triggerAlarm(){
-    if(isArmed.value)
-      alarmTriggered.value = true
-  }
-
-  function getSystemStatus(): String {
-    console.log(alarmTriggered.value)
-    if (alarmTriggered.value)
-      return 'Triggered';
-    else if (isArmed.value)
-      return 'Armed'
-    else
-      return 'Disarmed'
   }
   
 </script>

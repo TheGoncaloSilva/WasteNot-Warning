@@ -73,7 +73,10 @@
           </p>
 
           <div class="mt-3">
-            <va-button color="primary" @click="triggerAlarm">
+            <va-button color="primary" @click="triggerAlarm" v-if="isArmed && !alarmTriggered">
+              Trigger System
+            </va-button>
+            <va-button color="primary" disabled v-else>
               Trigger System
             </va-button>
           </div>
