@@ -35,16 +35,18 @@ Grupo p1g6:
 ## Dashboard
 
 * Armar, Desarmar e Informar ao utilizador que o alarme foi acionado
-* Gráfico de roda:
+* Gráfico de Donut:
   * Número Total de eventos (SELECT normal)
   * Número Total de eventos ocorridos em horário de exclusão
   * Número Total de eventos ocorridos em horário de manutenção
   * Número Total de eventos que acionaram o sistema
+* Gráfico de Tarte:
+  * Número de Eventos por tipo
 * Gráfico de linhas:
   * Eventos ordenados por data de adição (SELECT normal)
-  * Número de eventos por dia ocorridos em horário de exclusão
-  * Número de eventos por dia ocorridos em horário de manutenção
-  * Número de eventos por dia que acionaram o sistema
+  * Eventos ordenados por data ocorridos em horário de exclusão
+  * Eventos ordenados por data ocorridos em horário de manutenção
+  * Eventos ordenados por data que acionaram o sistema
 * Informação se o sistema se encontra em manutenção e quais as áreas afetadas, bem como o estado da manutenção (SELECT das manutenções, com Join das áreas e do estado da manutenção)
 * Informação das 2 próximas manutenções e a que áreas (SELECT com Join das áreas)
 * Lista dos ultimos eventos e informação a indicar qual é o seu status, como manutenção, fora de horário, "importante" (VIEW?)
@@ -69,7 +71,6 @@ Grupo p1g6:
 ## Exclusões
 
 * Dispositivos e Áreas restritas (Ficam apenas definidos com dados pré-populados)
-
 
 ## Geral
 

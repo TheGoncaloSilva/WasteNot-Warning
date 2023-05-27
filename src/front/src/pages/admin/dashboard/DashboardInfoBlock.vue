@@ -45,37 +45,41 @@
     </div>
 
     <div class="flex xs12 sm6 md6 xl3 lg3">
-      <va-card stripe stripe-color="info">
-        <va-card-title>
-          {{ t('dashboard.info.componentRichTheme') }}
-        </va-card-title>
+      <va-card class="d-flex">
         <va-card-content>
-          <p class="rich-theme-card-text">
-            Buying the right telescope to take your love of astronomy to the next level is a big next step.
-          </p>
-
-          <div class="mt-3">
-            <va-button color="primary" target="_blank" href="https://github.com/epicmaxco/vuestic-ui">
-              {{ t('dashboard.info.viewLibrary') }}
-            </va-button>
-          </div>
+            <div class="system-arm-section">
+              <button :class="['outer-button', {'armed': isArmed && !alarmTriggered, 'disarmed': !isArmed && !alarmTriggered , 'triggered': alarmTriggered}]">
+                <button :class="['inner-button', {'armed': isArmed && !alarmTriggered, 'disarmed': !isArmed && !alarmTriggered , 'triggered': alarmTriggered}]" @click="toggleArmedStatus">
+                  {{ getSystemStatus() }}
+                </button>
+                <span :class="{'armed': isArmed && !alarmTriggered, 'disarmed': !isArmed && !alarmTriggered , 'triggered': alarmTriggered}">
+                  {{ getSystemStatus() }}
+                </span>
+              </button>
+            </div>
+          
         </va-card-content>
       </va-card>
     </div>
 
     <div class="flex xs12 sm6 md6 xl3 lg3">
-      <va-card>
-        <va-image :src="images[currentImageIndex]" style="height: 200px" />
+      <va-card stripe stripe-color="info">
         <va-card-title>
-          <va-button preset="plain" icon-right="fa-arrow-circle-right" @click="showModal">
-            {{ t('dashboard.info.exploreGallery') }}
-          </va-button>
+          System Description
         </va-card-title>
+        <va-card-content>
+          <p class="rich-theme-card-text">
+            {{ getSystemDescription() }}
+          </p>
+
+          <div class="mt-3">
+            <va-button color="primary" @click="triggerAlarm">
+              Trigger System
+            </va-button>
+          </div>
+        </va-card-content>
       </va-card>
     </div>
-    <va-modal v-model="modal">
-      <va-carousel v-model="currentImageIndex" :items="images" class="gallery-carousel" />
-    </va-modal>
   </div>
 </template>
 
@@ -86,6 +90,9 @@
 
   const { t } = useI18n()
   const { colors } = useColors()
+
+  let alarmTriggered = ref(false)
+  let isArmed = ref(true)
 
   const infoTiles = ref([
     {
@@ -121,6 +128,34 @@
   function showModal() {
     modal.value = true
   }
+
+  function toggleArmedStatus() {
+    isArmed.value = !isArmed.value;
+    alarmTriggered.value = false
+  }
+
+  function triggerAlarm(){
+    if(isArmed.value)
+      alarmTriggered.value = true
+  }
+
+  function getSystemStatus(): String {
+    if (alarmTriggered.value)
+      return 'Triggered';
+    else if (isArmed.value)
+      return 'Armed'
+    else
+      return 'Disarmed'
+  }
+
+  function getSystemDescription(): String {
+    if (alarmTriggered.value)
+      return 'The Alarm has been Triggered, please check the device and the restricted area. To stop it, press the Triggered button';
+    else if (isArmed.value)
+      return 'The Alarm is currently Armed and functioning'
+    else
+      return "The Alarm is currently disabled and won't be activated, please press to activate it"
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -141,5 +176,98 @@
     @media all and (max-width: 576px) {
       width: 100%;
     }
+  }
+
+  .system-arm-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .outer-button {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 190px;
+    border-radius: 50%;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  /* Updated CSS for the outer button */
+  .outer-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: transparent;
+    z-index: -1;
+  }
+
+  .inner-button {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .armed .inner-button {
+    background-color: green;
+  }
+
+  .armed .outer-button {
+    background-color: green;
+  }
+  .triggered .outer-button {
+    background-color: red;
+  }
+
+  .disarmed .inner-button {
+    background-color: grey;
+  }
+
+  .disarmed .outer-button {
+    background-color: grey;
+  }
+
+  .triggered .inner-button {
+    background-color: red;
+  }
+
+  .armed span {
+    color: green;
+  }
+
+  .disarmed span {
+    color: grey;
+  }
+
+  .triggered span {
+    color: red;
+  }
+
+  .outer-button:hover {
+    opacity: 0.8;
+  }
+
+  .outer-button:focus {
+    outline: none;
   }
 </style>
