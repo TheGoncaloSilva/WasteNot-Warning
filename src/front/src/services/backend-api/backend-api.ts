@@ -52,11 +52,11 @@ class BaseCommunication {
       }
     }
   
-    async delete(endpoint: string): Promise<any> {
+    async delete(endpoint: string, data: any, headers: any): Promise<any> {
       const url = `${this.baseURL}/${endpoint}`;
       try {
-        const response: AxiosResponse = await axios.delete(url);
-        this.logRequestAndResponse(url, 'DELETE', null, response);
+        const response: AxiosResponse = await axios.delete(url, { data, headers });
+        this.logRequestAndResponse(url, 'DELETE', data, response);
         return response.data;
       } catch (error) {
         console.error(`Error while performing DELETE request to ${url}`, error);
@@ -73,6 +73,7 @@ class BaseCommunication {
 
 class BEAPI extends BaseCommunication
 {
+
     constructor(baseURL: string = "http://172.16.0.3:5000")
     {
         super(baseURL);
@@ -84,7 +85,17 @@ class BEAPI extends BaseCommunication
     async getUsers(): Promise<UTILIZADOR[]>
     {
         return await super.get('users');
-    }    
+    }
+    
+    async addUser(user: Partial<UTILIZADOR>): Promise<UTILIZADOR>
+    {
+        return await super.post('users', user);
+    }
+
+    async removeUser(Id: number)
+    {
+      return await super.delete('users/' + Id, null, null);
+    }
 }
 
 export const BE_API: BEAPI = new BEAPI();

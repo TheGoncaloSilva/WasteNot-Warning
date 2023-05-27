@@ -1,5 +1,5 @@
 export interface UTILIZADOR {
-    DataNascimento: string;
+    DataNascimento: Date;
     Id: number;
     NivelPermissao_Nivel: string;
     Nome: string;

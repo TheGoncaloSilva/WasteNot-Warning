@@ -16,7 +16,14 @@ class DatabaseInteraction:
     
     
     query_mapping = {
-        "get_users": "SELECT * FROM UTILIZADOR",  
+        "get_users": {"query": "SELECT * FROM UTILIZADOR", "returns_table" : True},
+        "add_user": {"query" : """
+                    INSERT INTO UTILIZADOR (DataNascimento, NivelPermissao_Nivel, Nome, Password, Telefone)
+                    VALUES (?, ?, ?, ?, ?)
+                    """, "returns_table" : False
+                    },
+        
+        "remove_user": {"query": "DELETE FROM UTILIZADOR WHERE Id = ?", "returns_table": False}
     }
     
     
@@ -28,6 +35,7 @@ class DatabaseInteraction:
             self.cursor = conn.cursor()
         except Exception as e:
             print(f"An error occurred: {str(e)}")
+            raise(e)
 
     def establish_connection_with_retry(self):
         max_retries = 2  # Maximum number of retries
@@ -48,13 +56,13 @@ class DatabaseInteraction:
         raise Exception("Unable to establish a connection with the SQL Server.")
 
     def __execute_query(self, query_name, *args):
-
         if query_name not in DatabaseInteraction.query_mapping:
             raise ValueError(f"Unknown query: {query_name}")
 
-        if self.cursor:
-            query = DatabaseInteraction.query_mapping[query_name]
-            cursor = self.cursor.execute(query, args)
+        info = DatabaseInteraction.query_mapping[query_name]
+        cursor = self.cursor.execute(info["query"], args)
+        
+        if info["returns_table"]:
             columns = [column[0] for column in cursor.description]
             results = []
             for row in cursor.fetchall():
@@ -63,3 +71,12 @@ class DatabaseInteraction:
         
     def get_users(self):
         return self.__execute_query("get_users")
+    
+    def add_user(self, DataNascimento, NivelPermissao_Nivel, Nome, Password, Telefone):
+        self.__execute_query("add_user", DataNascimento,NivelPermissao_Nivel,Nome,Password,Telefone)
+        
+    def remove_user(self, user_id):
+        self.__execute_query("remove_user",user_id)
+    
+    
+    
