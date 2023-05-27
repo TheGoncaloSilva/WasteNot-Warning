@@ -25,6 +25,9 @@ class DatabaseInteraction:
         
         "remove_user": {"query": "DELETE FROM UTILIZADOR WHERE Id = ?", "returns_table": False},
         "get_events": {"query": "SELECT * FROM REGISTO_EVENTOS", "returns_table" : True},
+        "get_user_last_events" : {"query" : "SELECT * FROM GetLastUserEvents(?,?)" , "returns_table" : True},
+        "get_user_restricted_areas" : {"query" : "SELECT * FROM GetAreasRestritasByUserId(?)" , "returns_table" : True} 
+        
     }
     
     
@@ -59,7 +62,7 @@ class DatabaseInteraction:
     def __execute_query(self, query_name, *args):
         if query_name not in DatabaseInteraction.query_mapping:
             raise ValueError(f"Unknown query: {query_name}")
-
+        
         info = DatabaseInteraction.query_mapping[query_name]
         cursor = self.cursor.execute(info["query"], args)
         
@@ -81,6 +84,12 @@ class DatabaseInteraction:
 
     def get_events(self):
         return self.__execute_query("get_users")
+        
+    def get_user_last_events(self, userid, nevents):
+        return self.__execute_query("get_user_last_events", userid, nevents)
+        
+    def get_user_restricted_areas(self, userid):
+        return self.__execute_query("get_user_restricted_areas", userid)
     
     
     

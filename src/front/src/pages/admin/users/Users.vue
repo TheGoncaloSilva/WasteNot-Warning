@@ -1,7 +1,7 @@
 <script lang="ts">
 import { ref, onMounted } from 'vue'
 import { BE_API } from '../../../services/backend-api/backend-api'
-import { UTILIZADOR } from '../../../services/backend-api/interfaces';
+import { UTILIZADOR , LAST_USER_EVENTS, AREA_RESTRITA} from '../../../services/backend-api/interfaces';
 
 
 export default {
@@ -9,6 +9,9 @@ export default {
     return {
       users: [] as UTILIZADOR[],
       showNewUserDialog: false,
+      selected_user: null,
+      lastEvents: [] as LAST_USER_EVENTS[],
+      areasRestritas: [] as AREA_RESTRITA[],
       permission_level: {id: 1, description: 'administrador'},
       newUser: {
         Nome: '',
@@ -18,6 +21,7 @@ export default {
         Password: ''
         
       },
+      showUserInfoDialog: false,
         nivel_permissao_options: [
     {
       id: 1,
@@ -53,9 +57,20 @@ export default {
       }
       })();
     },
-    edit(usrid: number)
+    viewDetails(user: UTILIZADOR)
     {
-
+      this.lastEvents = [];
+      this.areasRestritas = [];
+      (async() => {
+        // @ts-ignore
+        this.selected_user = user;
+        
+        this.showUserInfoDialog = true;
+        
+        this.lastEvents = await BE_API.getUserLastEvents(user.Id, 50);
+        this.areasRestritas = await BE_API.getUserRestrictedAreas(user.Id);
+          
+      })();
     },
 
     async addUser() {
@@ -133,6 +148,81 @@ export default {
         
       </va-card>
     </va-modal>
+    <va-modal v-model="showUserInfoDialog" @ok="addUser">
+  <va-card style="min-height:400px; min-width: 500px;">
+    <va-card-title>Informações do utilizador</va-card-title>
+    <va-card-content>
+
+    
+      <!--<va-table :data="lastEvents" :columns="['a','b','c','d']"></va-table>
+
+      
+      <h3>Áreas Restritas</h3>
+      <va-table :data="areasRestritas" :columns="['a','b','c','d']"></va-table>
+      -->
+
+      <va-card class="flex mb-4">
+      <va-card-title>Últimos eventos do utilizador(a) {{ selected_user ? selected_user["Nome"] : "" }}</va-card-title>
+      
+      <va-card-content>
+      <div class="table-wrapper">
+        <table class="va-table va-table--striped va-table--hoverable">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Tipo do evento</th>
+              <th>Dispositivo Mac</th>
+              <th>Dispositivo Modelo</th>
+              <th>Dispositivo Fabricante</th>
+            </tr>
+          </thead>
+  
+          <tbody>
+            <tr v-for="event in lastEvents" :key="event.Id">
+              <td>{{ event.Timestamp }}</td>
+              <td>{{ event.TipoEvento_Descricao }}</td>
+              <td>{{ event.Mac }}</td>
+              <td>{{ event.Modelo}}</td>
+              <td>{{ event.Fabricante }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </va-card-content>
+    </va-card>
+
+    <va-card class="flex mb-4">
+      <va-card-title>Áreas restritas do utilizador(a) {{ selected_user ? selected_user["Nome"] : "" }}</va-card-title>
+      
+      <va-card-content>
+      <div class="table-wrapper">
+        <table class="va-table va-table--striped va-table--hoverable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Descrição</th>
+              <th>Localização</th>
+
+            </tr>
+          </thead>
+  
+          <tbody>
+            <tr v-for="area in areasRestritas" :key="area.Id">
+              <td>{{ area.Id }}</td>
+              <td>{{ area.DESCRICAO }}</td>
+              <td>{{ area.LOCALIZACAO }}</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </va-card-content>
+    </va-card>
+
+      
+    </va-card-content>
+  </va-card>
+</va-modal>
     <va-card class="flex mb-4">
       <va-card-title>Users list</va-card-title>
       
@@ -156,7 +246,7 @@ export default {
               <td>{{ user.Telefone }}</td>
               <td>{{ user.DataNascimento }}</td>
               <td>{{ user.NivelPermissao_Nivel }}</td>
-              <td><span><!--<va-icon @click="edit(user.Id)" name="edit" color="warning" style="margin-right: 10px">edit</va-icon>--><va-icon @click="remove(user.Id)" name="remove" color="danger">delete</va-icon></span></td>
+              <td><span><va-icon @click="viewDetails(user)" name="edit" color="warning" style="margin-right: 10px">info</va-icon><va-icon @click="remove(user.Id)" name="remove" color="danger">delete</va-icon></span></td>
             </tr>
 
           </tbody>

@@ -13,3 +13,12 @@ export interface AREA_RESTRITA
     DESCRICAO: string;
     LOCALIZACAO: string;
 };
+
+export interface LAST_USER_EVENTS {
+    Id: number;
+    Timestamp: Date;
+    TipoEvento_Descricao: string;
+    Mac: string;
+    Modelo: string;
+    Fabricante: string;
+};
