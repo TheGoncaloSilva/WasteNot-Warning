@@ -28,7 +28,7 @@ services:
       - ./back/src:/back/src
     depends_on:
       - sql-server
-    command: "flask --app App.py run --host=0.0.0.0"
+    command: "flask --app App.py run --host=0.0.0.0 --port 5000"
     networks:
       my_network:
         ipv4_address: 172.16.0.3

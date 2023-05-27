@@ -11,9 +11,8 @@ def hello_geek():
 
 @app.route('/users')
 def get_users():
-    print(databaseInteraction.get_users())
     return databaseInteraction.get_users()
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
