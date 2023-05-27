@@ -1,5 +1,7 @@
 import pyodbc
 import time
+import json
+
 
 config = {
     'Driver': '{ODBC Driver 17 for SQL Server}',
@@ -41,5 +43,14 @@ class DatabaseInteraction:
 
     def get_users(self):
         if self.cursor:
-            self.cursor.execute("SELECT * FROM UTILIZADOR")
-            return self.cursor.fetchall()
+            #cursor = self.cursor.execute("SELECT * FROM UTILIZADOR")
+            #columns = [column[0] for column in cursor.description]
+            #result = self.cursor.fetchall()
+            #rows = [list(row) for row in result]
+            #return rows
+            cursor = self.cursor.execute("SELECT * FROM UTILIZADOR")
+            columns = [column[0] for column in cursor.description]
+            results = []
+            for row in cursor.fetchall():
+                results.append(dict(zip(columns, row)))
+            return results
