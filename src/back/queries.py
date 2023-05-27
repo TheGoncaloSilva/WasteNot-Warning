@@ -13,8 +13,15 @@ config = {
 
 
 class DatabaseInteraction:
+    
+    
+    query_mapping = {
+        "get_users": "SELECT * FROM UTILIZADOR",  
+    }
+    
+    
+    
     def __init__(self):
-        print(pyodbc.drivers())
         self.cursor = None
         try:
             conn = self.establish_connection_with_retry()
@@ -34,23 +41,29 @@ class DatabaseInteraction:
                 return conn
             except pyodbc.Error as err:
                 print(f"Error: {str(err)}")
-
                 print(f"Connection attempt {attempt} failed. Retrying in {retry_interval} seconds...")
                 time.sleep(retry_interval)
 
         # Maximum retries exceeded, raise an exception
         raise Exception("Unable to establish a connection with the SQL Server.")
 
-    def get_users(self):
+    def __execute_query(self, query_name, *args):
+        query_mapping = {
+            "get_users": "SELECT * FROM UTILIZADOR",
+            # Add more queries here
+        }
+
+        if query_name not in query_mapping:
+            raise ValueError(f"Unknown query: {query_name}")
+
         if self.cursor:
-            #cursor = self.cursor.execute("SELECT * FROM UTILIZADOR")
-            #columns = [column[0] for column in cursor.description]
-            #result = self.cursor.fetchall()
-            #rows = [list(row) for row in result]
-            #return rows
-            cursor = self.cursor.execute("SELECT * FROM UTILIZADOR")
+            query = query_mapping[query_name]
+            cursor = self.cursor.execute(query, args)
             columns = [column[0] for column in cursor.description]
             results = []
             for row in cursor.fetchall():
                 results.append(dict(zip(columns, row)))
             return results
+        
+    def get_users(self):
+        return self.__execute_query("get_users")
