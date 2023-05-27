@@ -24,6 +24,7 @@ class DatabaseInteraction:
                     },
         
         "remove_user": {"query": "DELETE FROM UTILIZADOR WHERE Id = ?", "returns_table": False},
+        "get_events": {"query": "SELECT * FROM REGISTO_EVENTOS", "returns_table" : True},
         "get_user_last_events" : {"query" : "SELECT * FROM GetLastUserEvents(?,?)" , "returns_table" : True},
         "get_user_restricted_areas" : {"query" : "SELECT * FROM GetAreasRestritasByUserId(?)" , "returns_table" : True},
         "get_events_count_by_category" : {
@@ -83,6 +84,9 @@ class DatabaseInteraction:
         
     def remove_user(self, user_id):
         self.__execute_query("remove_user",user_id)
+
+    def get_events(self):
+        return self.__execute_query("get_users")
         
     def get_user_last_events(self, userid, nevents):
         return self.__execute_query("get_user_last_events", userid, nevents)

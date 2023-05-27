@@ -29,6 +29,10 @@ def delete_user(user_id):
     response.status_code = 200
     return response
 
+@app.route('/events')
+def get_events():
+    return databaseInteraction.get_events()
+
 @app.route('/user/last_events', methods=['GET'])
 def get_last_user_events():
     user_id = request.args.get('user_id', type=int)
