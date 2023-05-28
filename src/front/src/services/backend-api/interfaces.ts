@@ -63,3 +63,13 @@ export interface HORARIO_MONITORIZACAO {
     HoraFim: Date;
     Estado: string;
 }
+
+export interface EVENT_LIST {
+    Reg_id: number;
+    Reg_tipo: string;
+    Reg_timestamp: string;
+    Disp_mac: string;
+    Disp_tipo: string;
+    AR_descricao: string;
+    AR_localizacao: string;
+}

@@ -167,5 +167,10 @@ def get_number_of_areas():
 def get_number_of_devices():
     return databaseInteraction.get_number_of_devices()
 
+@app.route('/events/list_events', methods=['GET'])
+@jwt_required()
+def list_events():
+    return databaseInteraction.list_events()
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

@@ -9,18 +9,17 @@
     </Suspense>
     
     <div class="row row-equal">
+      
+      <Suspense>
+        <div class="flex xs12 lg6">
+          <DashboardTable/>
+        </div>
+      </Suspense>
+
       <div class="flex xs12 lg6">
         <dashboard-tabs @submit="addAddressToMap" />
       </div>
-      
-      <div class="flex xs12 lg6">
-        <DashboardTable @submit="addAddressToMap" />
-      </div>
-    </div>
-    <div class="row row-equal">
-      <div class="flex xs12 lg6">
-          <DashboardMap ref="dashboardMap" />
-      </div>
+
     </div>
   </div>
 </template>
@@ -31,7 +30,6 @@
   import DashboardCharts from './DashboardCharts.vue'
   import DashboardInfoBlock from './DashboardInfoBlock.vue'
   import DashboardTabs from './DashboardTabs.vue'
-  import DashboardMap from './DashboardMap.vue'
   import DashboardTable from './DashboardTable.vue'
 
   const dashboardMap = ref()
