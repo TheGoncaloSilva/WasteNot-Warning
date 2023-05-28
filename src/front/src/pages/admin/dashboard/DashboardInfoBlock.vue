@@ -13,30 +13,18 @@
       </div>
 
       <div class="row">
-        <div class="flex xs12 sm6 md6">
-          <va-card>
-            <va-card-content>
-              <h2 class="va-h2 ma-0" :style="{ color: colors.primary }">291</h2>
-              <p class="no-wrap">{{ t('dashboard.info.completedPullRequests') }}</p>
-            </va-card-content>
-          </va-card>
-        </div>
-        <div class="flex xs12 sm6 md6">
+        <div class="flex xs12 sm6 md6" v-for="MAN in nextMaintenanceList">
           <va-card>
             <va-card-content>
               <div class="row row-separated">
-                <div class="flex xs4">
-                  <h2 class="va-h2 ma-0 va-text-center" :style="{ color: colors.primary }">3</h2>
-                  <p class="va-text-center">{{ t('dashboard.info.users') }}</p>
-                </div>
-                <div class="flex xs4">
-                  <h2 class="va-h2 ma-0 va-text-center" :style="{ color: colors.info }">24</h2>
-                  <p class="va-text-center no-wrap">{{ t('dashboard.info.points') }}</p>
-                </div>
-                <div class="flex xs4">
-                  <h2 class="va-h2 ma-0 va-text-center" :style="{ color: colors.warning }">91</h2>
-                  <p class="va-text-center">{{ t('dashboard.info.units') }}</p>
-                </div>
+                <div class="flex xs9">
+                  <h2 class="va-h2 ma-0" :style="{ color: colors.primary }">{{ MAN.Man_inicio }}</h2>
+                  <p class="no-wrap">{{ MAN.AR_localizacao }}</p>
+                </div>  
+                <div class="flex xs3">
+                    <h2 class="va-h2 ma-0 va-text-center" :style="{ color: colors.warning }">{{ MAN.Man_duracao }}</h2>
+                    <p class="va-text-center">Horas</p>
+                  </div>
               </div>
             </va-card-content>
           </va-card>
@@ -89,13 +77,28 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { VaCarousel, VaModal, VaCard, VaCardContent, VaCardTitle, VaButton, VaImage, useColors } from 'vuestic-ui'
+  import { VaCard, VaCardContent, VaCardTitle, VaButton, useColors } from 'vuestic-ui'
+  import { getNextMaintenance } from './stats'
+import { NEXT_MAINTENANCE } from '../../../services/backend-api/interfaces'
 
   const { t } = useI18n()
   const { colors } = useColors()
 
   let alarmTriggered = ref(false)
   let isArmed = ref(true)
+
+  // why component disappear with this?
+  //const nextMaintenanceList = ref(await getNextMaintenance());
+  const nextMaintenanceList = [
+                                { Man_inicio : "2023-06-30",
+                                  Man_duracao: "24",
+                                  AR_localizacao: "Edifício A, 3º Andar"
+                                },
+                                { Man_inicio : "2023-07-01",
+                                  Man_duracao: "48",
+                                  AR_localizacao: "Edifício B, 2º Andar"
+                                },
+                            ] 
 
   const infoTiles = ref([
     {
@@ -118,19 +121,6 @@
     },
   ])
 
-  const modal = ref(false)
-  const currentImageIndex = ref(0)
-  const images = ref([
-    'https://i.imgur.com/qSykGko.jpg',
-    'https://i.imgur.com/jYwT08D.png',
-    'https://i.imgur.com/9930myH.jpg',
-    'https://i.imgur.com/2JxhWD6.jpg',
-    'https://i.imgur.com/MpiOWbM.jpg',
-  ])
-
-  function showModal() {
-    modal.value = true
-  }
 
   function toggleArmedStatus() {
     isArmed.value = !isArmed.value;

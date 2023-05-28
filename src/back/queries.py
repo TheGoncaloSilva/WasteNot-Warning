@@ -35,6 +35,8 @@ class DatabaseInteraction:
         "get_number_of_events_in_active_schedule": {"query": "EXEC GetRowCountOfEventsInActiveSchedule", "returns_table" : True},
         
         "get_user" : {"query" : "SELECT * FROM UTILIZADOR WHERE Telefone = ?", "returns_table" : True},
+
+        "get_next_maintenance": {"query": "SELECT * FROM next_repairs", "returns_table" : True},
     }
     
     
@@ -144,6 +146,9 @@ class DatabaseInteraction:
     
     def get_number_of_events_in_active_schedule(self):
         return self.__execute_query("get_number_of_events_in_active_schedule")
+    
+    def get_next_maintenance(self):
+        return self.__execute_query("get_next_maintenance")
     
     def get_user(self, telefone):
         return self.__execute_query("get_user" , telefone)

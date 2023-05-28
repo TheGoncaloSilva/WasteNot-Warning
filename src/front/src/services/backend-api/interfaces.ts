@@ -31,3 +31,14 @@ export interface EVENTS_COUNT_BY_CATEGORY {
 export interface NUMBER_STATS {
     row_count: number;
 }
+
+export interface NEXT_MAINTENANCE {
+    Man_id: number;
+    Man_inicio: string;
+    Man_fim: string;
+    Man_comentario: string;
+    Man_estado: string;
+    AR_id: number;
+    AR_descricao: string;
+    AR_localizacao: string;
+}

@@ -85,6 +85,8 @@ VALUES
     ('2023-05-10', '2023-05-10', 'Troca de peças', 'Pendente', 2),
     ('2023-05-12', '2023-05-13', 'Limpeza geral', 'Em Progresso', 3),
     ('2023-05-08', '2023-05-09', 'Substituição do sensor', 'Concluída', 3),
+    ('2023-07-10', '2023-07-11', 'Substituição do sensor', 'Pendente', 3),
+    ('2023-09-01', '2023-09-03', 'Atualização de software', 'Pendente', 1),
     ('2023-05-04', '2023-05-05', 'Atualização de software', 'Concluída', 2);
 
 INSERT INTO DISPOSITIVO(Mac, IP, Modelo, Fabricante) 
