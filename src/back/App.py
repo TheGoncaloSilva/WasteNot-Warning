@@ -134,20 +134,20 @@ def get_restricted_areas():
     return databaseInteraction.get_restricted_areas()
 
 @app.route('/last-repairs', methods=['GET'])
-@jwt.required()
+@jwt_required()
 def get_last_repairs():
     raid = request.args.get('restricted_area', type=int)
     mrow = request.args.get('maxrows', type=int)
     return databaseInteraction.get_last_repairs_of_a_restricted_area(raid,mrow)
 
 @app.route('/device-list-by-restricted-area', methods=['GET'])
-@jwt.required()
+@jwt_required()
 def get_device_list_by_restricted_area():
     raid = request.args.get('restricted_area', type=int)
     return databaseInteraction.get_device_list_of_a_restricted_area(raid)
 
 @app.route('/horario-by-restricted-area', methods=['GET'])
-@jwt.required()
+@jwt_required()
 def get_horario_by_restricted_area():
     raid = request.args.get('restricted_area', type=int)
     return databaseInteraction.get_horarios_monitorizacao_by_restricted_area(raid)
