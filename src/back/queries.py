@@ -38,6 +38,8 @@ class DatabaseInteraction:
 
         "get_next_maintenance": {"query": "SELECT * FROM next_repairs", "returns_table" : True},
         
+        "get_restricted_areas" : {"query" : "SELECT * FROM AREA_RESTRITA" , "returns_table" : True},
+        
         "get_last_repairs_of_a_restricted_area" : {"query" : "SELECT * FROM GetLastRepairsOfARestrictedArea(?,?)", "returns_table" : True},
         
         "get_device_list_of_a_restricted_area" : {"query" : "SELECT * FROM GetDeviceListOfARestrictedArea(?)", "returns_table" : True},
@@ -47,6 +49,7 @@ class DatabaseInteraction:
         "get_number_of_events" : {"query" : "SELECT COUNT(*) AS row_count FROM REGISTO_EVENTOS;", "returns_table" : True},
         "get_number_of_areas" : {"query" : "SELECT COUNT(*) AS row_count FROM AREA_RESTRITA;", "returns_table" : True},
         "get_number_of_devices" : {"query" : "SELECT COUNT(*) AS row_count FROM DISPOSITIVO;", "returns_table" : True},
+        
     }
     
     
@@ -180,5 +183,8 @@ class DatabaseInteraction:
     
     def get_number_of_devices(self):
         return self.__execute_query("get_number_of_devices")
+    
+    def get_restricted_areas(self):
+        return self.__execute_query("get_restricted_areas")
     
     

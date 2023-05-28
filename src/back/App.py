@@ -5,6 +5,7 @@ import security
 
 import queries
 import os
+import json
 
 db_reset_flag = os.environ.get('DB_RESET_FLAG')
 
@@ -146,11 +147,16 @@ def get_device_list_by_restricted_area():
     raid = request.args.get('restricted_area', type=int)
     return databaseInteraction.get_device_list_of_a_restricted_area(raid)
 
+
 @app.route('/restricted-area/horario', methods=['GET'])
 @jwt_required()
 def get_horario_by_restricted_area():
     raid = request.args.get('restricted_area', type=int)
-    return databaseInteraction.get_horarios_monitorizacao_by_restricted_area(raid)
+    #return databaseInteraction.get_horarios_monitorizacao_by_restricted_area(raid)
+    obj = databaseInteraction.get_horarios_monitorizacao_by_restricted_area(raid)
+    serialized_object = json.dumps(obj, default=str)
+    return serialized_object
+
 
 @app.route('/events/get_number_of_events', methods=['GET'])
 @jwt_required()
