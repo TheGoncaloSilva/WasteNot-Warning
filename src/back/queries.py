@@ -49,7 +49,8 @@ class DatabaseInteraction:
         "get_number_of_events" : {"query" : "SELECT COUNT(*) AS row_count FROM REGISTO_EVENTOS;", "returns_table" : True},
         "get_number_of_areas" : {"query" : "SELECT COUNT(*) AS row_count FROM AREA_RESTRITA;", "returns_table" : True},
         "get_number_of_devices" : {"query" : "SELECT COUNT(*) AS row_count FROM DISPOSITIVO;", "returns_table" : True},
-        
+
+        "list_events" : {"query" : "SELECT * FROM list_ordered_events ORDER BY Reg_timestamp DESC;", "returns_table" : True},
     }
     
     
@@ -59,9 +60,11 @@ class DatabaseInteraction:
             self.__reset()
             
         self.cursor = None
+        self.conn = None
         try:
             conn = self.establish_connection_with_retry()
             self.cursor = conn.cursor()
+            #self.conn = conn
         except Exception as e:
             print(f"An error occurred: {str(e)}")
             raise(e)
@@ -121,8 +124,9 @@ class DatabaseInteraction:
             raise ValueError(f"Unknown query: {query_name}")
         
         info = DatabaseInteraction.query_mapping[query_name]
+        #self.cursor = self.conn.cursor() 
         cursor = self.cursor.execute(info["query"], args)
-        
+
         if info["returns_table"]:
             columns = [column[0] for column in cursor.description]
             results = []
@@ -186,5 +190,8 @@ class DatabaseInteraction:
     
     def get_restricted_areas(self):
         return self.__execute_query("get_restricted_areas")
+    
+    def list_events(self):
+        return self.__execute_query("list_events")
     
     

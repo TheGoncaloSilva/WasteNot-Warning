@@ -119,7 +119,7 @@
     },
     {
       color: '#004D40',
-      value: ref((await getNumberEvents())[0]['row_count']),
+      value: ref((await getNumberAreasRestritas())[0]['row_count']),
       text: 'Áreas Restritas',
       icon: '',
     },

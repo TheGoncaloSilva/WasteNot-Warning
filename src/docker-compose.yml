@@ -49,6 +49,7 @@ services:
     networks:
       my_network:
         ipv4_address: 172.16.0.4
+    #cpus: 0.5  # Specify the desired CPU limit for the SQL Server service
 
 
 

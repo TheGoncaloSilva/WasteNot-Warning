@@ -30,3 +30,18 @@ GO
 --DROP VIEW next_repairs;
 
 --VIEW: 3
+CREATE VIEW list_ordered_events AS (
+    SELECT RE.Id AS Reg_id,
+        TE.Descricao AS Reg_tipo,
+            RE.[Timestamp] AS Reg_timestamp,
+                DS.Dispositivo_Mac AS Disp_mac,
+                    DS.TipoDispositivoSeguranca_Descricao AS Disp_tipo,
+                        AR.DESCRICAO AS AR_descricao,
+                            AR.LOCALIZACAO as AR_localizacao
+    FROM REGISTO_EVENTOS AS RE
+        INNER JOIN TIPO_EVENTO AS TE ON TE.Descricao = RE.TipoEvento_Descricao
+            INNER JOIN DISPOSITIVO_SEGURANCA AS DS ON DS.Dispositivo_Mac = RE.DispositivoSeguranca_Mac
+                INNER JOIN AREA_RESTRITA AS AR ON AR.Id = DS.AreaRestrita_Id
+                    ORDER BY RE.[Timestamp] DESC
+);
+GO
