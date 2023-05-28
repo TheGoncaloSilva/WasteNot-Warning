@@ -183,16 +183,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/auth/login/Login.vue'),
       },
       {
-        name: 'signup',
-        path: 'signup',
-        component: () => import('../pages/auth/signup/Signup.vue'),
-      },
-      {
-        name: 'recover-password',
-        path: 'recover-password',
-        component: () => import('../pages/auth/recover-password/RecoverPassword.vue'),
-      },
-      {
         path: '',
         redirect: { name: 'login' },
       },
