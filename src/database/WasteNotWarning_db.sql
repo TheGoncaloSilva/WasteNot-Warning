@@ -1,7 +1,8 @@
 CREATE DATABASE WasteNot_Warning;
 GO
-USE WasteNot_Warning;
 
+USE WasteNot_Warning;
+GO
 CREATE TABLE NIVEL_PERMISSAO (
 	[Nivel] VARCHAR(20) PRIMARY KEY
 );

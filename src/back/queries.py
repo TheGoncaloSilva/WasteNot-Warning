@@ -1,7 +1,7 @@
 import pyodbc
 import time
 import json
-
+import subprocess
 
 config = {
     'Driver': '{ODBC Driver 17 for SQL Server}',
@@ -41,7 +41,10 @@ class DatabaseInteraction:
     
     
     
-    def __init__(self):
+    def __init__(self, reset_db: bool = False):
+        if reset_db:
+            self.__reset()
+            
         self.cursor = None
         try:
             conn = self.establish_connection_with_retry()
@@ -49,6 +52,38 @@ class DatabaseInteraction:
         except Exception as e:
             print(f"An error occurred: {str(e)}")
             raise(e)
+        
+            
+    def __reset(self):
+        self.__run_sql_from_source('/database/WasteNotWarning_db.sql')
+        self.__run_sql_from_source('/database/populate.sql')
+        self.__run_sql_from_source('/database/stored_procedures.sql')
+        self.__run_sql_from_source('/database/udfs.sql')
+        self.__run_sql_from_source('/database/views.sql')        
+
+        
+    def __run_sql_from_source(self, file_src):
+        
+        try:
+
+            with open(file_src, 'r') as file:
+                sql_script = file.read()
+
+            cmd = [
+                "/opt/mssql-tools/bin/sqlcmd",
+                "-S", config["Server"],
+                "-U", config["UID"],
+                "-P", config["PWD"],
+                "-d", config["Database"],
+                "-i", file_src,
+            ]
+            
+            subprocess.run(cmd,check=True)          
+                
+        except Exception as e:
+            raise Exception("Error while running file source '" + file_src + "' -> "  + str(e))
+        
+            
 
     def establish_connection_with_retry(self):
         max_retries = 2  # Maximum number of retries
