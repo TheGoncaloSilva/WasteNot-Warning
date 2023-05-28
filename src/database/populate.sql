@@ -5,13 +5,13 @@ INSERT INTO NIVEL_PERMISSAO(Nivel) VALUES ('utilizador comum');
 INSERT INTO NIVEL_PERMISSAO(Nivel) VALUES ('administrador');
 INSERT INTO NIVEL_PERMISSAO(Nivel) VALUES ('utilizador externo');
 
-INSERT INTO UTILIZADOR (Nome, Password, Telefone, DataNascimento, NivelPermissao_Nivel)
+-- INSERT statements
+INSERT INTO UTILIZADOR (Nome, PW_Hash, Salt, Telefone, DataNascimento, NivelPermissao_Nivel)
 VALUES
-('João Silva', 'pass123', 123456789, '1990-01-01', 'utilizador comum'),
-('Maria Santos', 'pass456', 987654321, '1995-05-05', 'administrador'),
-('Pedro Oliveira', 'pass789', 111111111, '2000-10-10', 'utilizador externo'),
-('Ana Silva', 'pass321', 333333333, '1992-02-02', 'utilizador comum'),
-('Luís Ferreira', 'pass654', 444444444, '1998-08-08', 'utilizador externo');
+('João Silva', 
+    0xb47958e9e761da3b448522da07f287289a2bee3e32438bbe8eee725aad2cd60a,
+    0x0123456789ABCDEF0123456789ABCDEF,
+    123456789, '1990-01-01', 'administrador')
 
 INSERT INTO HORARIO_MONITORIZACAO (HoraInicio, HoraFim, Estado)
 VALUES

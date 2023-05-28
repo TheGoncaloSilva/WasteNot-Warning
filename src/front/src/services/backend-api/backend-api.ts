@@ -1,29 +1,47 @@
 import axios, { AxiosResponse } from 'axios';
 import { EVENTS_COUNT_BY_CATEGORY, LAST_USER_EVENTS, NUMBER_STATS, UTILIZADOR } from './interfaces';
+import router from '../../router';
 
 class BaseCommunication {
     private baseURL: string;
   
+
+
     constructor(baseURL: string, logs: boolean = true) {
       this.baseURL = baseURL;
+    }
+
+    private get_access_token()
+    {
+      return `Bearer ${localStorage.getItem('auth-token')}`
     }
 
 
     async get(endpoint: string, ...params: string[]): Promise<any> {
       let url = `${this.baseURL}/${endpoint}`;
-  
+    
       // Append query parameters to the URL
       if (params.length > 0) {
         const queryParams = params.join('&');
         url += `?${queryParams}`;
       }
-  
+    
       try {
-        const response: AxiosResponse = await axios.get(url);
+        const response: AxiosResponse = await axios.get(url, {
+          headers: {
+            "Authorization": this.get_access_token(),
+          }
+        });
+    
         this.logRequestAndResponse(url, 'GET', null, response);
         return response.data;
-      } catch (error) {
+      } catch (error: any) {
         console.error(`Error while performing GET request to ${url}`, error);
+    
+        if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+          window.location.href = '/auth/login'
+        }
+    
         throw error;
       }
     }
@@ -31,11 +49,20 @@ class BaseCommunication {
     async post(endpoint: string, data: any): Promise<any> {
       const url = `${this.baseURL}/${endpoint}`;
       try {
-        const response: AxiosResponse = await axios.post(url, data);
+        const response: AxiosResponse = await axios.post(url, data, {
+          headers: {
+            "Authorization": this.get_access_token(),
+          }
+        });
         this.logRequestAndResponse(url, 'POST', data, response);
         return response.data;
-      } catch (error) {
-        console.error(`Error while performing POST request to ${url}`, error);
+      } catch (error: any) {
+        console.error(`Error while performing post request to ${url}`, error);
+    
+        if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+          window.location.href = '/auth/login'
+        }
+    
         throw error;
       }
     }
@@ -43,23 +70,39 @@ class BaseCommunication {
     async put(endpoint: string, data: any): Promise<any> {
       const url = `${this.baseURL}/${endpoint}`;
       try {
-        const response: AxiosResponse = await axios.put(url, data);
+        const response: AxiosResponse = await axios.put(url, data, {
+          headers: {
+            "Authorization": this.get_access_token(),
+          }
+        });
         this.logRequestAndResponse(url, 'PUT', data, response);
         return response.data;
-      } catch (error) {
+      } catch (error: any) {
         console.error(`Error while performing PUT request to ${url}`, error);
+    
+        if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+          window.location.href = '/auth/login'
+        }
+    
         throw error;
       }
     }
   
-    async delete(endpoint: string, data: any, headers: any): Promise<any> {
+    async delete(endpoint: string, data: any): Promise<any> {
       const url = `${this.baseURL}/${endpoint}`;
       try {
-        const response: AxiosResponse = await axios.delete(url, { data, headers });
+        const response: AxiosResponse = await axios.delete(url, { data, headers: {
+          "Authorization": this.get_access_token(),
+        } });
         this.logRequestAndResponse(url, 'DELETE', data, response);
         return response.data;
-      } catch (error) {
+      } catch (error: any) {
         console.error(`Error while performing DELETE request to ${url}`, error);
+    
+        if (error.response && (error.response.status === 401 || error.response.status === 422)) {
+          window.location.href = '/auth/login'
+        }
+    
         throw error;
       }
     }
@@ -77,11 +120,24 @@ class BEAPI extends BaseCommunication
     constructor(baseURL: string = "http://172.16.0.3:5000")
     {
         super(baseURL);
+
     }
+
 
     /*
         example usage getUsers('users', 'param1=value1', 'param2=value2');
     */
+
+    async login(telefone: number, password: string)
+    {
+      let data = await super.post('login', {
+        telefone: telefone,
+        password: password,
+      });
+      
+      localStorage.setItem('auth-token' , data.access_token)
+    }
+
     async getUsers(): Promise<UTILIZADOR[]>
     {
         return await super.get('users');
@@ -94,7 +150,7 @@ class BEAPI extends BaseCommunication
 
     async removeUser(Id: number)
     {
-      return await super.delete('users/' + Id, null, null);
+      return await super.delete('users/' + Id, null);
     }
 
     async getUserLastEvents(usr_id: number , nevents: number): Promise<LAST_USER_EVENTS[]>

@@ -16,10 +16,10 @@ class DatabaseInteraction:
     
     
     query_mapping = {
-        "get_users": {"query": "SELECT * FROM UTILIZADOR", "returns_table" : True},
+        "get_users": {"query": "SELECT Id,Nome,Telefone,DataNascimento,NivelPermissao_Nivel FROM UTILIZADOR", "returns_table" : True},
         "add_user": {"query" : """
-                    INSERT INTO UTILIZADOR (DataNascimento, NivelPermissao_Nivel, Nome, Password, Telefone)
-                    VALUES (?, ?, ?, ?, ?)
+                    INSERT INTO UTILIZADOR (DataNascimento, NivelPermissao_Nivel, Nome, PW_Hash, Salt, Telefone)
+                    VALUES (?, ?, ?, ?, ?, ?)
                     """, "returns_table" : False
                     },
         
@@ -34,6 +34,7 @@ class DatabaseInteraction:
         "get_number_of_events_in_maintenance": {"query": "EXEC GetRowCountOfEventsInRepairingSchedule", "returns_table" : True},
         "get_number_of_events_in_active_schedule": {"query": "EXEC GetRowCountOfEventsInActiveSchedule", "returns_table" : True},
         
+        "get_user" : {"query" : "SELECT * FROM UTILIZADOR WHERE Telefone = ?", "returns_table" : True},
     }
     
     
@@ -82,8 +83,8 @@ class DatabaseInteraction:
     def get_users(self):
         return self.__execute_query("get_users")
     
-    def add_user(self, DataNascimento, NivelPermissao_Nivel, Nome, Password, Telefone):
-        self.__execute_query("add_user", DataNascimento,NivelPermissao_Nivel,Nome,Password,Telefone)
+    def add_user(self, DataNascimento, NivelPermissao_Nivel, Nome, PW_Hash, Salt, Telefone):
+        self.__execute_query("add_user", DataNascimento,NivelPermissao_Nivel,Nome,PW_Hash,Salt,Telefone)
         
     def remove_user(self, user_id):
         self.__execute_query("remove_user",user_id)
@@ -108,5 +109,8 @@ class DatabaseInteraction:
     
     def get_number_of_events_in_active_schedule(self):
         return self.__execute_query("get_number_of_events_in_active_schedule")
+    
+    def get_user(self, telefone):
+        return self.__execute_query("get_user" , telefone)
     
     

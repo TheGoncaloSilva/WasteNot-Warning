@@ -1,11 +1,38 @@
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager,create_access_token, jwt_required, get_jwt_identity
+import security
+
 import queries
 app = Flask(__name__)
+app.config['JWT_SECRET_KEY'] = 'super_secret_key'
+jwt = JWTManager(app)
 CORS(app)
 
 databaseInteraction = queries.DatabaseInteraction()
 
+@app.route('/login', methods=['POST'])
+def login():
+    telefone = request.json.get('telefone')
+    password = request.json.get('password')
+    
+    users = databaseInteraction.get_user(telefone)
+    
+    if len(users) == 0:
+        return jsonify({'message': 'Invalid credentials'}), 401
+    else:
+        user = users[0]
+        hash = security.find_hash(password, user["Salt"])
+
+        if hash == user["PW_Hash"]:
+            access_token = create_access_token(identity=telefone)
+            return jsonify({'access_token': access_token}), 200
+        
+        else:
+            return jsonify({'message': 'Invalid credentials'}), 401
+        
+    
+    
 
 @app.route('/')
 def hello_geek():
@@ -15,17 +42,27 @@ def hello_geek():
 Users
 """
 @app.route('/users')
+@jwt_required()
 def get_users():
     return databaseInteraction.get_users()
 
 @app.route('/users', methods=['POST'])
+@jwt_required()
 def add_user():
-    # Retrieve the data from the request body
     user_data = request.get_json()
-    databaseInteraction.add_user(user_data["DataNascimento"],user_data["NivelPermissao_Nivel"],user_data["Nome"],user_data["Password"],int(user_data["Telefone"]))
+    
+    salt = security.generate_salt()
+    
+    pw_hash = security.find_hash(
+        user_data["Password"],
+        salt
+    )
+    
+    databaseInteraction.add_user(user_data["DataNascimento"],user_data["NivelPermissao_Nivel"],user_data["Nome"],pw_hash,salt,int(user_data["Telefone"]))
     return user_data
 
 @app.route('/users/<int:user_id>', methods=['DELETE'])
+@jwt_required()
 def delete_user(user_id):
     databaseInteraction.remove_user(user_id)
     response = make_response()
@@ -33,6 +70,7 @@ def delete_user(user_id):
     return response
 
 @app.route('/user/last_events', methods=['GET'])
+@jwt_required()
 def get_last_user_events():
     user_id = request.args.get('user_id', type=int)
     nevents = request.args.get('nevents', type=int)
@@ -40,6 +78,7 @@ def get_last_user_events():
     return databaseInteraction.get_user_last_events(user_id,nevents)
 
 @app.route('/user/restricted_areas_by_user', methods=['GET'])
+@jwt_required()
 def get_areas_restritas_by_user():
     user_id = request.args.get('user_id', type=int)
     
@@ -49,23 +88,28 @@ def get_areas_restritas_by_user():
 Events
 """
 @app.route('/events')
+@jwt_required()
 def get_events():
     return databaseInteraction.get_events()
 
 @app.route('/events/get_events_count_by_category', methods=['GET'])
+@jwt_required()
 def get_events_count_by_category():
     
     return databaseInteraction.get_events_count_by_category()
 
 @app.route('/events/get_number_of_events_in_excluded_time', methods=['GET'])
+@jwt_required()
 def get_number_of_events_in_excluded_time():
     return databaseInteraction.get_number_of_events_in_excluded_time()
 
 @app.route('/events/get_number_of_events_in_maintenance', methods=['GET'])
+@jwt_required()
 def get_number_of_events_in_maintenance():
     return databaseInteraction.get_number_of_events_in_maintenance()
 
 @app.route('/events/get_number_of_events_in_active_schedule', methods=['GET'])
+@jwt_required()
 def get_number_of_events_in_active_schedule():
     return databaseInteraction.get_number_of_events_in_active_schedule()
 
