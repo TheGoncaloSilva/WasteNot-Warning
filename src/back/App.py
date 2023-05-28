@@ -113,5 +113,10 @@ def get_number_of_events_in_maintenance():
 def get_number_of_events_in_active_schedule():
     return databaseInteraction.get_number_of_events_in_active_schedule()
 
+@app.route('/events/get_next_maintenance', methods=['GET'])
+@jwt_required()
+def get_next_maintenance():
+    return databaseInteraction.get_next_maintenance()
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

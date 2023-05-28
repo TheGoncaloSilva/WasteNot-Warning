@@ -48,7 +48,7 @@ Grupo p1g6:
   * Eventos ordenados por data ocorridos em horário de manutenção
   * Eventos ordenados por data que acionaram o sistema
 * Informação se o sistema se encontra em manutenção e quais as áreas afetadas, bem como o estado da manutenção (SELECT das manutenções, com Join das áreas e do estado da manutenção)
-* Informação das 2 próximas manutenções e a que áreas (SELECT com Join das áreas)
+* Informação das próximas manutenções e a que áreas (VIEW)
 * Lista dos ultimos eventos e informação a indicar qual é o seu status, como manutenção, fora de horário, "importante" (VIEW)
 * CRUD para dispositivos de acesso?
 
@@ -76,8 +76,9 @@ Grupo p1g6:
 
 * Quando inserido um registo de eventos, tem de ser verificado o tipo e é de um dispositivo que pertence a uma área restrita, se for. O sistema tem de verificar se está dentro das regras para ser acionado (dentro do horário da área e fora de exclusão ou manutenção), se estiver, aciona (trigger)
 * Temos que ter uma aplicação (CLI) externa para falsificar a ocorrência de um evento por um dispositivo
-* **Trigger** para quando se adiciona um evento, se o timestamp não for fornecido, ele preencher sozinho
+* **Trigger** para quando se adiciona um evento, se o timestamp não for fornecido, ele preencher sozinho (Ou se for fornecido um no futuro, substituir pelo atual ou não executar)
 * Script para carregar a base de dados inteira para o docker
+* **Trigger** para garantir que as datas (por exemplo nas manutençoes) de inicio e fim são corretas (Inicio < Fim)
 
 ## Ferramentas a incorporar
 

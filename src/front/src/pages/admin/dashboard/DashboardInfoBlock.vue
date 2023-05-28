@@ -16,8 +16,16 @@
         <div class="flex xs12 sm6 md6">
           <va-card>
             <va-card-content>
-              <h2 class="va-h2 ma-0" :style="{ color: colors.primary }">291</h2>
-              <p class="no-wrap">{{ t('dashboard.info.completedPullRequests') }}</p>
+              <div class="row row-separated">
+                <div class="flex xs9">
+                  <h2 class="va-h2 ma-0" :style="{ color: colors.primary }">291</h2>
+                  <p class="no-wrap">{{ t('dashboard.info.completedPullRequests') }}</p>
+                </div>  
+                <div class="flex xs3">
+                    <h2 class="va-h2 ma-0 va-text-center" :style="{ color: colors.warning }">91</h2>
+                    <p class="va-text-center">{{ t('dashboard.info.units') }}</p>
+                  </div>
+              </div>
             </va-card-content>
           </va-card>
         </div>
@@ -89,13 +97,17 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { VaCarousel, VaModal, VaCard, VaCardContent, VaCardTitle, VaButton, VaImage, useColors } from 'vuestic-ui'
+  import { VaCard, VaCardContent, VaCardTitle, VaButton, useColors } from 'vuestic-ui'
+  import { getNextMaintenance } from './stats'
 
   const { t } = useI18n()
   const { colors } = useColors()
 
   let alarmTriggered = ref(false)
   let isArmed = ref(true)
+
+  // why component disappear with this?
+  //const nextMaintenanceList = ref(await getNextMaintenance());
 
   const infoTiles = ref([
     {
@@ -118,19 +130,6 @@
     },
   ])
 
-  const modal = ref(false)
-  const currentImageIndex = ref(0)
-  const images = ref([
-    'https://i.imgur.com/qSykGko.jpg',
-    'https://i.imgur.com/jYwT08D.png',
-    'https://i.imgur.com/9930myH.jpg',
-    'https://i.imgur.com/2JxhWD6.jpg',
-    'https://i.imgur.com/MpiOWbM.jpg',
-  ])
-
-  function showModal() {
-    modal.value = true
-  }
 
   function toggleArmedStatus() {
     isArmed.value = !isArmed.value;
