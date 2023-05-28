@@ -5,6 +5,7 @@ GO
 CREATE PROCEDURE GetRowCountOfEventsInExclusionTime
 AS
 BEGIN
+    SET NOCOUNT ON;
     DECLARE @RowCount INT;
 
     SELECT @RowCount = COUNT(*)
@@ -34,6 +35,7 @@ GO
 CREATE PROCEDURE GetRowCountOfEventsInRepairingSchedule
 AS
 BEGIN
+    SET NOCOUNT ON;
     DECLARE @RowCount INT;
 
     SELECT @RowCount = COUNT(*)
@@ -56,7 +58,8 @@ GO
 GO
 CREATE PROCEDURE GetRowCountOfEventsInActiveSchedule
 AS
-BEGIN
+BEGIN 
+    SET NOCOUNT ON;
     DECLARE @RowCount INT;
 
     SELECT @RowCount = COUNT(*)
