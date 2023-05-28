@@ -3,9 +3,11 @@
     <Suspense>
       <dashboard-charts />
     </Suspense>
-
-    <dashboard-info-block />
-
+    
+    <Suspense>
+      <dashboard-info-block />
+    </Suspense>
+    
     <div class="row row-equal">
       <div class="flex xs12 lg6">
         <dashboard-tabs @submit="addAddressToMap" />

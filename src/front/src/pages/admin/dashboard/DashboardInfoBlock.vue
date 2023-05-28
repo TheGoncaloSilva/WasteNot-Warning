@@ -13,22 +13,23 @@
       </div>
 
       <div class="row">
-        <div class="flex xs12 sm6 md6" v-for="MAN in nextMaintenanceList">
-          <va-card>
-            <va-card-content>
-              <div class="row row-separated">
-                <div class="flex xs9">
-                  <h2 class="va-h2 ma-0" :style="{ color: colors.primary }">{{ MAN.Man_inicio }}</h2>
-                  <p class="no-wrap">{{ MAN.AR_localizacao }}</p>
-                </div>  
-                <div class="flex xs3">
-                    <h2 class="va-h2 ma-0 va-text-center" :style="{ color: colors.warning }">{{ MAN.Man_duracao }}</h2>
-                    <p class="va-text-center">Horas</p>
-                  </div>
-              </div>
-            </va-card-content>
-          </va-card>
-        </div>
+        
+          <div class="flex xs12 sm6 md6" v-for="MAN in nextMaintenanceList">
+            <va-card>
+              <va-card-content>
+                <div class="row row-separated">
+                  <div class="flex xs9">
+                    <h2 class="va-h2 ma-0" :style="{ color: colors.primary }">{{ MAN.Man_inicio }}</h2>
+                    <p class="no-wrap">{{ MAN.AR_localizacao }}</p>
+                  </div>  
+                  <div class="flex xs3">
+                      <h2 class="va-h2 ma-0 va-text-center" :style="{ color: colors.warning }">{{ MAN.Man_duracao }}</h2>
+                      <p class="va-text-center">Horas</p>
+                    </div>
+                </div>
+              </va-card-content>
+            </va-card>
+          </div>
       </div>
     </div>
 
@@ -79,7 +80,7 @@
   import { useI18n } from 'vue-i18n'
   import { VaCard, VaCardContent, VaCardTitle, VaButton, useColors } from 'vuestic-ui'
   import { getNextMaintenance } from './stats'
-import { NEXT_MAINTENANCE } from '../../../services/backend-api/interfaces'
+  import { NEXT_MAINTENANCE } from '../../../services/backend-api/interfaces'
 
   const { t } = useI18n()
   const { colors } = useColors()
@@ -88,8 +89,8 @@ import { NEXT_MAINTENANCE } from '../../../services/backend-api/interfaces'
   let isArmed = ref(true)
 
   // why component disappear with this?
-  //const nextMaintenanceList = ref(await getNextMaintenance());
-  const nextMaintenanceList = [
+  const nextMaintenanceList = ref(await formatMaintenanceList());
+  /*const nextMaintenanceList = [
                                 { Man_inicio : "2023-06-30",
                                   Man_duracao: "24",
                                   AR_localizacao: "Edifício A, 3º Andar"
@@ -98,7 +99,7 @@ import { NEXT_MAINTENANCE } from '../../../services/backend-api/interfaces'
                                   Man_duracao: "48",
                                   AR_localizacao: "Edifício B, 2º Andar"
                                 },
-                            ] 
+                            ]*/
 
   const infoTiles = ref([
     {
@@ -121,6 +122,51 @@ import { NEXT_MAINTENANCE } from '../../../services/backend-api/interfaces'
     },
   ])
 
+  async function formatMaintenanceList() {
+    const main = await getNextMaintenance();
+
+    const res: any[] = [];
+
+    main.forEach(MAN => {
+      let dInicio = formatDate(MAN.Man_inicio);
+      let local = MAN.AR_localizacao;
+      let duracao = time_between_dates(MAN.Man_inicio, MAN.Man_fim)
+      console.log(time_between_dates(MAN.Man_inicio, MAN.Man_fim))
+      res.push({Man_inicio: dInicio, Man_duracao: duracao, AR_localizacao:local})
+    });
+
+    return res;
+  };
+
+  function time_between_dates(dateS1: string, dateS2: string): number {
+    const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000; // Number of milliseconds in a day
+
+    const date1 = new Date(dateS1);
+    const date2 = new Date(dateS2);
+
+    if (date1.getTime() === date2.getTime()) {
+      // If the dates are equal, return 24 hours (1 day)
+      return 24;
+    } else if (date2 > date1) {
+      // If date2 is greater than date1, calculate the time difference in milliseconds
+      const timeDiffInMs = date2.getTime() - date1.getTime();
+      const hoursDiff = Math.ceil(timeDiffInMs / (1000 * 60 * 60)); // Convert milliseconds to hours and round up
+      return hoursDiff;
+    } else {
+      // Invalid input, date2 is not greater than or equal to date1
+      throw new Error("Invalid input: date2 should be greater than or equal to date1.");
+    }
+  }
+
+
+  function formatDate(dateString: string): String{
+    const date = new Date(dateString);
+
+    const isoDateString = date.toISOString();
+    const formattedDate = isoDateString.slice(8, 10) + '-' + isoDateString.slice(5, 7) + '-' + isoDateString.slice(0, 4);
+
+    return formattedDate
+  }
 
   function toggleArmedStatus() {
     isArmed.value = !isArmed.value;
