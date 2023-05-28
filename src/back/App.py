@@ -128,6 +128,30 @@ def get_number_of_events_in_active_schedule():
 def get_next_maintenance():
     return databaseInteraction.get_next_maintenance()
 
+@app.route('/restricted-areas', methods=['GET'])
+@jwt_required()
+def get_restricted_areas():
+    return databaseInteraction.get_restricted_areas()
+
+@app.route('/restricted-area/last-repairs', methods=['GET'])
+@jwt_required()
+def get_last_repairs():
+    raid = request.args.get('restricted_area', type=int)
+    mrow = request.args.get('maxrows', type=int)
+    return databaseInteraction.get_last_repairs_of_a_restricted_area(raid,mrow)
+
+@app.route('/restricted-area/devices', methods=['GET'])
+@jwt_required()
+def get_device_list_by_restricted_area():
+    raid = request.args.get('restricted_area', type=int)
+    return databaseInteraction.get_device_list_of_a_restricted_area(raid)
+
+@app.route('/restricted-area/horario', methods=['GET'])
+@jwt_required()
+def get_horario_by_restricted_area():
+    raid = request.args.get('restricted_area', type=int)
+    return databaseInteraction.get_horarios_monitorizacao_by_restricted_area(raid)
+
 @app.route('/events/get_number_of_events', methods=['GET'])
 @jwt_required()
 def get_number_of_events():

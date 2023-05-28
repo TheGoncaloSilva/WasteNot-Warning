@@ -24,3 +24,39 @@ RETURN
     WHERE apu.Utilizador_Id = @UserId
 );
 GO
+
+CREATE FUNCTION dbo.GetLastRepairsOfARestrictedArea(@restrictedAreaID INT, @maxRows INT)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT TOP (@maxRows)  DataInicio, DataFim, Comentatio, EstadoManutencao_Descricao, AreaRestrita_Id
+    FROM MANUTENCOES AS M
+    INNER JOIN AREA_RESTRITA AS A ON M.AreaRestrita_Id = A.Id
+    WHERE A.Id = @restrictedAreaID
+    ORDER BY DataInicio
+);
+GO
+
+CREATE FUNCTION dbo.GetDeviceListOfARestrictedArea(@restrictedAreaID INT)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT Dispositivo_Mac, TipoDispositivoSeguranca_Descricao FROM DISPOSITIVO_SEGURANCA AS D
+    INNER JOIN AREA_RESTRITA AS A
+    ON D.AreaRestrita_Id = A.Id
+    WHERE A.Id = @restrictedAreaID
+);
+GO
+
+CREATE FUNCTION dbo.GetHorariosMonitorizacaoByRestrictedArea(@RestrictedAreaID INT)
+RETURNS TABLE
+AS
+RETURN
+(
+SELECT HoraInicio,HoraFim,Estado FROM AREA_RESTRITA_HORARIO_MONITORIZACAO AS T1
+INNER JOIN AREA_RESTRITA AS T2 ON T1.AreaRestrita_Id=T2.Id
+INNER JOIN HORARIO_MONITORIZACAO AS T3 ON T1.HorarioMonitorizacao_Id=T3.Id
+WHERE T2.Id = @RestrictedAreaID);
+GO

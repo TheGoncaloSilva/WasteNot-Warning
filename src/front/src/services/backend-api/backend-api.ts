@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { EVENTS_COUNT_BY_CATEGORY, LAST_USER_EVENTS, NEXT_MAINTENANCE, NUMBER_STATS, UTILIZADOR } from './interfaces';
+import { EVENTS_COUNT_BY_CATEGORY, HORARIO_MONITORIZACAO, LAST_REPAIRS, LAST_USER_EVENTS, NEXT_MAINTENANCE, NUMBER_STATS, SECURITY_DEVICE, UTILIZADOR } from './interfaces';
 import router from '../../router';
 
 class BaseCommunication {
@@ -201,6 +201,21 @@ class BEAPI extends BaseCommunication
     async get_number_of_devices(): Promise<NUMBER_STATS[]>
     {
       return await super.get('events/get_number_of_devices');
+    }
+
+    async get_resticted_area_last_repairs(restricted_area_id: number, max_rows: number): Promise<LAST_REPAIRS[]>
+    {
+      return await super.get('restricted-area/last-repairs', 'restricted_area=' + String(restricted_area_id), 'maxrows=' + String(max_rows));
+    }
+
+    async get_restricted_area_devices(restricted_area_id: number): Promise<SECURITY_DEVICE[]>
+    {
+      return await super.get('restricted-area/devices', 'restricted_area=' + String(restricted_area_id));
+    }
+
+    async get_restricted_area_horario(restricted_area_id: number): Promise<HORARIO_MONITORIZACAO[]>
+    {
+      return await super.get('restricted-area/horario' , 'restricted_area=' + String(restricted_area_id))
     }
 }
 
