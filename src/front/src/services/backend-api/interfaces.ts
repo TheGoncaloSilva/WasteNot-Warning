@@ -42,3 +42,24 @@ export interface NEXT_MAINTENANCE {
     AR_descricao: string;
     AR_localizacao: string;
 }
+
+export interface LAST_REPAIRS
+{
+    DataInicio: Date;
+    DataFim: Date;
+    Comentatio: string;
+    EstadoManutencao_Descricao: string;
+    AreaRestrita_Id: number;
+}
+
+export interface SECURITY_DEVICE
+{
+    Dispositivo_Mac: string;
+    TipoDispositivoSeguranca_Descricao: string;
+}
+
+export interface HORARIO_MONITORIZACAO {
+    HoraInicio: Date;
+    HoraFim: Date;
+    Estado: string;
+}
