@@ -55,6 +55,7 @@ class DatabaseInteraction:
         
             
     def __reset(self):
+        self.__run_sql_from_source('/database/reset.sql')
         self.__run_sql_from_source('/database/WasteNotWarning_db.sql')
         self.__run_sql_from_source('/database/populate.sql')
         self.__run_sql_from_source('/database/stored_procedures.sql')
@@ -74,7 +75,6 @@ class DatabaseInteraction:
                 "-S", config["Server"],
                 "-U", config["UID"],
                 "-P", config["PWD"],
-                "-d", config["Database"],
                 "-i", file_src,
             ]
             
