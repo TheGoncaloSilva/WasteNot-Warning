@@ -37,7 +37,7 @@ def login():
 
         if hash == user["PW_Hash"]:
             access_token = create_access_token(identity=telefone)
-            return jsonify({'access_token': access_token}), 200
+            return jsonify({'access_token': access_token, 'user_name' : user["Nome"]}), 200
         
         else:
             return jsonify({'message': 'Invalid credentials'}), 401

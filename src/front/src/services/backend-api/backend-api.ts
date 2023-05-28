@@ -135,6 +135,7 @@ class BEAPI extends BaseCommunication
         password: password,
       });
       
+      localStorage.setItem('user-name' , data.user_name)
       localStorage.setItem('auth-token' , data.access_token)
     }
 

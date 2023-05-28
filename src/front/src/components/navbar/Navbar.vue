@@ -39,7 +39,9 @@
   const GlobalStore = useGlobalStore()
   const { t } = useI18n()
 
-  const { isSidebarMinimized, userName } = storeToRefs(GlobalStore)
+  const { isSidebarMinimized } = storeToRefs(GlobalStore)
+
+  const userName = localStorage.getItem('user-name')
 
   const { getColors } = useColors()
   const colors = computed(() => getColors())
