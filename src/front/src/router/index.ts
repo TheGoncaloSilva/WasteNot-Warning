@@ -28,6 +28,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/admin/users/Users.vue'),
       },
       {
+        name: 'restricted-areas',
+        path: 'restricted-areas',
+        component: () => import('../pages/admin/restricted-areas/Restricted-areas.vue'),
+      },
+      {
         name: 'dashboard_stock',
         path: 'dashboard_stock',
         component: () => import('../pages/admin/dashboard_stock/Dashboard.vue'),

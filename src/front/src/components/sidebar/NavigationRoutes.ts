@@ -26,6 +26,13 @@ export default {
       },
     },
     {
+      name: 'restricted-areas',
+      displayName: 'Restricted Areas',
+      meta: {
+        icon: 'fa-lock'
+      }
+    },
+    {
       name: 'dashboard_stock',
       displayName: 'dashboard_stock',
       meta: {

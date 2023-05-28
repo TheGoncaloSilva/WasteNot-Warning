@@ -37,6 +37,12 @@ class DatabaseInteraction:
         "get_user" : {"query" : "SELECT * FROM UTILIZADOR WHERE Telefone = ?", "returns_table" : True},
 
         "get_next_maintenance": {"query": "SELECT * FROM next_repairs", "returns_table" : True},
+        
+        "get_last_repairs_of_a_restricted_area" : {"query" : "SELECT * FROM GetLastRepairsOfARestrictedArea(?,?)", "returns_table" : True},
+        
+        "get_device_list_of_a_restricted_area" : {"query" : "SELECT * FROM GetDeviceListOfARestrictedArea(?)", "returns_table" : True},
+        
+        "get_horarios_monitorizacao_by_restricted_area" : {"query" : "SELECT * FROM GetHorariosMonitorizacaoByRestrictedArea(?)", "returns_table" : True}
     }
     
     
@@ -152,5 +158,15 @@ class DatabaseInteraction:
     
     def get_user(self, telefone):
         return self.__execute_query("get_user" , telefone)
+    
+    def get_last_repairs_of_a_restricted_area(self, restrictedArea, count):
+        return self.__execute_query("get_last_repairs_of_a_restricted_area", restrictedArea, count)
+    
+    def get_device_list_of_a_restricted_area(self, restrictedArea):
+        return self.__execute_query("get_device_list_of_a_restricted_area", restrictedArea)
+    
+    def get_horarios_monitorizacao_by_restricted_area(self, restrictedArea):
+        return self.__execute_query("get_horarios_monitorizacao_by_restricted_area", restrictedArea)
+    
     
     
