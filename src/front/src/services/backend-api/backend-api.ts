@@ -187,6 +187,21 @@ class BEAPI extends BaseCommunication
     {
       return await super.get('events/get_next_maintenance');
     }
+
+    async get_number_of_events(): Promise<NUMBER_STATS[]>
+    {
+      return await super.get('events/get_number_of_events');
+    }
+
+    async get_number_of_areas(): Promise<NUMBER_STATS[]>
+    {
+      return await super.get('events/get_number_of_areas');
+    }
+
+    async get_number_of_devices(): Promise<NUMBER_STATS[]>
+    {
+      return await super.get('events/get_number_of_devices');
+    }
 }
 
 export const BE_API: BEAPI = new BEAPI();

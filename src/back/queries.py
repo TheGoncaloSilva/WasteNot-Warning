@@ -37,6 +37,10 @@ class DatabaseInteraction:
         "get_user" : {"query" : "SELECT * FROM UTILIZADOR WHERE Telefone = ?", "returns_table" : True},
 
         "get_next_maintenance": {"query": "SELECT * FROM next_repairs", "returns_table" : True},
+
+        "get_number_of_events" : {"query" : "SELECT COUNT(*) AS row_count FROM REGISTO_EVENTOS;", "returns_table" : True},
+        "get_number_of_areas" : {"query" : "SELECT COUNT(*) AS row_count FROM AREA_RESTRITA;", "returns_table" : True},
+        "get_number_of_devices" : {"query" : "SELECT COUNT(*) AS row_count FROM DISPOSITIVO;", "returns_table" : True},
     }
     
     
@@ -152,5 +156,14 @@ class DatabaseInteraction:
     
     def get_user(self, telefone):
         return self.__execute_query("get_user" , telefone)
+    
+    def get_number_of_events(self):
+        return self.__execute_query("get_number_of_events")
+    
+    def get_number_of_areas(self):
+        return self.__execute_query("get_number_of_areas")
+    
+    def get_number_of_devices(self):
+        return self.__execute_query("get_number_of_devices")
     
     

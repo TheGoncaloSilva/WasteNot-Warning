@@ -1,6 +1,6 @@
 USE WasteNot_Warning;
 -- SAMPLE WASTE NOT WARNING DATA
-
+GO
 INSERT INTO NIVEL_PERMISSAO(Nivel) VALUES ('utilizador comum');
 INSERT INTO NIVEL_PERMISSAO(Nivel) VALUES ('administrador');
 INSERT INTO NIVEL_PERMISSAO(Nivel) VALUES ('utilizador externo');

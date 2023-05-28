@@ -1,5 +1,5 @@
 import { BE_API } from '../../../services/backend-api/backend-api';
-import { NEXT_MAINTENANCE } from '../../../services/backend-api/interfaces';
+import { NEXT_MAINTENANCE, NUMBER_STATS } from '../../../services/backend-api/interfaces';
 
 export const getNextMaintenance = async () => {
     return await (async() => {
@@ -11,4 +11,28 @@ export const getNextMaintenance = async () => {
         }
         return res;
     })();
-  };
+};
+
+export const getNumberEvents = async () => {
+    return await (async() => {
+        const res: NUMBER_STATS[] = await BE_API.get_number_of_events();
+
+        return res;
+    })();
+};
+
+export const getNumberAreasRestritas = async () => {
+    return await (async() => {
+        const res: NUMBER_STATS[] = await BE_API.get_number_of_events();
+        
+        return res;
+    })();
+};
+
+export const getNumberDevices = async () => {
+    return await (async() => {
+        const res: NUMBER_STATS[] = await BE_API.get_number_of_devices();
+        
+        return res;
+    })();
+};
