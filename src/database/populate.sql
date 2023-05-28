@@ -8,59 +8,76 @@ INSERT INTO NIVEL_PERMISSAO(Nivel) VALUES ('utilizador externo');
 -- INSERT statements
 INSERT INTO UTILIZADOR (Nome, PW_Hash, Salt, Telefone, DataNascimento, NivelPermissao_Nivel)
 VALUES
-('João Silva', 
-    0xb47958e9e761da3b448522da07f287289a2bee3e32438bbe8eee725aad2cd60a,
-    0x0123456789ABCDEF0123456789ABCDEF,
-    123456789, '1990-01-01', 'administrador')
+    ('João Silva', 
+        0xb47958e9e761da3b448522da07f287289a2bee3e32438bbe8eee725aad2cd60a,
+        0x0123456789ABCDEF0123456789ABCDEF,
+        123456789, '1990-01-01', 'administrador'),
+    ('Maria Furtado', 
+        0xb47958e9e761da3b448522da07f287289a2bee3e32438bbe8eee725aad2cd60a,
+        0x0123456789ABCDEF0123456789ABCDEF,
+        939939939, '2000-02-03', 'utilizador comum'),
+    ('Paulo Alberto', 
+        0xb47958e9e761da3b448522da07f287289a2bee3e32438bbe8eee725aad2cd60a,
+        0x0123456789ABCDEF0123456789ABCDEF,
+        919919919, '1982-05-04', 'utilizador externo'),
+    ('Joana Santos', 
+        0xb47958e9e761da3b448522da07f287289a2bee3e32438bbe8eee725aad2cd60a,
+        0x0123456789ABCDEF0123456789ABCDEF,
+        929929929, '1995-10-12', 'administrador'),
+    ('Francisco Lourenço', 
+        0xb47958e9e761da3b448522da07f287289a2bee3e32438bbe8eee725aad2cd60a,
+        0x0123456789ABCDEF0123456789ABCDEF,
+        999999999, '1993-07-02', 'utilizador comum');
+    
 
 INSERT INTO HORARIO_MONITORIZACAO (HoraInicio, HoraFim, Estado)
 VALUES
-('00:00:00', '07:00:00', 1),
-('19:00:00', '23:00:00', 0);
+    ('00:00:00', '07:00:00', 1),
+    ('19:00:00', '23:00:00', 0);
 
 INSERT INTO AREA_RESTRITA (DESCRICAO, LOCALIZACAO)
 VALUES
-('Sala de Reuniões', 'Edifício A, 3º Andar'),
-('Laboratório de Informática', 'Edifício B, 2º Andar'),
-('Sala de Convívio', 'Edifício C, 1º Andar');
+    ('Sala de Reuniões', 'Edifício A, 3º Andar'),
+    ('Laboratório de Informática', 'Edifício B, 2º Andar'),
+    ('Sala de Convívio', 'Edifício C, 1º Andar');
 
 INSERT INTO AREA_RESTRITA_HORARIO_MONITORIZACAO (AreaRestrita_Id, HorarioMonitorizacao_Id)
 VALUES
-(1, 1),
-(1, 2),
-(2, 2);
+    (1, 1),
+    (1, 2),
+    (2, 2);
 
 INSERT INTO AREA_RESTRITA_CONTACTA_UTILIZADOR (AreaRestrita_Id, Utilizador_Id, HoraInicio, HoraFim)
 VALUES
-(1, 1, '06:00:00', '12:00:00'),
-(2, 2, '18:00:00', '23:00:00');
+    (1, 1, '06:00:00', '12:00:00'),
+    (2, 2, '18:00:00', '23:00:00');
 
 INSERT INTO AREA_RESTRITA_PERTENCE_UTILIZADOR (AreaRestrita_Id, Utilizador_Id)
 VALUES
-(1, 1),
-(2, 2),
-(2, 3),
-(3, 3),
-(3, 4),
-(3, 5);
+    (1, 1),
+    (2, 2),
+    (2, 3),
+    (3, 3),
+    (3, 4),
+    (3, 5);
 
 INSERT INTO HORARIO_EXCLUSAO (DataInicio, DataFim)
 VALUES
-('2023-05-20 08:00:00', '2023-05-20 12:00:00'),
-('2023-05-21 14:00:00', '2023-05-21 18:00:00'),
-('2023-05-22 09:00:00', '2023-05-22 13:00:00');
+    ('2023-05-20 08:00:00', '2023-05-20 12:00:00'),
+    ('2023-05-21 14:00:00', '2023-05-21 18:00:00'),
+    ('2023-05-22 09:00:00', '2023-05-22 13:00:00');
 
 INSERT INTO AREA_RESTRITA_HORARIO_EXCLUSAO (AreaRestrita_Id, HorarioExclusao_Id)
 VALUES
-(1, 1),
-(2, 2),
-(3, 3);
+    (1, 1),
+    (2, 2),
+    (3, 3);
 
 INSERT INTO ESTADO_MANUTENCAO (Descricao)
 VALUES
-('Pendente'),
-('Em Progresso'),
-('Concluída');
+    ('Pendente'),
+    ('Em Progresso'),
+    ('Concluída');
 
 INSERT INTO MANUTENCOES(DataInicio, DataFim, Comentatio, EstadoManutencao_Descricao, AreaRestrita_Id) 
 VALUES 

@@ -1,3 +1,6 @@
+USE WasteNot_Warning;
+GO
+
 CREATE FUNCTION dbo.GetLastUserEvents(@UserID INT, @TopCount INT)
 RETURNS TABLE
 AS
