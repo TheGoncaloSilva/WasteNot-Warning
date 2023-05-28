@@ -42,7 +42,11 @@ class DatabaseInteraction:
         
         "get_device_list_of_a_restricted_area" : {"query" : "SELECT * FROM GetDeviceListOfARestrictedArea(?)", "returns_table" : True},
         
-        "get_horarios_monitorizacao_by_restricted_area" : {"query" : "SELECT * FROM GetHorariosMonitorizacaoByRestrictedArea(?)", "returns_table" : True}
+        "get_horarios_monitorizacao_by_restricted_area" : {"query" : "SELECT * FROM GetHorariosMonitorizacaoByRestrictedArea(?)", "returns_table" : True},
+
+        "get_number_of_events" : {"query" : "SELECT COUNT(*) AS row_count FROM REGISTO_EVENTOS;", "returns_table" : True},
+        "get_number_of_areas" : {"query" : "SELECT COUNT(*) AS row_count FROM AREA_RESTRITA;", "returns_table" : True},
+        "get_number_of_devices" : {"query" : "SELECT COUNT(*) AS row_count FROM DISPOSITIVO;", "returns_table" : True},
     }
     
     
@@ -168,5 +172,13 @@ class DatabaseInteraction:
     def get_horarios_monitorizacao_by_restricted_area(self, restrictedArea):
         return self.__execute_query("get_horarios_monitorizacao_by_restricted_area", restrictedArea)
     
+    def get_number_of_events(self):
+        return self.__execute_query("get_number_of_events")
+    
+    def get_number_of_areas(self):
+        return self.__execute_query("get_number_of_areas")
+    
+    def get_number_of_devices(self):
+        return self.__execute_query("get_number_of_devices")
     
     

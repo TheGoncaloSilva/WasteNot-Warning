@@ -152,6 +152,20 @@ def get_horario_by_restricted_area():
     raid = request.args.get('restricted_area', type=int)
     return databaseInteraction.get_horarios_monitorizacao_by_restricted_area(raid)
 
+@app.route('/events/get_number_of_events', methods=['GET'])
+@jwt_required()
+def get_number_of_events():
+    return databaseInteraction.get_number_of_events()
+
+@app.route('/events/get_number_of_areas', methods=['GET'])
+@jwt_required()
+def get_number_of_areas():
+    return databaseInteraction.get_number_of_areas()
+
+@app.route('/events/get_number_of_devices', methods=['GET'])
+@jwt_required()
+def get_number_of_devices():
+    return databaseInteraction.get_number_of_devices()
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

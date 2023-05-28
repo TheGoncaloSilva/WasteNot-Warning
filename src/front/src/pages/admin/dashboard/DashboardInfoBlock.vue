@@ -6,16 +6,19 @@
           <va-card class="mb-4" :color="info.color">
             <va-card-content>
               <h2 class="va-h2 ma-0" style="color: white">{{ info.value }}</h2>
-              <p style="color: white">{{ t('dashboard.info.' + info.text) }}</p>
+              <p style="color: white">{{ info.text }}</p>
             </va-card-content>
           </va-card>
         </div>
       </div>
 
       <div class="row">
-        
+
           <div class="flex xs12 sm6 md6" v-for="MAN in nextMaintenanceList">
             <va-card>
+              <va-card-title>
+                Próxima Manutenção
+              </va-card-title>
               <va-card-content>
                 <div class="row row-separated">
                   <div class="flex xs9">
@@ -54,7 +57,7 @@
     <div class="flex xs12 sm6 md6 xl3 lg3">
       <va-card stripe stripe-color="info">
         <va-card-title>
-          System Description
+          Estado do Sistema
         </va-card-title>
         <va-card-content>
           <p class="rich-theme-card-text">
@@ -63,10 +66,10 @@
 
           <div class="mt-3">
             <va-button color="primary" @click="triggerAlarm" v-if="isArmed && !alarmTriggered">
-              Trigger System
+              Soar Alarme
             </va-button>
             <va-button color="primary" disabled v-else>
-              Trigger System
+              Soar Sistema
             </va-button>
           </div>
         </va-card-content>
@@ -79,7 +82,7 @@
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { VaCard, VaCardContent, VaCardTitle, VaButton, useColors } from 'vuestic-ui'
-  import { getNextMaintenance } from './stats'
+  import { getNextMaintenance, getNumberAreasRestritas, getNumberDevices, getNumberEvents } from './stats'
   import { NEXT_MAINTENANCE } from '../../../services/backend-api/interfaces'
 
   const { t } = useI18n()
@@ -104,20 +107,20 @@
   const infoTiles = ref([
     {
       color: 'success',
-      value: '803',
-      text: 'commits',
+      value: ref((await getNumberDevices())[0]['row_count']),
+      text: 'Dispositivos',
       icon: '',
     },
     {
-      color: 'danger',
-      value: '57',
-      text: 'components',
+      color: '#EF6C00',
+      value: ref((await getNumberEvents())[0]['row_count']),
+      text: 'Eventos',
       icon: '',
     },
     {
-      color: 'info',
-      value: '5',
-      text: 'teamMembers',
+      color: '#004D40',
+      value: ref((await getNumberEvents())[0]['row_count']),
+      text: 'Áreas Restritas',
       icon: '',
     },
   ])
@@ -180,20 +183,20 @@
 
   function getSystemStatus(): String {
     if (alarmTriggered.value)
-      return 'Triggered';
+      return 'Acionado';
     else if (isArmed.value)
-      return 'Armed'
+      return 'Armado'
     else
-      return 'Disarmed'
+      return 'Desarmado'
   }
 
   function getSystemDescription(): String {
     if (alarmTriggered.value)
-      return 'The Alarm has been Triggered, please check the device and the restricted area. To stop it, press the Triggered button';
+      return 'O alarme acabou de ser acionado, por favor verifique a Área Restrita e o dispositivo';
     else if (isArmed.value)
-      return 'The Alarm is currently Armed and functioning'
+      return 'O alarme está Armado e a Funcionar';
     else
-      return "The Alarm is currently disabled and won't be activated, please press to activate it"
+      return 'O alarme encontra-se Desarmado e não será ativado. Por favor pressione para Armar, para proteger a sua área'
   }
 </script>
 
@@ -229,8 +232,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 200px;
-    height: 190px;
+    width: 240px;
+    height: 220px;
     border-radius: 50%;
     font-size: 18px;
     font-weight: bold;
