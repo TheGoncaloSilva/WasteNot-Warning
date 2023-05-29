@@ -7,12 +7,7 @@ import queries
 import os
 import json
 
-db_reset_flag = os.environ.get('DB_RESET_FLAG')
-
-
-RESET_DB = False
-if db_reset_flag and db_reset_flag.lower() == "true":
-    RESET_DB = True
+databaseInteraction = queries.DatabaseInteraction(False)
 
 
 app = Flask(__name__)
@@ -20,7 +15,6 @@ app.config['JWT_SECRET_KEY'] = 'super_secret_key'
 jwt = JWTManager(app)
 CORS(app)
 
-databaseInteraction = queries.DatabaseInteraction(RESET_DB)
 
 @app.route('/login', methods=['POST'])
 def login():
