@@ -228,6 +228,19 @@ class BEAPI extends BaseCommunication
     {
       return await super.get('events/list_events')
     }
+
+    async get_unused_devices(): Promise<SECURITY_DEVICE[]>
+    {
+      return await super.get('devices/unused_devices');
+    }
+
+    async add_device(device_mac: string, area_id: number): Promise<any>
+    {
+      await super.post('restricted-area/add-device', {
+        device_mac: device_mac,
+        area_id: area_id
+      });
+    }
 }
 
 export const BE_API: BEAPI = new BEAPI();

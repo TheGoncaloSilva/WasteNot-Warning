@@ -96,7 +96,11 @@ VALUES
     ('EFGH34', '192.168.0.11', 'Câmera de segurança', 'Fabricante B'),
     ('IJKL56', '192.168.0.12', 'Leitor biométrico', 'Fabricante C'),
     ('MNOP78', '192.168.0.13', 'Sensor de presença', 'Fabricante D'),
-    ('QRST90', '192.168.0.14', 'Alarme de incêndio', 'Fabricante E');
+    ('QRSV90', '192.168.0.14', 'Sensor de presença', 'Fabricante D'),
+    ('EFCH34', '192.168.0.15', 'Sensor de presença', 'Fabricante D'),
+    ('IBKL56', '192.168.0.16', 'Sensor de presença', 'Fabricante D'),
+    ('AJKL56', '192.168.0.17', 'Sensor de presença', 'Fabricante D'),
+    ('QRST90', '192.168.0.18', 'Alarme de incêndio', 'Fabricante E');
 
 INSERT INTO TIPO_DISPOSITIVO_SEGURANCA(Descricao) 
 VALUES 
@@ -113,7 +117,11 @@ VALUES
     ('EFGH34', 'Câmera de segurança', 2),
     ('IJKL56', 'Leitor biométrico', 2),
     ('MNOP78', 'Sensor de presença', 3),
-    ('QRST90', 'Alarme de incêndio', 3);
+    ('QRST90', 'Alarme de incêndio', 3),
+    ('QRSV90', 'Alarme de incêndio', NULL),
+    ('EFCH34', 'Câmera de segurança', NULL),
+    ('IBKL56', 'Leitor biométrico', NULL),
+    ('AJKL56', 'Leitor biométrico', NULL);
 
 INSERT INTO DISPOSITIVO_ACESSO(Dispositivo_Mac) 
 VALUES 

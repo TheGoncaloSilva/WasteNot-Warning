@@ -178,5 +178,22 @@ def get_number_of_devices():
 def list_events():
     return databaseInteraction.list_events()
 
+@app.route('/devices/unused_devices', methods=['GET'])
+@jwt_required()
+def get_unused_devices():
+    return databaseInteraction.get_unused_devices()
+
+@app.route('/restricted-area/add-device', methods=['POST'])
+def restricted_area_add_device():
+    
+    mac = request.json.get('device_mac')
+    area_id = int(request.json.get('area_id'))
+    
+    databaseInteraction.restricted_area_add_device(mac,area_id)
+    
+    response = make_response()
+    response.status_code = 200
+    return response
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

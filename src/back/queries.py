@@ -54,6 +54,21 @@ class DatabaseInteraction:
         "get_number_of_devices" : {"query" : "SELECT COUNT(*) AS row_count FROM DISPOSITIVO;", "returns_table" : True},
 
         "list_events" : {"query" : "SELECT * FROM list_ordered_events ORDER BY Reg_timestamp DESC;", "returns_table" : True},
+        
+        "unused_devices" : {"query" : """ 
+                            
+                            SELECT *
+                            FROM DISPOSITIVO_SEGURANCA
+                            WHERE AreaRestrita_Id IS NULL;
+                            
+                            """, "returns_table" : True},
+        
+        
+        "restricted_area_add_device" : {"query" : """
+                                        UPDATE DISPOSITIVO_SEGURANCA
+                                        SET AreaRestrita_Id = ?
+                                        WHERE Dispositivo_Mac = ?;
+                                        """, "returns_table" : False}
     }
     
     
@@ -200,5 +215,11 @@ class DatabaseInteraction:
     
     def list_events(self):
         return self.__execute_query("list_events")
+    
+    def get_unused_devices(self):
+        return self.__execute_query("unused_devices")
+    
+    def restricted_area_add_device(self, mac: str,area_id: int):
+        self.__execute_query("restricted_area_add_device", area_id , mac)
     
     

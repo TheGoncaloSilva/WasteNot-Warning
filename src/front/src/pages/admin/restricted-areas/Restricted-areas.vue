@@ -13,10 +13,14 @@ export default {
         devices: {} as { [key: number]: SECURITY_DEVICE[] },
         horarios: {} as { [key: number]: HORARIO_MONITORIZACAO[]},
         last_repairs: {} as {[key: number]: LAST_REPAIRS[]},
+        showNewDeviceDialog: false as boolean,
+        unused_devices: [] as SECURITY_DEVICE[],
+        currentArea: null as number | null
     }
   },
   async mounted() {
     this.restrictedAreas = await BE_API.get_restricted_areas();
+    this.unused_devices = await BE_API.get_unused_devices();
 
     this.restrictedAreas.forEach(area => {
       this.devices[area.Id] = [];
@@ -45,6 +49,16 @@ export default {
           this.horarios[area.Id] = _horarios;
         }
       })();
+    },
+    addNewDevice(device: SECURITY_DEVICE)
+    {
+        (async() => {
+          if(this.currentArea !== null)
+          {
+            await BE_API.add_device(device.Dispositivo_Mac, this.currentArea)
+            this.$router.go(0);
+          }
+      })();
     }
   }
 }
@@ -53,6 +67,35 @@ export default {
 
 
 <template>
+
+<va-modal v-model="showNewDeviceDialog">
+      <va-card style="min-height:400px">
+        <va-card-title>Add New Device</va-card-title>
+        <va-card-content>
+          <table class="va-table va-table--striped va-table--hoverable">
+                        <thead>
+                          <tr>
+                            <th>Mac do dispositivo</th>
+                            <th>Tipo do dispositivo</th>
+                            <th>adicionar</th>
+                          </tr>
+                        </thead>
+                
+                        <tbody>
+                          <tr v-for="device in unused_devices" :key="device.Dispositivo_Mac">
+                            <td>{{ device.Dispositivo_Mac }}</td>
+                            <td>{{ device.TipoDispositivoSeguranca_Descricao }}</td>
+                            <td><va-button @click="addNewDevice(device)">+</va-button></td>
+                          </tr>
+                        </tbody>
+                      </table>
+        </va-card-content>
+
+        
+      </va-card>
+    </va-modal>
+
+
       <div class="flex xs12">
         <va-card>
 
@@ -85,6 +128,9 @@ export default {
                       </table>
                     </div>
                   </va-card-content>
+                  <va-card-actions>
+                <va-button @click="showNewDeviceDialog = true; currentArea = area.Id">Add device</va-button>
+              </va-card-actions>
                   </va-card>
 
                   <va-card class="flex mb-4">
