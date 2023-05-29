@@ -80,6 +80,7 @@ Grupo p1g6:
 * Script para carregar a base de dados inteira para o docker
 * **Trigger** para garantir que as datas (por exemplo nas manutençoes) de inicio e fim são corretas (Inicio < Fim)
 * 1 dispositivo só pode pertencer a uma e uma só area restrita
+* Um horário de exclusão só pode estar associado a uma área restrita, se estiver dentro do horário de monitorização da mesma (Trigger)
 
 ## Ferramentas a incorporar
 

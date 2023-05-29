@@ -45,7 +45,8 @@ INSERT INTO AREA_RESTRITA_HORARIO_MONITORIZACAO (AreaRestrita_Id, HorarioMonitor
 VALUES
     (1, 1),
     (1, 2),
-    (2, 2);
+    (2, 2),
+    (3, 1);
 
 INSERT INTO AREA_RESTRITA_CONTACTA_UTILIZADOR (AreaRestrita_Id, Utilizador_Id, HoraInicio, HoraFim)
 VALUES
@@ -142,7 +143,8 @@ VALUES ('2023-05-13 20:00:07', 'Acesso permitido', 'IJKL56'),
        ('2023-05-13 11:00:6', 'Sensor de movimento ativado', 'MNOP78'), 
        ('2023-05-13 21:09:51', 'Alarme disparado', 'MNOP78'),
        ('2023-05-22 10:00:00', 'Sensor de movimento ativado', 'MNOP78'),
-       ('2023-05-04 12:00:00', 'Intrusão detectada', 'EFGH34')
+       ('2023-05-04 12:00:00', 'Intrusão detectada', 'EFGH34'),
+       ('2023-05-20 06:00:00', 'Temperatura elevada', 'QRST90')
        ;
 
 INSERT INTO UTILIZADOR_REGISTO_EVENTOS (Utilizador_Id, RegistoEventos_Id)

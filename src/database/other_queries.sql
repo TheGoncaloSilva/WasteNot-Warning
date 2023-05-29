@@ -26,3 +26,13 @@ ADD [PW_Hash] VARBINARY(32) NOT NULL,
     [Salt] VARBINARY(16) NOT NULL;
 SELECT * FROM UTILIZADOR;
 */
+
+SELECT *
+    FROM REGISTO_EVENTOS AS RE
+        INNER JOIN DISPOSITIVO_SEGURANCA AS DS ON RE.DispositivoSeguranca_Mac = DS.Dispositivo_Mac
+            INNER JOIN AREA_RESTRITA AS AR ON DS.AreaRestrita_Id = AR.Id
+                INNER JOIN AREA_RESTRITA_HORARIO_EXCLUSAO AS ARHE ON ARHE.AreaRestrita_Id = AR.Id
+                    INNER JOIN HORARIO_EXCLUSAO AS HE ON HE.Id = ARHE.HorarioExclusao_Id
+                        INNER JOIN AREA_RESTRITA_HORARIO_MONITORIZACAO AS ARHM ON ARHM.AreaRestrita_Id = AR.Id
+                            INNER JOIN HORARIO_MONITORIZACAO AS HM ON HM.Id = ARHM.HorarioMonitorizacao_Id 
+                                INNER JOIN MANUTENCOES AS MAN ON MAN.AreaRestrita_Id = AR.Id;
