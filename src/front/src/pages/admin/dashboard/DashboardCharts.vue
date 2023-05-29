@@ -2,34 +2,7 @@
 
   <div class="row row-equal">
     <div class="flex xs12 lg6 xl6">
-      <va-card v-if="lineChartDataGenerated">
-        <va-card-title>
-          <h1>Event History</h1>
-          <div>
-            <va-button
-              class="ma-1"
-              size="small"
-              color="danger"
-              :disabled="datasetIndex === minIndex"
-              @click="setDatasetIndex(datasetIndex - 1)"
-            >
-              {{ t('dashboard.charts.showInLessDetail') }}
-            </va-button>
-            <va-button
-              class="ma-1"
-              size="small"
-              color="danger"
-              :disabled="datasetIndex === maxIndex - 1"
-              @click="setDatasetIndex(datasetIndex + 1)"
-            >
-              {{ t('dashboard.charts.showInMoreDetail') }}
-            </va-button>
-          </div>
-        </va-card-title>
-        <va-card-content>
-          <va-chart class="chart" :data="lineChartDataGenerated" type="line" />
-        </va-card-content>
-      </va-card>
+        <DashboardTable/>
     </div>
 
     <div class="flex xs12 sm6 md6 lg3 xl3">
@@ -67,6 +40,7 @@
   import { useChartData } from '../../../data/charts/composables/useChartData'
   import { usePartOfChartData } from './composables/usePartOfChartData'
   import VaChart from '../../../components/va-charts/VaChart.vue'
+  import DashboardTable from './DashboardTable.vue'
 
 
   const { t } = useI18n()

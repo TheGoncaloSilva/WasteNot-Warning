@@ -1,41 +1,5 @@
 <template>
   <div class="row row-equal">
-    <div class="flex xl6 xs12 lg6">
-      <div class="row">
-        <div v-for="(info, idx) in infoTiles" :key="idx" class="flex xs12 sm4">
-          <va-card class="mb-4" :color="info.color">
-            <va-card-content>
-              <h2 class="va-h2 ma-0" style="color: white">{{ info.value }}</h2>
-              <p style="color: white">{{ info.text }}</p>
-            </va-card-content>
-          </va-card>
-        </div>
-      </div>
-
-      <div class="row">
-
-          <div class="flex xs12 sm6 md6" v-for="MAN in nextMaintenanceList">
-            <va-card>
-              <va-card-title>
-                Próxima Manutenção
-              </va-card-title>
-              <va-card-content>
-                <div class="row row-separated">
-                  <div class="flex xs9">
-                    <h2 class="va-h2 ma-0" :style="{ color: colors.primary }">{{ MAN.Man_inicio }}</h2>
-                    <p class="no-wrap">{{ MAN.AR_localizacao }}</p>
-                  </div>  
-                  <div class="flex xs3">
-                      <h2 class="va-h2 ma-0 va-text-center" :style="{ color: colors.warning }">{{ MAN.Man_duracao }}</h2>
-                      <p class="va-text-center">Horas</p>
-                    </div>
-                </div>
-              </va-card-content>
-            </va-card>
-          </div>
-      </div>
-    </div>
-
     <div class="flex xs12 sm6 md6 xl3 lg3">
       <va-card class="d-flex">
         <va-card-content>
@@ -74,6 +38,42 @@
           </div>
         </va-card-content>
       </va-card>
+    </div>
+    
+    <div class="flex xl6 xs12 lg6">
+      <div class="row">
+        <div v-for="(info, idx) in infoTiles" :key="idx" class="flex xs12 sm4">
+          <va-card class="mb-4" :color="info.color">
+            <va-card-content>
+              <h2 class="va-h2 ma-0" style="color: white">{{ info.value }}</h2>
+              <p style="color: white">{{ info.text }}</p>
+            </va-card-content>
+          </va-card>
+        </div>
+      </div>
+
+      <div class="row">
+
+          <div class="flex xs12 sm6 md6" v-for="MAN in nextMaintenanceList">
+            <va-card>
+              <va-card-title>
+                Próxima Manutenção
+              </va-card-title>
+              <va-card-content>
+                <div class="row row-separated">
+                  <div class="flex xs9">
+                    <h2 class="va-h2 ma-0" :style="{ color: colors.primary }">{{ MAN.Man_inicio }}</h2>
+                    <p class="no-wrap">{{ MAN.AR_localizacao }}</p>
+                  </div>  
+                  <div class="flex xs3">
+                      <h2 class="va-h2 ma-0 va-text-center" :style="{ color: colors.warning }">{{ MAN.Man_duracao }}</h2>
+                      <p class="va-text-center">Horas</p>
+                    </div>
+                </div>
+              </va-card-content>
+            </va-card>
+          </div>
+      </div>
     </div>
   </div>
 </template>
