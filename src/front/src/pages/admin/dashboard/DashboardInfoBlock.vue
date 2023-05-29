@@ -79,17 +79,21 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { onBeforeUnmount, onMounted, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { VaCard, VaCardContent, VaCardTitle, VaButton, useColors } from 'vuestic-ui'
-  import { getNextMaintenance, getNumberAreasRestritas, getNumberDevices, getNumberEvents } from './stats'
-  import { NEXT_MAINTENANCE } from '../../../services/backend-api/interfaces'
+  import { getNextMaintenance, getNumberAreasRestritas, getNumberDevices, getNumberEvents, getTriggerAlarm } from './stats'
+  import { EVENT_LIST, NEXT_MAINTENANCE } from '../../../services/backend-api/interfaces'
 
   const { t } = useI18n()
   const { colors } = useColors()
 
   let alarmTriggered = ref(false)
   let isArmed = ref(true)
+  let elapsedTime = ref(0)
+  let intervalId: any = null
+  let triggerReason: {} | null = null 
+
 
   // why component disappear with this?
   const nextMaintenanceList = ref(await formatMaintenanceList());
@@ -134,7 +138,6 @@
       let dInicio = formatDate(MAN.Man_inicio);
       let local = MAN.AR_localizacao;
       let duracao = time_between_dates(MAN.Man_inicio, MAN.Man_fim)
-      console.log(time_between_dates(MAN.Man_inicio, MAN.Man_fim))
       res.push({Man_inicio: dInicio, Man_duracao: duracao, AR_localizacao:local})
     });
 
@@ -191,13 +194,49 @@
   }
 
   function getSystemDescription(): String {
-    if (alarmTriggered.value)
-      return 'O alarme acabou de ser acionado, por favor verifique a Área Restrita e o dispositivo';
-    else if (isArmed.value)
+    if (alarmTriggered.value){
+      if(triggerReason != null){
+        const text = "O alarme acabou de ser acionado no Dispositivo: " + triggerReason['Disp_mac'] + ", pertencente à Área Restrita localizada em: " + triggerReason['AR_localizacao'];
+        return text;
+      }
+      else
+        return 'O alarme acabou de ser acionado, por favor verifique a Área Restrita e o dispositivo';
+    }else if (isArmed.value)
       return 'O alarme está Armado e a Funcionar';
     else
-      return 'O alarme encontra-se Desarmado e não será ativado. Por favor pressione para Armar, para proteger a sua área'
+      return 'O alarme encontra-se Desarmado e não será ativado. Por favor pressione Armar, para proteger a sua área'
   }
+
+  function startTimer() {
+    intervalId = setInterval(() => {
+      elapsedTime.value += 10; // Increment elapsed time by 10 seconds
+      // Call your desired function here
+      myFunction();
+    }, 10000); // 10000 milliseconds = 10 seconds
+  }
+
+  function stopTimer() {
+    clearInterval(intervalId);
+  }
+
+  function myFunction() {
+    // Perform the desired action here
+    getTriggerAlarm().then((event: EVENT_LIST[]) => {
+      if(event.length == 0)
+        return;
+      triggerReason = event[0]
+      triggerAlarm();
+    });
+  }
+
+  onMounted(() => {
+    startTimer();
+  });
+
+  onBeforeUnmount(() => {
+    stopTimer();
+  });
+
 </script>
 
 <style lang="scss" scoped>
