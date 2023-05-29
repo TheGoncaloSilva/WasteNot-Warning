@@ -92,10 +92,11 @@ class DatabaseInteraction:
     def __reset(self):
         self.__run_sql_from_source('/database/reset.sql')
         self.__run_sql_from_source('/database/WasteNotWarning_db.sql')
-        self.__run_sql_from_source('/database/populate.sql')
         self.__run_sql_from_source('/database/stored_procedures.sql')
         self.__run_sql_from_source('/database/udfs.sql')
-        self.__run_sql_from_source('/database/views.sql')        
+        self.__run_sql_from_source('/database/views.sql')
+        self.__run_sql_from_source('/database/triggers.sql')
+        self.__run_sql_from_source('/database/populate.sql')
 
         
     def __run_sql_from_source(self, file_src):
