@@ -33,25 +33,29 @@ VALUES
 INSERT INTO HORARIO_MONITORIZACAO (HoraInicio, HoraFim, Estado)
 VALUES
     ('00:00:00', '07:00:00', 1),
-    ('19:00:00', '23:00:00', 0);
+    ('19:00:00', '23:00:00', 0),
+    ('00:00:01', '23:59:58', 1);
 
 INSERT INTO AREA_RESTRITA (DESCRICAO, LOCALIZACAO)
 VALUES
     ('Sala de Reuniões', 'Edifício A, 3º Andar'),
     ('Laboratório de Informática', 'Edifício B, 2º Andar'),
-    ('Sala de Convívio', 'Edifício C, 1º Andar');
+    ('Sala de Convívio', 'Edifício C, 1º Andar'),
+    ('Sala de Servidores', 'Edifício A, 1º Andar');
 
 INSERT INTO AREA_RESTRITA_HORARIO_MONITORIZACAO (AreaRestrita_Id, HorarioMonitorizacao_Id)
 VALUES
     (1, 1),
     (1, 2),
     (2, 2),
-    (3, 1);
+    (3, 1),
+    (4, 3);
 
 INSERT INTO AREA_RESTRITA_CONTACTA_UTILIZADOR (AreaRestrita_Id, Utilizador_Id, HoraInicio, HoraFim)
 VALUES
     (1, 1, '06:00:00', '12:00:00'),
-    (2, 2, '18:00:00', '23:00:00');
+    (2, 2, '18:00:00', '23:00:00'),
+    (4, 5, '10:00:00', '19:00:00');
 
 INSERT INTO AREA_RESTRITA_PERTENCE_UTILIZADOR (AreaRestrita_Id, Utilizador_Id)
 VALUES
@@ -60,7 +64,8 @@ VALUES
     (2, 3),
     (3, 3),
     (3, 4),
-    (3, 5);
+    (3, 5),
+    (4, 5);
 
 INSERT INTO HORARIO_EXCLUSAO (DataInicio, DataFim)
 VALUES
@@ -100,7 +105,8 @@ VALUES
     ('EFCH34', '192.168.0.15', 'Sensor de presença', 'Fabricante D'),
     ('IBKL56', '192.168.0.16', 'Sensor de presença', 'Fabricante D'),
     ('AJKL56', '192.168.0.17', 'Sensor de presença', 'Fabricante D'),
-    ('QRST90', '192.168.0.18', 'Alarme de incêndio', 'Fabricante E');
+    ('QRST90', '192.168.0.18', 'Alarme de incêndio', 'Fabricante E'),
+    ('PO98GS', '192.168.0.19', 'Câmera de segurança', 'Fabricante F');
 
 INSERT INTO TIPO_DISPOSITIVO_SEGURANCA(Descricao) 
 VALUES 
@@ -118,6 +124,7 @@ VALUES
     ('IJKL56', 'Leitor biométrico', 2),
     ('MNOP78', 'Sensor de presença', 3),
     ('QRST90', 'Alarme de incêndio', 3),
+    ('PO98GS', 'Câmera de segurança', 4),
     ('QRSV90', 'Alarme de incêndio', NULL),
     ('EFCH34', 'Câmera de segurança', NULL),
     ('IBKL56', 'Leitor biométrico', NULL),
@@ -152,7 +159,8 @@ VALUES ('2023-05-13 20:00:07', 'Acesso permitido', 'IJKL56'),
        ('2023-05-13 21:09:51', 'Alarme disparado', 'MNOP78'),
        ('2023-05-22 10:00:00', 'Sensor de movimento ativado', 'MNOP78'),
        ('2023-05-04 12:00:00', 'Intrusão detectada', 'EFGH34'),
-       ('2023-05-20 06:00:00', 'Temperatura elevada', 'QRST90')
+       ('2023-05-20 06:00:00', 'Temperatura elevada', 'QRST90'),
+       ('2023-05-27 08:00:00', 'Intrusão detectada', 'PO98GS')
        ;
 
 INSERT INTO UTILIZADOR_REGISTO_EVENTOS (Utilizador_Id, RegistoEventos_Id)

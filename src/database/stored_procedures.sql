@@ -166,7 +166,7 @@ BEGIN
     DECLARE @PastTime DATETIME;
     -- In seconds, time that the alarm should be activated
     --SET @PastTime = CONVERT(DATETIME, '2023-05-01 12:00:00');
-    SET @PastTime = DATEADD(SECOND, -240, GETDATE());
+    SET @PastTime = DATEADD(SECOND, -120, GETDATE());
     -- Create a temporary table to store the matching RegistoEventos IDs
     CREATE TABLE #MatchingRegistoEventos (
         RegistoEventos_Id INT
