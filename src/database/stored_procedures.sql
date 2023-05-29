@@ -37,7 +37,7 @@ BEGIN
         INNER JOIN DISPOSITIVO_SEGURANCA DS ON RE.DispositivoSeguranca_Mac = DS.Dispositivo_Mac
         INNER JOIN AREA_RESTRITA AR ON DS.AreaRestrita_Id = AR.Id
         INNER JOIN MANUTENCOES M ON AR.Id = M.AreaRestrita_Id
-        WHERE RE.Id IN (SELECT Id FROM REGISTO_EVENTOS)
+        WHERE RE.Id IN ((SELECT RegistoEventos_Id FROM #MatchingRegistoEventos))
             AND CONVERT(DATE, RE.[Timestamp]) BETWEEN M.DataInicio AND M.DataFim
     );
     
@@ -54,10 +54,12 @@ BEGIN
         INNER JOIN HORARIO_MONITORIZACAO HM ON ARHM.HorarioMonitorizacao_Id = HM.Id
         WHERE RE.Id IN (SELECT Id FROM REGISTO_EVENTOS)
             AND RE.[Timestamp] BETWEEN HE.DataInicio AND HE.DataFim
+            AND NOT EXISTS (SELECT RegistoEventos_Id FROM #MatchingRegistoEventos)
     );
 
     -- Return the final set of matching RegistoEventos IDs
-    SELECT COUNT(*) AS row_count FROM #MatchingRegistoEventos;
+    SELECT DISTINCT COUNT(*) AS row_count FROM #MatchingRegistoEventos;
+    --
 END;
 GO
 /* With Return
