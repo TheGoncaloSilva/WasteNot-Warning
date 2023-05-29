@@ -165,8 +165,8 @@ BEGIN
     -- Procedure to analyze the events and determine if the alarm should be activated
     DECLARE @PastTime DATETIME;
     -- In seconds, time that the alarm should be activated
-    SET @PastTime = CONVERT(DATETIME, '2023-05-01 12:00:00');
-    --SET @PastTime = DATEADD(SECOND, -120, GETDATE());
+    --SET @PastTime = CONVERT(DATETIME, '2023-05-01 12:00:00');
+    SET @PastTime = DATEADD(SECOND, -240, GETDATE());
     -- Create a temporary table to store the matching RegistoEventos IDs
     CREATE TABLE #MatchingRegistoEventos (
         RegistoEventos_Id INT
@@ -217,7 +217,19 @@ BEGIN
     );
     
     -- Return the final set of matching RegistoEventos IDs
-    SELECT COUNT(*) AS row_count FROM #MatchingRegistoEventos;
+    SELECT RE.Id AS Reg_id,
+        TE.Descricao AS Reg_tipo,
+        RE.[Timestamp] AS Reg_timestamp,
+        DS.Dispositivo_Mac AS Disp_mac,
+        DS.TipoDispositivoSeguranca_Descricao AS Disp_tipo,
+        AR.DESCRICAO AS AR_descricao,
+        AR.LOCALIZACAO as AR_localizacao
+    FROM REGISTO_EVENTOS AS RE
+        INNER JOIN TIPO_EVENTO AS TE ON TE.Descricao = RE.TipoEvento_Descricao
+            INNER JOIN DISPOSITIVO_SEGURANCA AS DS ON DS.Dispositivo_Mac = RE.DispositivoSeguranca_Mac
+                INNER JOIN AREA_RESTRITA AS AR ON AR.Id = DS.AreaRestrita_Id
+                    WHERE RE.Id IN (SELECT * FROM #MatchingRegistoEventos)
+                        ORDER BY RE.[Timestamp] DESC;
 END;
 GO
 

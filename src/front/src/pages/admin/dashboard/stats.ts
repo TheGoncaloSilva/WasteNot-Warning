@@ -43,7 +43,20 @@ export const getEventList = async () => {
         
         // Only get the next two
         if (res.length > 10) {
-            res.splice(8); // Remove all elements starting from index 2
+            res.splice(10); // Remove all elements starting from index 10
+        }
+
+        return res;
+    })();
+};
+
+export const getTriggerAlarm = async () => {
+    return await (async() => {
+        const res: EVENT_LIST[] = await BE_API.get_trigger_alarm();
+        
+        // Only get the next two
+        if (res.length > 1) {
+            res.splice(1); // Remove all elements starting from index 1
         }
 
         return res;

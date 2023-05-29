@@ -68,7 +68,8 @@ class DatabaseInteraction:
                                         UPDATE DISPOSITIVO_SEGURANCA
                                         SET AreaRestrita_Id = ?
                                         WHERE Dispositivo_Mac = ?;
-                                        """, "returns_table" : False}
+                                        """, "returns_table" : False},
+        "trigger_alarm" : {"query" : "EXEC getAlarmActivated;", "returns_table" : True},
     }
     
     
@@ -218,6 +219,9 @@ class DatabaseInteraction:
     
     def get_unused_devices(self):
         return self.__execute_query("unused_devices")
+    
+    def get_trigger_alarm(self):
+        return self.__execute_query("trigger_alarm")
     
     def restricted_area_add_device(self, mac: str,area_id: int):
         self.__execute_query("restricted_area_add_device", area_id , mac)

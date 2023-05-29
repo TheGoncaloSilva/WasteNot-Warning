@@ -173,6 +173,11 @@ def get_number_of_areas():
 def get_number_of_devices():
     return databaseInteraction.get_number_of_devices()
 
+@app.route('/events/get_trigger_alarm', methods=['GET'])
+@jwt_required()
+def get_trigger_alarm():
+    return databaseInteraction.get_trigger_alarm()
+
 @app.route('/events/list_events', methods=['GET'])
 @jwt_required()
 def list_events():

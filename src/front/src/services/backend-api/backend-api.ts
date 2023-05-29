@@ -229,6 +229,11 @@ class BEAPI extends BaseCommunication
       return await super.get('events/list_events')
     }
 
+    async get_trigger_alarm(): Promise<EVENT_LIST[]>
+    {
+      return await super.get('events/get_trigger_alarm')
+    }
+
     async get_unused_devices(): Promise<SECURITY_DEVICE[]>
     {
       return await super.get('devices/unused_devices');
