@@ -5,6 +5,7 @@ GO
 CREATE PROCEDURE GetRowCountOfEventsInExclusionTime
 AS
 BEGIN
+    SET NOCOUNT ON;
     -- Create a temporary table
     CREATE TABLE #MatchingRegistoEventos (
         RegistoEventos_Id INT
@@ -95,6 +96,7 @@ GO
 CREATE PROCEDURE GetRowCountOfEventsInActiveSchedule
 AS
 BEGIN 
+    SET NOCOUNT ON;
     -- Create a temporary table
     CREATE TABLE #MatchingRegistoEventos (
         RegistoEventos_Id INT
@@ -157,6 +159,7 @@ GO
 CREATE PROCEDURE getAlarmActivated
 AS
 BEGIN
+    SET NOCOUNT ON;
     -- Procedure to analyze the events and determine if the alarm should be activated
     DECLARE @PastTime DATETIME;
     -- In seconds, time that the alarm should be activated
@@ -217,4 +220,4 @@ END;
 GO
 
 EXEC getAlarmActivated;
-DROP PROCEDURE getAlarmActivated;
+--DROP PROCEDURE getAlarmActivated;
