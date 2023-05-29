@@ -42,6 +42,5 @@ CREATE VIEW list_ordered_events AS (
         INNER JOIN TIPO_EVENTO AS TE ON TE.Descricao = RE.TipoEvento_Descricao
             INNER JOIN DISPOSITIVO_SEGURANCA AS DS ON DS.Dispositivo_Mac = RE.DispositivoSeguranca_Mac
                 INNER JOIN AREA_RESTRITA AS AR ON AR.Id = DS.AreaRestrita_Id
-                    ORDER BY RE.[Timestamp] DESC
 );
 GO
