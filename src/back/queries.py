@@ -2,6 +2,9 @@ import pyodbc
 import time
 import json
 import subprocess
+from threading import Lock
+critical_function_lock = Lock()
+
 
 config = {
     'Driver': '{ODBC Driver 17 for SQL Server}',
@@ -62,8 +65,8 @@ class DatabaseInteraction:
         self.cursor = None
         self.conn = None
         try:
-            conn = self.establish_connection_with_retry()
-            self.cursor = conn.cursor()
+            self.conn = self.establish_connection_with_retry()
+
             #self.conn = conn
         except Exception as e:
             print(f"An error occurred: {str(e)}")
@@ -120,19 +123,23 @@ class DatabaseInteraction:
         raise Exception("Unable to establish a connection with the SQL Server.")
 
     def __execute_query(self, query_name, *args):
-        if query_name not in DatabaseInteraction.query_mapping:
-            raise ValueError(f"Unknown query: {query_name}")
-        
-        info = DatabaseInteraction.query_mapping[query_name]
-        #self.cursor = self.conn.cursor() 
-        cursor = self.cursor.execute(info["query"], args)
+        with critical_function_lock:
+            if query_name not in DatabaseInteraction.query_mapping:
+                raise ValueError(f"Unknown query: {query_name}")
+            
+            info = DatabaseInteraction.query_mapping[query_name]
+            #self.cursor = self.conn.cursor() 
+            cursor = self.conn.cursor()
+            cursor = cursor.execute(info["query"], args)
 
-        if info["returns_table"]:
-            columns = [column[0] for column in cursor.description]
-            results = []
-            for row in cursor.fetchall():
-                results.append(dict(zip(columns, row)))
-            return results
+            if info["returns_table"]:
+                columns = [column[0] for column in cursor.description]
+                results = []
+                for row in cursor.fetchall():
+                    results.append(dict(zip(columns, row)))
+                cursor.close()
+                return results
+            cursor.close()
         
     def get_users(self):
         return self.__execute_query("get_users")

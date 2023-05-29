@@ -62,11 +62,11 @@ Grupo p1g6:
 ## Eventos
 
 * Listar, com funcionalidade de filtração
-    * Eventos dentro de horário de manutenção
-    * Eventos dentro de horário de exclusão
-    * Eventos dentro de horário de "trabalho"
-    * Eventos pertencentes a utilizadores
-    * Tipos de evento
+  * Eventos dentro de horário de manutenção
+  * Eventos dentro de horário de exclusão
+  * Eventos dentro de horário de "trabalho"
+  * Eventos pertencentes a utilizadores
+  * Tipos de evento
 
 ## Exclusões
 
@@ -79,6 +79,7 @@ Grupo p1g6:
 * **Trigger** para quando se adiciona um evento, se o timestamp não for fornecido, ele preencher sozinho (Ou se for fornecido um no futuro, substituir pelo atual ou não executar)
 * Script para carregar a base de dados inteira para o docker
 * **Trigger** para garantir que as datas (por exemplo nas manutençoes) de inicio e fim são corretas (Inicio < Fim)
+* 1 dispositivo só pode pertencer a uma e uma só area restrita
 
 ## Ferramentas a incorporar
 
