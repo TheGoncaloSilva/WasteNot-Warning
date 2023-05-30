@@ -106,12 +106,7 @@ VALUES
     ('IBKL56', '192.168.0.16', 'Sensor de presença', 'Fabricante D'),
     ('AJKL56', '192.168.0.17', 'Sensor de presença', 'Fabricante D'),
     ('QRST90', '192.168.0.18', 'Alarme de incêndio', 'Fabricante E'),
-    ('PO98GS', '192.168.0.19', 'Câmera de segurança', 'Fabricante F'),
-    ('OKFBV7', '192.168.0.20', 'Xpto', 'Fabricante A'),
-    ('OUJG5G', '192.168.0.21', 'Xpto 2', 'Fabricante B'),
-    ('FDVHT6', '192.168.0.22', 'Xpto 3', 'Fabricante C'),
-    ('35DFGH', '192.168.0.23', 'Xpto 4', 'Fabricante E')
-    ;
+    ('PO98GS', '192.168.0.19', 'Câmera de segurança', 'Fabricante F');
 
 INSERT INTO TIPO_DISPOSITIVO_SEGURANCA(Descricao) 
 VALUES 
@@ -133,12 +128,7 @@ VALUES
     ('QRSV90', 'Alarme de incêndio', NULL),
     ('EFCH34', 'Câmera de segurança', NULL),
     ('IBKL56', 'Leitor biométrico', NULL),
-    ('AJKL56', 'Leitor biométrico', NULL),
-    ('OKFBV7', 'Sensor de presença', 1),
-    ('OUJG5G', 'Alarme de incêndio', 2),
-    ('FDVHT6', 'Sensor de temperatura', 3),
-    ('35DFGH', 'Câmera de segurança', 4)
-    ;
+    ('AJKL56', 'Leitor biométrico', NULL);
 
 INSERT INTO DISPOSITIVO_ACESSO(Dispositivo_Mac) 
 VALUES 
@@ -178,24 +168,3 @@ VALUES	(1, 1),
 		(2, 2), 
 		(3, 3), 
 		(4, 4);
-
-GO
-
--- Generate more records for REGISTO_EVENTOS table
-DECLARE @Timestamp DATETIME
-DECLARE @TipoEvento_Descricao VARCHAR(50)
-DECLARE @DispositivoSeguranca_Mac VARCHAR(10)
-
-DECLARE @Counter INT = 1
-
-WHILE @Counter <= 100
-BEGIN
-    SET @Timestamp = DATEADD(minute, -RAND() * 10080, GETDATE()) -- Random timestamp within the past week
-    SET @TipoEvento_Descricao = (SELECT TOP 1 Descricao FROM TIPO_EVENTO ORDER BY NEWID()) -- Random TipoEvento_Descricao
-    SET @DispositivoSeguranca_Mac = (SELECT TOP 1 Dispositivo_Mac FROM DISPOSITIVO_SEGURANCA ORDER BY NEWID()) -- Random DispositivoSeguranca_Mac
-    
-    INSERT INTO REGISTO_EVENTOS ([Timestamp], TipoEvento_Descricao, DispositivoSeguranca_Mac)
-    VALUES (@Timestamp, @TipoEvento_Descricao, @DispositivoSeguranca_Mac)
-    
-    SET @Counter = @Counter + 1
-END
