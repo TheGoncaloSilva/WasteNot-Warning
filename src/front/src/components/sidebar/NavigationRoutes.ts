@@ -32,7 +32,7 @@ export default {
         icon: 'fa-lock'
       }
     },
-    {
+    /*{
       name: 'dashboard_stock',
       displayName: 'dashboard_stock',
       meta: {
@@ -247,6 +247,6 @@ export default {
           displayName: 'menu.faq',
         },
       ],
-    },
+    },*/
   ] as INavigationRoute[],
 }
