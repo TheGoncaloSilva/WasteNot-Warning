@@ -89,19 +89,35 @@ De forma a tornar o nosso sistema mais modular, decidimos colocar os vários ele
 
 ## Modelação tabela
 
-## Inserts
+No ficheiro `src/database/WasteNotWarning_db.sql` está presente o ficheiro SQL para criar e modelar a Base de Dados, com as tabelas definidas.
 
-## Update
+## Operações de CRUD
 
-## Delete
+O ficheiro `src/database/populate.sql` contém um conjunto de Inserts para popular a base de dados com dados, sendo que num deles é usado um While para gerar um número de registos maior e mais aleatório. No entanto, no ficheiro `src/back/queries.py`, está contido no objeto *query_mapping*, o conjunto de queries que o backend faz com a base de dados.
 
-## Drop
+## Other queries
 
-## Queries
+No ficheiro `src/database/other_queries.sql` estão outras queries que foram usadas durante a modelação da Base de Dados.
 
 ## User Defined Functions
 
+
+As UDFs estão localizadas no ficheiro `src/database/udfs.sql` e cada uma efetua a seguinte tarefa:
+* **GetLastUserEvents**: Aceita como argumento o ID do utilizador e o máximo número de eventos que devem ser pesquisados. Retorna os últimos eventos do utilizador ordenados pela coluna Timestamp.
+* **GetAreasRestritasByUserId**: Recebe como parâmetro o ID de um utilizador e retorna as áreas restritas em que ele pertence.
+* **GetLastRepairsOfARestrictedArea**: Recebe como argumento o Id de uma área restrita e o número máximo de linhas da pesquisa, retorna as próximas manutenções da área restrita ordenadas pela data de início da manutenção
+* **GetDeviceListOfARestrictedArea**: Aceita como argumento o Id de uma Área Restrita e retorna o número de Dispositivos de Segurança associados a essa Área Restrita
+* **GetHorariosMonitorizacaoByRestrictedArea**: Aceita como argumento o Id de uma Área Restrita e retorna os Horários de Monitorização associados a essa Área Restrita
+
+
 ## Stored Procedures
+
+As Stored Procedures  estão localizadas no ficheiro `src/database/stored_procedures.sql` e cada uma efetua a seguinte tarefa:
+* **GetRowCountOfEventsInExclusionTime**: Seleciona o número de eventos que aconteceram fora do horário de monitorização da Área Restrita ou que aconteceram dentro do Horário de Exclusão e que não aconteceram enquanto o sistema estava em manutenção
+* **GetRowCountOfEventsInRepairingSchedule**: Seleciona o número de eventos que aconteceram durante período de manutenção
+* **GetRowCountOfEventsInActiveSchedule**: Seleciona o número de eventos que aconteceram numa altura em que o sistema foi acionado
+  * Para o sistema ser acionado, um evento tem de ocorrer dentro do Horário de Monitorização da Área Restrita associada ao Dispositivo de Segurança, fora de alguma horário de exclusão associado e numa data em que a Área Restrita não tenha sofrido uma Manutenção
+* **getAlarmActivated**: Selecionar os eventos que podem acionar o alarme, de uma forma customizada, que ocorreram nos últimos 120 segundos. Quando este é chamado pelo website, o website fica com o alarme acionado até o utilizador pressionar para Desarmar o sistema.
 
 ## Views
 
