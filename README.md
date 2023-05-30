@@ -83,7 +83,7 @@ Diagrama DER ![DER diagram](./documentation/WasteNot_Warning_DER.jpg)
 
 Esquema Relacional ![esquema relaciona](./documentation/WasteNot_Warning_Relational_Diagram.jpg)
 
-# SQL Scripts
+# Funcionalidades
 
 De forma a tornar o nosso sistema mais modular, decidimos colocar os vários elements SQL em ficheiros separados. Para os executar todos juntos e popular a base de dados, fazemos uso da funcionalidade descrita na secção de *Execução*.
 
@@ -121,6 +121,11 @@ As Stored Procedures  estão localizadas no ficheiro `src/database/stored_proced
 
 ## Views
 
+No ficheiro `src/database/stored_procedures.sql`, estão localizadas as views que fazem as seguintes seleções:
+* **events_count_by_category**: Selecionar o número de eventos, agrupados por tipo de evento
+* **next_repairs**: Selecionar as próximas manutenções que irão acontecer (em qualquer área restrita)
+* **list_ordered_events**: Selecionar, os eventos com o seu tipo, dispositivo associado e Área Restrita
+
 ## Triggers
 
 ## Indexes
@@ -131,7 +136,38 @@ As Stored Procedures  estão localizadas no ficheiro `src/database/stored_proced
 
 ## Login
 
-# Funcionalidades e Descrição
+A funcionalidade de login está present no backend, no ficheiro  `src/back/App.py` e usa as queries estabelecidas no ficheiro  `src/back/queries.sql`. Na base de dados é guardada uma *Hash* da palavra passe e um *Salt*. Quando o utilizador introduz a sua palavra passe, esta e o *Salt* são juntas e formam uma *Hash* que será comparada com a que está registada na base de dados. Para efetuar-mos isto, fazemos uso do algoritmo [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2). Desta maneira, mesmo que um atacante obtenha acesso à base de dados, não conseguirá deduzir a palavra-passe dos utilizadores.
+
+## Segurança por tokens
+
+Para aumentar a segurança entre o backend e fronted, foi usado um token, que é gerado e enviado pelo backend quando um utilizador inicia sessão. O módulo usado foi o *JWTManager* pertencente à package *flask_jwt_extended*. Isto também significa que a plataforma tem implementado a funcionalidade de caso o utilizador não interaja com a mesma durante algum tempo, a sua sessão irá ser terminada e terá de efetuar login novamente.
+
+## Website
+
+No desenvolvimento do website, foi dado um maior foco aos usos principais, que são:
+* Dashboard sólido, com bastantes funcionalidades e métricas
+* Funcionalidade de acionar e desativar alarme
+* Interação com os utilizadores (Ver, eliminar e adicionar)
+* Inicio de Sessão
+* Visualização das Áreas Restritas e associação de dispositivos a Áreas Restritas
+
+### Acionar o alarme
+
+Para acionar o alarme, dirija-se para o Dashboard e garanta que o botão de Alarme se encontra em `Armado` e o que o Estado do Sistema seja `O alarme está Armado e a Funcionar`. Após isso, execute o script `src/database/triggerAlarm.sql`.
+
+Dentro de aproximadamente 10 segundos, o Alarme deverá aparecer a vermelho e com o texto de `Acionado`.
+
+----------------------------------------------------------
+
+
+
+
+
+
+
+
+
+# Antigo
 
 ## Login
 
@@ -186,13 +222,3 @@ As Stored Procedures  estão localizadas no ficheiro `src/database/stored_proced
 * **Trigger** para garantir que as datas (por exemplo nas manutençoes) de inicio e fim são corretas (Inicio < Fim)
 * 1 dispositivo só pode pertencer a uma e uma só area restrita
 * Um horário de exclusão só pode estar associado a uma área restrita, se estiver dentro do horário de monitorização da mesma (Trigger)
-
-## Ferramentas a incorporar
-
-* View
-* Index
-* Cursor
-* Batches
-* Stored Procedures
-* UDF
-* Trigger
