@@ -137,8 +137,14 @@ No ficheiro `src/database/stored_procedures.sql`, estão localizadas as views qu
 * **list_ordered_events**: Selecionar, os eventos com o seu tipo, dispositivo associado e Área Restrita
 
 ## Triggers
+No ficheiro `src/database/triggers.sql` estão localizados todos os triggers utilizados na base de dados.
+* **trg_CreateDispositivoSeguranca**: Trigger do tipo *INSTEAD OF* que quando é criado um dispositivo de segurança e não existir um dispositivo com o mac, é criado primeiro um dispositivo base e somente depois é feito o insert na tabela dos dispositivos de segurança.
 
+* **trg_CheckDateValidity**: Trigger do tipo *AFTER* que quando é criada ou atualizada uma manutenção com data de fim menor que a data de início, é lançado um erro e é feito rollback ao insert ou update.
 ## Indexes
+* **idx_registo_eventos_timestamp**: Index na coluna timestamp que aumenta a eficiência das queries que pesquisam em função da coluna timestamp seja através de pesquisas em intervalos de tempo ou quando é feita uma ordenação em função desta coluna.
+* **idx_dispositivo_mac**: Existem algumas queries que fazem pesquisas a dispositivos pelo endereço MAC, este index aumenta a eficiência deste tipo de queries.
+* **idx_utilizador_telefone**: Quando é feito o login é feita uma pesquisa à base de dados pelo utilizador através do telefone (primary key), como podem existir muitos utilizadores de forma a aumentar a eficiência desta query colocou-se um index na coluna "Telefone".
 
 ## Paginação
 

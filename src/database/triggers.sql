@@ -22,3 +22,20 @@ BEGIN
     SELECT Dispositivo_Mac, TipoDispositivoSeguranca_Descricao, AreaRestrita_Id
     FROM inserted;
 END;
+
+CREATE TRIGGER trg_CheckDateValidity
+ON MANUTENCOES
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM inserted
+        WHERE DataInicio >= DataFim
+    )
+    BEGIN
+        RAISERROR('Start date must be less than end date.', 16, 1)
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END;
+END;
