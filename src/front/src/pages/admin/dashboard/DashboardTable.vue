@@ -31,27 +31,43 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, onMounted, onBeforeUnmount } from 'vue'
   import { useI18n } from 'vue-i18n'
   import data from '../../../data/tables/markup-table/data.json'
   import { getEventList } from './stats'
 
   const { t } = useI18n()
 
-  const users = ref(data.slice(0, 8))
-  const events = ref(await getEventList());
+  let events = ref(await getEventList());
+  let elapsedTime = ref(0)
+  let intervalId: any = null
 
-  function getStatusColor(status: string) {
-    if (status === 'paid') {
-      return 'success'
-    }
-
-    if (status === 'processing') {
-      return 'info'
-    }
-
-    return 'danger'
+  function startTimer() {
+    intervalId = setInterval(() => {
+      elapsedTime.value += 10; // Increment elapsed time by 10 seconds
+      // Call your desired function here
+      myFunction();
+    }, 10000); // 10000 milliseconds = 10 seconds
   }
+
+  function stopTimer() {
+    clearInterval(intervalId);
+  }
+
+  function myFunction() {
+    // Perform the desired action here
+    getEventList().then((res: any[]) => {
+      events = ref(res);
+    });
+  }
+
+  onMounted(() => {
+    startTimer();
+  });
+
+  onBeforeUnmount(() => {
+    stopTimer();
+  });
 </script>
 
 <style lang="scss">

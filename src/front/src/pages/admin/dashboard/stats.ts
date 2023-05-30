@@ -41,9 +41,8 @@ export const getEventList = async () => {
     return await (async() => {
         const res: EVENT_LIST[] = await BE_API.get_list_events();
         
-        // Only get the next 8
-        if (res.length > 8) {
-            res.splice(8); // Remove all elements starting from index 8
+        if (res.length > 10) {
+            res.splice(10);
         }
 
         return res;

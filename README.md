@@ -9,6 +9,52 @@ Grupo p1g6:
 * Gonçalo Silva, 103244
 * Tiago Silvestre, 103554
 
+# Tecnologias Usadas
+
+As seguintes tecnologias foram usadas neste projeto:
+ * Frontend: [VUEjs](https://vuejs.org/) 
+ * Backend: Python [Flask](https://flask.palletsprojects.com/en/2.3.x/)
+ * Base de Dados: [Microsoft Sql Server](https://www.microsoft.com/en-us/sql-server)
+ * Ambiente: [Docker](https://www.docker.com/)
+
+# Sistema Operativo utilizado
+
+Esta plataforma foi desenvolvida e testada para executar em Ubuntu 22.04, configurações extras podem ter de ser efetuadas para suporte de outros Sistemas Operativos.
+
+# Configuração
+
+Antes de continuar com a execução, vai ser preciso ter as ferramentas Docker e Docker compose na sua máquina. Caso não as tenha, for favor siga as instruções em [get docker](https://docs.docker.com/get-docker/) e [install compose](https://docs.docker.com/compose/install/).
+
+Após ter as ferramentas instaladas, execute o comando:
+```bash
+docker compose build
+```
+
+Para construir o ambiente docker, com todas as dependências e serviços.
+
+# Execução
+
+Para executar a plataforma, execute o comando:
+```bash
+docker compose up
+```
+
+**Nota**: Para reiniciar a base de dados, pode tirar partido de um script para esse efeito, por executar o comando com a seguinte Flag:
+```bash
+DB_RESET_FLAG=true docker compose up
+```
+
+### Primeira execução
+
+Na primeira execução, execute primeiro só o container só com o sql server:
+```bash
+docker compose up sql-server
+```
+Executando em seguida o comando para reiniciar a base de dados:
+```bash
+DB_RESET_FLAG=true docker compose up
+```
+
 # Requisitos
 
 1. Um utilizador é caracterizado pelo seu nome, nível de permissão, data de nascimento, um identificador único, password, email e numero de telefone.
@@ -25,6 +71,49 @@ Grupo p1g6:
 12. Uma área restrita pode ser configurada para ter dias da semana, com hora de inicio e de fim, recorrentes em que os dispositivos estão ativos em modo de monitorização (Não acionam o alarme). Também deve ser possível colocar essa regra ativa ou inativa.
 13. Deve ser possível configurar dias de exclusão para as alturas de funcionamento (data/hora inicio e fim).
 14. Dispositivos podem sofrer manutenções, a uma manutenção está associada uma área restrita, sendo caracterizada pela data de inicio, data de fim, estado, comentários (opcional) e uma lista de  utilizadores externos (mandatório).
+
+# Diagramas
+Com base nos requisitos e nas necessidades do sistema, modelámos os seguintes diagramas:
+
+## Diagrama Entidade-Relacionamento
+
+Diagrama DER ![DER diagram](./documentation/WasteNot_Warning_DER.jpg)
+
+# Esquema Relacional
+
+Esquema Relacional ![esquema relaciona](./documentation/WasteNot_Warning_Relational_Diagram.jpg)
+
+# SQL Scripts
+
+De forma a tornar o nosso sistema mais modular, decidimos colocar os vários elements SQL em ficheiros separados. Para os executar todos juntos e popular a base de dados, fazemos uso da funcionalidade descrita na secção de *Execução*.
+
+## Modelação tabela
+
+## Inserts
+
+## Update
+
+## Delete
+
+## Drop
+
+## Queries
+
+## User Defined Functions
+
+## Stored Procedures
+
+## Views
+
+## Triggers
+
+## Indexes
+
+## Paginação
+
+## Transaction Flow
+
+## Login
 
 # Funcionalidades e Descrição
 
