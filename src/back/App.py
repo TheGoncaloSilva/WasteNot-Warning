@@ -177,10 +177,19 @@ def get_trigger_alarm():
 def list_events():
     return databaseInteraction.list_events()
 
+@app.route('/events/get_events_paginated', methods=['GET'])
+@jwt_required()
+def get_paginated_events():
+    offset = request.args.get('offset', type=int)
+    fetch = request.args.get('fetch', type=int)
+    
+    return databaseInteraction.get_paginated_events(offset, fetch)
+
 @app.route('/devices/unused_devices', methods=['GET'])
 @jwt_required()
 def get_unused_devices():
     return databaseInteraction.get_unused_devices()
+
 
 @app.route('/restricted-area/add-device', methods=['POST'])
 def restricted_area_add_device():
@@ -193,6 +202,7 @@ def restricted_area_add_device():
     response = make_response()
     response.status_code = 200
     return response
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

@@ -70,6 +70,7 @@ class DatabaseInteraction:
                                         WHERE Dispositivo_Mac = ?;
                                         """, "returns_table" : False},
         "trigger_alarm" : {"query" : "EXEC getAlarmActivated;", "returns_table" : True},
+        "get_events_paginated" : {"query" : "SELECT * FROM PaginatedEvents(?,?)", "returns_table" : True},
     }
     
     
@@ -223,6 +224,9 @@ class DatabaseInteraction:
     
     def get_trigger_alarm(self):
         return self.__execute_query("trigger_alarm")
+    
+    def get_paginated_events(self, offset: int, fetch: int):
+        return self.__execute_query("get_events_paginated", offset , fetch)
     
     def restricted_area_add_device(self, mac: str,area_id: int):
         self.__execute_query("restricted_area_add_device", area_id , mac)

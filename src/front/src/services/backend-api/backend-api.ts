@@ -229,6 +229,11 @@ class BEAPI extends BaseCommunication
       return await super.get('events/list_events')
     }
 
+    async get_paginated_Events(offset: number, fetch: number): Promise<EVENT_LIST[]>
+    {
+      return await super.get('events/get_events_paginated', 'offset=' + String(offset), 'fetch=' + String(fetch))
+    }
+
     async get_trigger_alarm(): Promise<EVENT_LIST[]>
     {
       return await super.get('events/get_trigger_alarm')

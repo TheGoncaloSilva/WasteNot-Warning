@@ -55,8 +55,23 @@ RETURNS TABLE
 AS
 RETURN
 (
-SELECT HoraInicio,HoraFim,Estado FROM AREA_RESTRITA_HORARIO_MONITORIZACAO AS T1
-INNER JOIN AREA_RESTRITA AS T2 ON T1.AreaRestrita_Id=T2.Id
-INNER JOIN HORARIO_MONITORIZACAO AS T3 ON T1.HorarioMonitorizacao_Id=T3.Id
-WHERE T2.Id = @RestrictedAreaID);
+    SELECT HoraInicio,HoraFim,Estado FROM AREA_RESTRITA_HORARIO_MONITORIZACAO AS T1
+    INNER JOIN AREA_RESTRITA AS T2 ON T1.AreaRestrita_Id=T2.Id
+    INNER JOIN HORARIO_MONITORIZACAO AS T3 ON T1.HorarioMonitorizacao_Id=T3.Id
+    WHERE T2.Id = @RestrictedAreaID
+);
+GO
+
+GO
+CREATE FUNCTION dbo.PaginatedEvents(@offset INT, @fetch INT)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT *
+    FROM list_ordered_events
+    ORDER BY Reg_timestamp DESC
+    OFFSET @offset ROWS
+    FETCH NEXT @fetch ROWS ONLY
+);
 GO

@@ -26,27 +26,34 @@
             </tbody>
           </table>
         </div>
+          <div class="flex xs12 xm6">
+              <va-pagination v-model="activePage" :visible-pages="3" :pages="numberPages" />
+          </div>
       </va-card-content>
     </va-card>
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted, onBeforeUnmount } from 'vue'
+  import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import data from '../../../data/tables/markup-table/data.json'
-  import { getEventList } from './stats'
+  import { getEventList, get_paginated_Events } from './stats'
+  import { getNumberEvents } from './stats';
+import { EVENT_LIST } from '../../../services/backend-api/interfaces';
 
   const { t } = useI18n()
 
-  let events = ref(await getEventList());
   let elapsedTime = ref(0)
   let intervalId: any = null
+  const numberOfEventsPerPage: number = 9;
+  let numberPages = ref(Math.ceil((await getNumberEvents())[0]['row_count']/numberOfEventsPerPage))
+  const activePage = ref(1)
+  let events = ref(await getEventList());
 
   function startTimer() {
     intervalId = setInterval(() => {
       elapsedTime.value += 10; // Increment elapsed time by 10 seconds
       // Call your desired function here
-      myFunction();
+      paginated();
     }, 10000); // 10000 milliseconds = 10 seconds
   }
 
@@ -54,11 +61,12 @@
     clearInterval(intervalId);
   }
 
-  function myFunction() {
-    // Perform the desired action here
-    getEventList().then((res: any[]) => {
+  function paginated(){
+    console.log("Page: ", activePage.value)
+    const offset = (activePage.value - 1) * numberOfEventsPerPage;
+    get_paginated_Events(offset, numberOfEventsPerPage).then((res: EVENT_LIST[]) => {
       events = ref(res);
-    });
+    })
   }
 
   onMounted(() => {
@@ -68,6 +76,11 @@
   onBeforeUnmount(() => {
     stopTimer();
   });
+
+  watch(activePage, (newPage, oldPage) => {
+    paginated();
+  });
+
 </script>
 
 <style lang="scss">

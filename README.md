@@ -12,10 +12,11 @@ Grupo p1g6:
 # Tecnologias Usadas
 
 As seguintes tecnologias foram usadas neste projeto:
- * Frontend: [VUEjs](https://vuejs.org/) 
- * Backend: Python [Flask](https://flask.palletsprojects.com/en/2.3.x/)
- * Base de Dados: [Microsoft Sql Server](https://www.microsoft.com/en-us/sql-server)
- * Ambiente: [Docker](https://www.docker.com/)
+
+* Frontend: [VUEjs](https://vuejs.org/)
+* Backend: Python [Flask](https://flask.palletsprojects.com/en/2.3.x/)
+* Base de Dados: [Microsoft Sql Server](https://www.microsoft.com/en-us/sql-server)
+* Ambiente: [Docker](https://www.docker.com/)
 
 # Sistema Operativo utilizado
 
@@ -26,6 +27,7 @@ Esta plataforma foi desenvolvida e testada para executar em Ubuntu 22.04, config
 Antes de continuar com a execução, vai ser preciso ter as ferramentas Docker e Docker compose na sua máquina. Caso não as tenha, for favor siga as instruções em [get docker](https://docs.docker.com/get-docker/) e [install compose](https://docs.docker.com/compose/install/).
 
 Após ter as ferramentas instaladas, execute o comando:
+
 ```bash
 docker compose build
 ```
@@ -35,11 +37,13 @@ Para construir o ambiente docker, com todas as dependências e serviços.
 # Execução
 
 Para executar a plataforma, execute o comando:
+
 ```bash
 docker compose up
 ```
 
 **Nota**: Para reiniciar a base de dados, pode tirar partido de um script para esse efeito, por executar o comando com a seguinte Flag:
+
 ```bash
 DB_RESET_FLAG=true docker compose up
 ```
@@ -47,10 +51,13 @@ DB_RESET_FLAG=true docker compose up
 ### Primeira execução
 
 Na primeira execução, execute primeiro só o container só com o sql server:
+
 ```bash
 docker compose up sql-server
 ```
+
 Executando em seguida o comando para reiniciar a base de dados:
+
 ```bash
 DB_RESET_FLAG=true docker compose up
 ```
@@ -73,6 +80,7 @@ DB_RESET_FLAG=true docker compose up
 14. Dispositivos podem sofrer manutenções, a uma manutenção está associada uma área restrita, sendo caracterizada pela data de inicio, data de fim, estado, comentários (opcional) e uma lista de  utilizadores externos (mandatório).
 
 # Diagramas
+
 Com base nos requisitos e nas necessidades do sistema, modelámos os seguintes diagramas:
 
 ## Diagrama Entidade-Relacionamento
@@ -101,18 +109,19 @@ No ficheiro `src/database/other_queries.sql` estão outras queries que foram usa
 
 ## User Defined Functions
 
-
 As UDFs estão localizadas no ficheiro `src/database/udfs.sql` e cada uma efetua a seguinte tarefa:
+
 * **GetLastUserEvents**: Aceita como argumento o ID do utilizador e o máximo número de eventos que devem ser pesquisados. Retorna os últimos eventos do utilizador ordenados pela coluna Timestamp.
 * **GetAreasRestritasByUserId**: Recebe como parâmetro o ID de um utilizador e retorna as áreas restritas em que ele pertence.
 * **GetLastRepairsOfARestrictedArea**: Recebe como argumento o Id de uma área restrita e o número máximo de linhas da pesquisa, retorna as próximas manutenções da área restrita ordenadas pela data de início da manutenção
 * **GetDeviceListOfARestrictedArea**: Aceita como argumento o Id de uma Área Restrita e retorna o número de Dispositivos de Segurança associados a essa Área Restrita
 * **GetHorariosMonitorizacaoByRestrictedArea**: Aceita como argumento o Id de uma Área Restrita e retorna os Horários de Monitorização associados a essa Área Restrita
-
+* **PaginatedEvents**: Aceita como um argumento um offset e um fetch, para interagir com a paginação e ir buscar os eventos. O fetch representa o número de registos e o offset, é o index do registo inicial para retornar.
 
 ## Stored Procedures
 
 As Stored Procedures  estão localizadas no ficheiro `src/database/stored_procedures.sql` e cada uma efetua a seguinte tarefa:
+
 * **GetRowCountOfEventsInExclusionTime**: Seleciona o número de eventos que aconteceram fora do horário de monitorização da Área Restrita ou que aconteceram dentro do Horário de Exclusão e que não aconteceram enquanto o sistema estava em manutenção
 * **GetRowCountOfEventsInRepairingSchedule**: Seleciona o número de eventos que aconteceram durante período de manutenção
 * **GetRowCountOfEventsInActiveSchedule**: Seleciona o número de eventos que aconteceram numa altura em que o sistema foi acionado
@@ -122,6 +131,7 @@ As Stored Procedures  estão localizadas no ficheiro `src/database/stored_proced
 ## Views
 
 No ficheiro `src/database/stored_procedures.sql`, estão localizadas as views que fazem as seguintes seleções:
+
 * **events_count_by_category**: Selecionar o número de eventos, agrupados por tipo de evento
 * **next_repairs**: Selecionar as próximas manutenções que irão acontecer (em qualquer área restrita)
 * **list_ordered_events**: Selecionar, os eventos com o seu tipo, dispositivo associado e Área Restrita
@@ -145,6 +155,7 @@ Para aumentar a segurança entre o backend e fronted, foi usado um token, que é
 ## Website
 
 No desenvolvimento do website, foi dado um maior foco aos usos principais, que são:
+
 * Dashboard sólido, com bastantes funcionalidades e métricas
 * Funcionalidade de acionar e desativar alarme
 * Interação com os utilizadores (Ver, eliminar e adicionar)
@@ -157,15 +168,7 @@ Para acionar o alarme, dirija-se para o Dashboard e garanta que o botão de Alar
 
 Dentro de aproximadamente 10 segundos, o Alarme deverá aparecer a vermelho e com o texto de `Acionado`.
 
-----------------------------------------------------------
-
-
-
-
-
-
-
-
+---
 
 # Antigo
 
