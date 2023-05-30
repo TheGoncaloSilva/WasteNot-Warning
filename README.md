@@ -142,6 +142,20 @@ No ficheiro `src/database/stored_procedures.sql`, estão localizadas as views qu
 
 ## Paginação
 
+Usando a UDF *PaginatedEvents* definida anteriormente, foi possível implementar paginação, por chamar esta udf com um offset e um número de registos para obter. Esta UDF tira partido deste suporte já embutido no SQL Server com o seguinte código:
+```SQL
+OFFSET @offset ROWS
+FETCH NEXT @fetch ROWS ONLY
+``` 
+
+Este offset é simplesmente calculado pelo frontend usando o seguinte código:
+```TypeScript
+const offset = (pageNumber - 1) * numberOfEventsPerPage;
+```
+
+Fazendo com que seja fácil ao selecionar uma página para ver os registos, estes serem retornados com base no `pageNumber` ou número de página fornecido
+
+
 ## Transaction Flow
 
 ## Login
