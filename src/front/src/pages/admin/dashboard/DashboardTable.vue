@@ -3,7 +3,7 @@
       <va-card-title>Lista de últimos eventos</va-card-title>
       <va-card-content>
         <div class="table-wrapper">
-          <table class="va-table va-table--striped va-table--hoverable">
+          <table class="va-table va-table--striped va-table--hoverable" style="width: 100%;">
             <thead>
               <tr>
                 <th>TimeStamp</th>
