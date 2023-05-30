@@ -47,7 +47,8 @@ import { EVENT_LIST } from '../../../services/backend-api/interfaces';
   const numberOfEventsPerPage: number = 9;
   let numberPages = ref(Math.ceil((await getNumberEvents())[0]['row_count']/numberOfEventsPerPage))
   const activePage = ref(1)
-  let events = ref(await getEventList());
+  //let events = ref(await getEventList());
+  let events = ref();
 
   function startTimer() {
     intervalId = setInterval(() => {
@@ -62,14 +63,14 @@ import { EVENT_LIST } from '../../../services/backend-api/interfaces';
   }
 
   function paginated(){
-    console.log("Page: ", activePage.value)
     const offset = (activePage.value - 1) * numberOfEventsPerPage;
     get_paginated_Events(offset, numberOfEventsPerPage).then((res: EVENT_LIST[]) => {
-      events = ref(res);
+      events.value = res;
     })
   }
 
   onMounted(() => {
+    paginated();
     startTimer();
   });
 

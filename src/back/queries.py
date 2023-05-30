@@ -49,7 +49,7 @@ class DatabaseInteraction:
         
         "get_horarios_monitorizacao_by_restricted_area" : {"query" : "SELECT * FROM GetHorariosMonitorizacaoByRestrictedArea(?)", "returns_table" : True},
 
-        "get_number_of_events" : {"query" : "SELECT COUNT(*) AS row_count FROM REGISTO_EVENTOS;", "returns_table" : True},
+        "get_number_of_events" : {"query" : "SELECT COUNT(*) AS row_count FROM list_ordered_events;", "returns_table" : True},
         "get_number_of_areas" : {"query" : "SELECT COUNT(*) AS row_count FROM AREA_RESTRITA;", "returns_table" : True},
         "get_number_of_devices" : {"query" : "SELECT COUNT(*) AS row_count FROM DISPOSITIVO;", "returns_table" : True},
 
