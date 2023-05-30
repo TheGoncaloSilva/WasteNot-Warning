@@ -91,7 +91,7 @@ export default {
         //   displayName: 'menu.dataTables',
         // },
       ],
-    },*/
+    },
     {
       name: 'ui',
       displayName: 'menu.uiElements',
@@ -195,7 +195,7 @@ export default {
           displayName: 'menu.typography',
         },
       ],
-    },/*
+    },
     {
       name: 'maps',
       displayName: 'menu.maps',

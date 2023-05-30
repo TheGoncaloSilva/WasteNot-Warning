@@ -192,7 +192,7 @@ WHILE @Counter <= 100
 BEGIN
     SET @Timestamp = DATEADD(minute, -RAND() * 10080, GETDATE()) -- Random timestamp within the past week
     SET @TipoEvento_Descricao = (SELECT TOP 1 Descricao FROM TIPO_EVENTO ORDER BY NEWID()) -- Random TipoEvento_Descricao
-    SET @DispositivoSeguranca_Mac = (SELECT TOP 1 Dispositivo_Mac FROM DISPOSITIVO_SEGURANCA ORDER BY NEWID()) -- Random DispositivoSeguranca_Mac
+    SET @DispositivoSeguranca_Mac = (SELECT TOP 1 Dispositivo_Mac FROM DISPOSITIVO_SEGURANCA WHERE AreaRestrita_Id IS NOT NULL ORDER BY NEWID()) -- Random DispositivoSeguranca_Mac
     
     INSERT INTO REGISTO_EVENTOS ([Timestamp], TipoEvento_Descricao, DispositivoSeguranca_Mac)
     VALUES (@Timestamp, @TipoEvento_Descricao, @DispositivoSeguranca_Mac)
