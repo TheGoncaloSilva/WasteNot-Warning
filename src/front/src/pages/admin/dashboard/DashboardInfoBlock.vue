@@ -177,6 +177,8 @@
   function toggleArmedStatus() {
     isArmed.value = !isArmed.value;
     alarmTriggered.value = false
+    if(isArmed.value)
+      startTimer()
   }
 
   function triggerAlarm(){
@@ -224,6 +226,7 @@
     getTriggerAlarm().then((event: EVENT_LIST[]) => {
       if(event.length == 0)
         return;
+      stopTimer();
       triggerReason = event[0]
       triggerAlarm();
     });
