@@ -23,6 +23,7 @@ BEGIN
     FROM inserted;
 END;
 
+GO
 CREATE TRIGGER trg_CheckDateValidity
 ON MANUTENCOES
 AFTER INSERT, UPDATE
