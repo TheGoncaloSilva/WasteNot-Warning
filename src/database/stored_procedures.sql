@@ -64,9 +64,7 @@ END;
 GO
 /* With Return
 DECLARE @Result INT;
-EXEC @Result = GetRowCountOfEventsInExclusionTime;
 SELECT @Result;*/
-EXEC GetRowCountOfEventsInExclusionTime;
 --DROP PROCEDURE GetRowCountOfEventsInExclusionTime;
 GO
 
@@ -88,7 +86,6 @@ BEGIN
 END;
 GO
 
-EXEC GetRowCountOfEventsInRepairingSchedule;
 --DROP PROCEDURE GetRowCountOfEventsInRepairingSchedule;
 GO
 
@@ -152,7 +149,6 @@ BEGIN
 END;
 GO
 
-EXEC GetRowCountOfEventsInActiveSchedule;
 --DROP PROCEDURE GetRowCountOfEventsInActiveSchedule;
 GO
 
@@ -232,6 +228,3 @@ BEGIN
                         ORDER BY RE.[Timestamp] DESC;
 END;
 GO
-
-EXEC getAlarmActivated;
---DROP PROCEDURE getAlarmActivated;

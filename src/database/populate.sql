@@ -130,7 +130,7 @@ VALUES
     ('MNOP78', 'Sensor de presença', 3),
     ('QRST90', 'Alarme de incêndio', 3),
     ('PO98GS', 'Câmera de segurança', 4),
-    ('QRSV90', 'Alarme de incêndio', NULL),
+    ('QRSV9T', 'Alarme de incêndio', NULL),
     ('EFCH34', 'Câmera de segurança', NULL),
     ('IBKL56', 'Leitor biométrico', NULL),
     ('AJKL56', 'Leitor biométrico', NULL),
