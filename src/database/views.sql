@@ -44,3 +44,5 @@ CREATE VIEW list_ordered_events AS (
                 INNER JOIN AREA_RESTRITA AS AR ON AR.Id = DS.AreaRestrita_Id
 );
 GO
+
+

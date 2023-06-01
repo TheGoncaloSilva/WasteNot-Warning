@@ -4,15 +4,10 @@ import json
 import subprocess
 from threading import Lock
 critical_function_lock = Lock()
+import config
 
 
-config = {
-    'Driver': '{ODBC Driver 17 for SQL Server}',
-    'Server': '172.16.0.4,1433',  # Specify the SQL Server instance and port
-    'Database': 'WasteNot_Warning',
-    'UID': 'sa',
-    'PWD': 'StrongP@ssw0rd123'
-}
+config = config.getConfig()
 
 
 class DatabaseInteraction:

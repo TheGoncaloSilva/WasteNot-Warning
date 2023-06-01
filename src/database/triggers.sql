@@ -1,4 +1,5 @@
 USE p1g6;
+GO
 -- When a security device is created, a device is also created
 GO
 CREATE OR ALTER TRIGGER trg_CreateDispositivoSeguranca
@@ -6,17 +7,18 @@ ON DISPOSITIVO_SEGURANCA
 INSTEAD OF INSERT
 AS
 BEGIN
-
-    IF NOT EXISTS (
-        SELECT *
-        FROM DISPOSITIVO
-        WHERE Mac = (SELECT Dispositivo_Mac FROM inserted)
+    IF EXISTS (
+        SELECT I.Dispositivo_Mac
+        FROM inserted AS I
+        LEFT JOIN DISPOSITIVO AS D ON I.Dispositivo_Mac = D.Mac
+        WHERE D.Mac IS NULL
     )
     BEGIN
-
         INSERT INTO DISPOSITIVO (Mac, IP, Modelo, Fabricante)
-        SELECT Dispositivo_Mac, NULL, NULL, NULL
-        FROM inserted;
+        SELECT I.Dispositivo_Mac, NULL, NULL, NULL
+        FROM inserted AS I
+        LEFT JOIN DISPOSITIVO AS D ON I.Dispositivo_Mac = D.Mac
+        WHERE D.Mac IS NULL;
     END;
 
     INSERT INTO DISPOSITIVO_SEGURANCA (Dispositivo_Mac, TipoDispositivoSeguranca_Descricao, AreaRestrita_Id)
@@ -25,7 +27,7 @@ BEGIN
 END;
 
 GO
-CREATE TRIGGER trg_CheckDateValidity
+CREATE OR ALTER TRIGGER trg_CheckDateValidity
 ON MANUTENCOES
 AFTER INSERT, UPDATE
 AS
@@ -33,11 +35,11 @@ BEGIN
     IF EXISTS (
         SELECT 1
         FROM inserted
-        WHERE DataInicio >= DataFim
+        WHERE DataInicio > DataFim
     )
     BEGIN
         RAISERROR('Start date must be less than end date.', 16, 1)
-        ROLLBACK TRANSACTION;
+        ROLLBACK TRAN;
         RETURN;
     END;
 END;
