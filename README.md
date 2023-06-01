@@ -144,7 +144,7 @@ No ficheiro `src/database/triggers.sql` estão localizados todos os triggers uti
 ## Indexes
 * **idx_registo_eventos_timestamp**: Index na coluna timestamp que aumenta a eficiência das queries que pesquisam em função da coluna timestamp seja através de pesquisas em intervalos de tempo ou quando é feita uma ordenação em função desta coluna.
 * **idx_dispositivo_mac**: Existem algumas queries que fazem pesquisas a dispositivos pelo endereço MAC, este index aumenta a eficiência deste tipo de queries.
-* **idx_utilizador_telefone**: Quando é feito o login é feita uma pesquisa à base de dados pelo utilizador através do telefone (primary key), como podem existir muitos utilizadores de forma a aumentar a eficiência desta query colocou-se um index na coluna "Telefone".
+* **idx_utilizador_telefone**: Quando é feito o login é feita uma pesquisa à base de dados pelo utilizador através da coluna Telefone, como podem existir muitos utilizadores de forma a aumentar a eficiência desta query colocou-se um index na coluna "Telefone".
 
 ## Paginação
 
@@ -160,9 +160,6 @@ const offset = (pageNumber - 1) * numberOfEventsPerPage;
 ```
 
 Fazendo com que seja fácil ao selecionar uma página para ver os registos, estes serem retornados com base no `pageNumber` ou número de página fornecido
-
-
-## Transaction Flow
 
 ## Login
 
