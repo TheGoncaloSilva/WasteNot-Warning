@@ -1,3 +1,4 @@
+USE p1g6;
 -- When a security device is created, a device is also created
 
 CREATE OR ALTER TRIGGER trg_CreateDispositivoSeguranca

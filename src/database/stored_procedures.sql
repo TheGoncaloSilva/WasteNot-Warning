@@ -1,4 +1,4 @@
-USE WasteNot_Warning;
+USE p1g6;
 
 -- SP: 1 -> Not complete, verificar se está dentro do horário de monitorização
 GO

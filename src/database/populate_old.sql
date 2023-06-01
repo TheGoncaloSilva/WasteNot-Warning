@@ -1,4 +1,4 @@
-USE WasteNot_Warning;
+USE p1g6;
 -- SAMPLE WASTE NOT WARNING DATA
 GO
 INSERT INTO NIVEL_PERMISSAO(Nivel) VALUES ('utilizador comum');

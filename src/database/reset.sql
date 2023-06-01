@@ -1,1 +1,1 @@
-DROP DATABASE WasteNot_Warning;
+DROP DATABASE p1g6;
