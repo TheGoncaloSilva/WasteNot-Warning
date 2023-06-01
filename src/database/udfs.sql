@@ -9,7 +9,7 @@ RETURN
     SELECT TOP (@TopCount) Id,[Timestamp],TipoEvento_Descricao,Mac,Modelo,Fabricante
 	FROM UTILIZADOR_REGISTO_EVENTOS AS U INNER JOIN REGISTO_EVENTOS AS R ON U.RegistoEventos_Id=R.Id 
 	INNER JOIN DISPOSITIVO as D ON DispositivoSeguranca_Mac=D.Mac
-	WHERE U.Utilizador_Id = @UserID BY [Timestamp]
+	WHERE U.Utilizador_Id = @UserID ORDER BY [Timestamp]
 );
 
 GO
