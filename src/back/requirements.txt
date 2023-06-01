@@ -2,3 +2,4 @@ flask
 flask-cors
 pyodbc
 Flask-JWT-Extended
+python-dotenv
