@@ -228,3 +228,38 @@ BEGIN
                         ORDER BY RE.[Timestamp] DESC;
 END;
 GO
+
+
+
+
+CREATE PROCEDURE AddUserEvent
+    @timestamp TIMESTAMP,
+    @tipo_ev_desc VARCHAR(64),
+    @disp_seg_MAC VARCHAR(6),
+    @user_id INT
+AS
+BEGIN
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        DECLARE @registo_id INT;
+
+        INSERT INTO REGISTO_EVENTOS (Timestamp, TipoEvento_Descricao, DispositivoSeguranca_Mac)
+        VALUES (@timestamp, @tipo_ev_desc, @disp_seg_MAC);
+
+        -- Get the inserted RegistoEventos_Id
+        SET @registo_id = SCOPE_IDENTITY();
+
+        INSERT INTO UTILIZADOR_REGISTO_EVENTOS (Utilizador_Id, RegistoEventos_Id)
+        VALUES (@user_id, @registo_id);
+
+        COMMIT;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK;
+        DECLARE @errorMessage NVARCHAR(500);
+        SET @errorMessage = 'An error occurred while adding the user event. Error: ' + ERROR_MESSAGE();
+        THROW 51000, @errorMessage, 1;
+    END CATCH;
+END;
+GO

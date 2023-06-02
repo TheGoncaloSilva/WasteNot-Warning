@@ -173,6 +173,9 @@ No ficheiro `src/database/triggers.sql` estão localizados todos os triggers uti
 * **idx_dispositivo_mac**: Existem algumas queries que fazem pesquisas a dispositivos pelo endereço MAC, este index aumenta a eficiência deste tipo de queries.
 * **idx_utilizador_telefone**: Quando é feito o login é feita uma pesquisa à base de dados pelo utilizador através da coluna Telefone, como podem existir muitos utilizadores de forma a aumentar a eficiência desta query colocou-se um index na coluna "Telefone".
 
+## Transações
+* **AddUserEvent**: Adiciona um evento associado a um utilizador, o registo do evento é criado bem como a associação ao utilizador. Caso uma inserção falhe é feito um rollback à transação e é lançada uma excepção.
+
 ## Paginação
 
 Usando a UDF *PaginatedEvents* definida anteriormente, foi possível implementar paginação, por chamar esta udf com um offset e um número de registos para obter. Esta UDF tira partido deste suporte já embutido no SQL Server com o seguinte código:

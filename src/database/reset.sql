@@ -51,6 +51,7 @@ DROP PROCEDURE IF EXISTS GetRowCountOfEventsInExclusionTime;
 DROP PROCEDURE IF EXISTS GetRowCountOfEventsInRepairingSchedule;
 DROP PROCEDURE IF EXISTS GetRowCountOfEventsInActiveSchedule;
 DROP PROCEDURE IF EXISTS getAlarmActivated;
+DROP PROCEDURE IF EXISTS AddUserEvent;
 
 -- Delete UDFs
 DROP FUNCTION IF EXISTS dbo.GetLastUserEvents;
