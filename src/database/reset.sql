@@ -42,14 +42,17 @@ DROP TABLE IF EXISTS HORARIO_MONITORIZACAO;
 DROP TABLE IF EXISTS UTILIZADOR;
 DROP TABLE IF EXISTS NIVEL_PERMISSAO;
 
+--Delete Triggers
 DROP TRIGGER IF EXISTS trg_CreateDispositivoSeguranca;
 DROP TRIGGER IF EXISTS trg_CheckDateValidity;
 
+-- Delete Stored Procedures
 DROP PROCEDURE IF EXISTS GetRowCountOfEventsInExclusionTime;
 DROP PROCEDURE IF EXISTS GetRowCountOfEventsInRepairingSchedule;
 DROP PROCEDURE IF EXISTS GetRowCountOfEventsInActiveSchedule;
 DROP PROCEDURE IF EXISTS getAlarmActivated;
 
+-- Delete UDFs
 DROP FUNCTION IF EXISTS dbo.GetLastUserEvents;
 DROP FUNCTION IF EXISTS dbo.GetAreasRestritasByUserId;
 DROP FUNCTION IF EXISTS dbo.GetLastRepairsOfARestrictedArea;
@@ -57,6 +60,7 @@ DROP FUNCTION IF EXISTS dbo.GetDeviceListOfARestrictedArea;
 DROP FUNCTION IF EXISTS dbo.GetHorariosMonitorizacaoByRestrictedArea;
 DROP FUNCTION IF EXISTS dbo.PaginatedEvents;
 
+-- Delete Views
 DROP VIEW IF EXISTS events_count_by_category;
 DROP VIEW IF EXISTS next_repairs;
 DROP VIEW IF EXISTS list_ordered_events;

@@ -26,26 +26,50 @@ Esta plataforma foi desenvolvida e testada para executar em Ubuntu 22.04, config
 
 Antes de continuar com a execução, vai ser preciso ter as ferramentas Docker e Docker compose na sua máquina. Caso não as tenha, for favor siga as instruções em [get docker](https://docs.docker.com/get-docker/) e [install compose](https://docs.docker.com/compose/install/).
 
-Após ter as ferramentas instaladas, execute o comando:
+Após ter as ferramentas instaladas, execute uma das seguintes opções.
+
+### Desenvolvimento
+
+Com esta configuração o sistema usará a base de dados local do Docker.
 
 ```bash
 docker compose build
+```
+
+### Produção
+
+Com esta configuração o sistema usará a base de dados de produção, localizada no IEETA.
+
+```bash
+docker compose -f docker-compose-prod.yml build
 ```
 
 Para construir o ambiente docker, com todas as dependências e serviços.
 
 # Execução
 
-Para executar a plataforma, execute o comando:
+Para executar a plataforma, execute uma das seguintes opções
+
+### Desenvolvimento
+
+Com esta configuração o sistema usará a base de dados local do Docker.
 
 ```bash
 docker compose up
 ```
 
+### Produção
+
+Com esta configuração o sistema usará a base de dados de produção, localizada no IEETA.
+
+```bash
+DB_RESET_FLAG=true docker compose -f docker-compose-prod.yml up
+```
+
 **Nota**: Para reiniciar a base de dados, pode tirar partido de um script para esse efeito, por executar o comando com a seguinte Flag:
 
 ```bash
-DB_RESET_FLAG=true docker compose up
+DB_RESET_FLAG=true <opcao_de_execucao (docker compose ...)>
 ```
 
 ### Primeira execução
@@ -137,11 +161,14 @@ No ficheiro `src/database/stored_procedures.sql`, estão localizadas as views qu
 * **list_ordered_events**: Selecionar, os eventos com o seu tipo, dispositivo associado e Área Restrita
 
 ## Triggers
-No ficheiro `src/database/triggers.sql` estão localizados todos os triggers utilizados na base de dados.
-* **trg_CreateDispositivoSeguranca**: Trigger do tipo *INSTEAD OF* que quando é criado um dispositivo de segurança e não existir um dispositivo com o mac, é criado primeiro um dispositivo base e somente depois é feito o insert na tabela dos dispositivos de segurança.
 
+No ficheiro `src/database/triggers.sql` estão localizados todos os triggers utilizados na base de dados.
+
+* **trg_CreateDispositivoSeguranca**: Trigger do tipo *INSTEAD OF* que quando é criado um dispositivo de segurança e não existir um dispositivo com o mac, é criado primeiro um dispositivo base e somente depois é feito o insert na tabela dos dispositivos de segurança.
 * **trg_CheckDateValidity**: Trigger do tipo *AFTER* que quando é criada ou atualizada uma manutenção com data de fim menor que a data de início, é lançado um erro e é feito rollback ao insert ou update.
+
 ## Indexes
+
 * **idx_registo_eventos_timestamp**: Index na coluna timestamp que aumenta a eficiência das queries que pesquisam em função da coluna timestamp seja através de pesquisas em intervalos de tempo ou quando é feita uma ordenação em função desta coluna.
 * **idx_dispositivo_mac**: Existem algumas queries que fazem pesquisas a dispositivos pelo endereço MAC, este index aumenta a eficiência deste tipo de queries.
 * **idx_utilizador_telefone**: Quando é feito o login é feita uma pesquisa à base de dados pelo utilizador através da coluna Telefone, como podem existir muitos utilizadores de forma a aumentar a eficiência desta query colocou-se um index na coluna "Telefone".
@@ -149,12 +176,14 @@ No ficheiro `src/database/triggers.sql` estão localizados todos os triggers uti
 ## Paginação
 
 Usando a UDF *PaginatedEvents* definida anteriormente, foi possível implementar paginação, por chamar esta udf com um offset e um número de registos para obter. Esta UDF tira partido deste suporte já embutido no SQL Server com o seguinte código:
+
 ```SQL
 OFFSET @offset ROWS
 FETCH NEXT @fetch ROWS ONLY
-``` 
+```
 
 Este offset é simplesmente calculado pelo frontend usando o seguinte código:
+
 ```TypeScript
 const offset = (pageNumber - 1) * numberOfEventsPerPage;
 ```

@@ -1,6 +1,22 @@
 <template>
     <va-card>
-      <va-card-title>Lista de últimos eventos</va-card-title>
+      <va-card-title>
+        Lista de últimos eventos
+        <!--<va-button-dropdown 
+          icon="fa-filter" 
+          plain 
+          class="mr-2 mb-2"
+          round
+          :default="items"
+        >
+        <template v-slot:default>
+          <va-button-dropdown-item label="Option 1"></va-button-dropdown-item>
+          <va-button-dropdown-item label="Option 2"></va-button-dropdown-item>
+          <va-button-dropdown-item label="Option 3"></va-button-dropdown-item>
+        </template>
+        </va-button-dropdown>-->
+
+      </va-card-title>
       <va-card-content>
         <div class="table-wrapper">
           <table class="va-table va-table--striped va-table--hoverable" style="width: 100%;">
@@ -26,9 +42,24 @@
             </tbody>
           </table>
         </div>
-          <div class="flex xs12 xm6">
+        <div class="row">
+          <div class="flex xs12 md4">
               <va-pagination v-model="activePage" :visible-pages="3" :pages="numberPages" />
           </div>
+          <div class="flex xs12 md2">
+            <span>Filter by:</span>
+          </div>
+          <div class="grid xs12 md6">
+            <va-button-toggle
+              v-model="defOption"
+              preset="outline"
+              :options="filterOptions"
+              border-color="info"
+              round
+              :click="filterEvent"
+            />
+          </div>
+        </div>
       </va-card-content>
     </va-card>
 </template>
@@ -50,6 +81,15 @@ import { EVENT_LIST } from '../../../services/backend-api/interfaces';
   //let events = ref(await getEventList());
   let events = ref();
 
+  const filterOptions = ref([
+    { label: 'Tudo', value: 'all' },
+    { label: 'Acionados', value: 'active' },
+    { label: 'Excluídos', value: 'excluded' },
+    { label: 'Manutenção', value: 'maintenance' },
+  ])
+  const defOption = ref('all')
+
+
   function startTimer() {
     intervalId = setInterval(() => {
       elapsedTime.value += 10; // Increment elapsed time by 10 seconds
@@ -68,6 +108,11 @@ import { EVENT_LIST } from '../../../services/backend-api/interfaces';
       events.value = res;
     })
   }
+
+  function filterEvent(rule: string) {
+    console.log(rule)
+  };
+
 
   onMounted(() => {
     paginated();
@@ -93,5 +138,17 @@ import { EVENT_LIST } from '../../../services/backend-api/interfaces';
     .va-table {
       width: 100%;
     }
+  }
+
+  .va-dropdown-item {
+    display: block;
+    padding: 0.5rem 1rem;
+    clear: both;
+    font-weight: normal;
+    color: #212529;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
   }
 </style>
