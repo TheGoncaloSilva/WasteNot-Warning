@@ -167,27 +167,6 @@ RETURN (
 );
 GO
 
---SELECT * FROM dbo.GetEventIdsInExclusionTimeFunc();
---SELECT * FROM dbo.GetEventIdsInRepairingScheduleFunc();
---SELECT * FROM dbo.GetEventIdsInActiveScheduleFunc();
-
-/*
-GO
-CREATE FUNCTION dbo.PaginatedEvents(@offset INT, @fetch INT)
-RETURNS TABLE
-AS
-RETURN
-(
-    SELECT *
-    FROM list_ordered_events
-    ORDER BY Reg_timestamp DESC
-    OFFSET @offset ROWS
-    FETCH NEXT @fetch ROWS ONLY
-);
-GO
-*/
-
-
 GO
 CREATE FUNCTION dbo.PaginatedEvents(@offset INT, @fetch INT, @type VARCHAR(50))
 RETURNS TABLE
@@ -218,4 +197,3 @@ RETURN (
 );
 GO
 
---SELECT * FROM PaginatedEvents(0, 108, 'active');
