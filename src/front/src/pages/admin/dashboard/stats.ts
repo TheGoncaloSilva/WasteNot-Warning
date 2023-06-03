@@ -21,6 +21,30 @@ export const getNumberEvents = async () => {
     })();
 };
 
+export const getNumberExcludedEvents = async () => {
+    return await (async() => {
+        const res: NUMBER_STATS[] = await BE_API.getNumberOfEventsInExcludedTime();
+
+        return res;
+    })();
+};
+
+export const getNumberActivatedEvents = async () => {
+    return await (async() => {
+        const res: NUMBER_STATS[] = await BE_API.getNumberOfEventsInActiveSchedule();
+
+        return res;
+    })();
+};
+
+export const getNumberMaintenanceEvents = async () => {
+    return await (async() => {
+        const res: NUMBER_STATS[] = await BE_API.getNumberOfEventsInMaintenance();
+
+        return res;
+    })();
+};
+
 export const getNumberAreasRestritas = async () => {
     return await (async() => {
         const res: NUMBER_STATS[] = await BE_API.get_number_of_areas();
@@ -64,11 +88,7 @@ export const getTriggerAlarm = async () => {
 
 export const get_paginated_Events = async (offset : number, fetch:number, type: string) => {
     return await (async() => {
-        let res: EVENT_LIST[]
-        if(type == 'all')
-            res = await BE_API.get_paginated_Events(offset, fetch);
-        else
-            res = []
+        const res: EVENT_LIST[] = await BE_API.get_paginated_Events(offset, fetch, type);
 
         if (res.length > 9) {
             res.splice(9);

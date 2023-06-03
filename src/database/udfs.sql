@@ -62,6 +62,116 @@ RETURN
 );
 GO
 
+CREATE FUNCTION dbo.GetEventIdsInExclusionTimeFunc()
+RETURNS @MatchingRegistoEventos TABLE (
+    Event_id INT
+)
+AS
+BEGIN
+    -- Insert the matching RegistoEventos IDs into the table variable
+    INSERT INTO @MatchingRegistoEventos (Event_id)
+    SELECT RE.Id
+    FROM REGISTO_EVENTOS RE
+
+    -- Check if the matching RegistoEventos IDs are NOT IN the HORARIO_MONITORIZACAO of the related AREA_RESTRITA and DISPOSITIVO_SEGURANCA
+    DELETE FROM @MatchingRegistoEventos
+    WHERE Event_id IN (
+        SELECT RE.Id
+        FROM REGISTO_EVENTOS RE
+        INNER JOIN DISPOSITIVO_SEGURANCA DS ON RE.DispositivoSeguranca_Mac = DS.Dispositivo_Mac
+        INNER JOIN AREA_RESTRITA AR ON DS.AreaRestrita_Id = AR.Id
+        INNER JOIN AREA_RESTRITA_HORARIO_MONITORIZACAO ARHM ON AR.Id = ARHM.AreaRestrita_Id
+        INNER JOIN HORARIO_MONITORIZACAO HM ON ARHM.HorarioMonitorizacao_Id = HM.Id
+        WHERE RE.Id IN (SELECT Event_id FROM @MatchingRegistoEventos)
+            AND CONVERT(TIME, RE.[Timestamp]) BETWEEN HM.HoraInicio AND HM.HoraFim
+    );
+
+    -- Check if the matching RegistoEventos IDs are NOT IN MANUTENCOES
+    DELETE FROM @MatchingRegistoEventos
+    WHERE Event_id IN (
+        SELECT RE.Id
+        FROM REGISTO_EVENTOS RE
+        INNER JOIN DISPOSITIVO_SEGURANCA DS ON RE.DispositivoSeguranca_Mac = DS.Dispositivo_Mac
+        INNER JOIN AREA_RESTRITA AR ON DS.AreaRestrita_Id = AR.Id
+        INNER JOIN MANUTENCOES M ON AR.Id = M.AreaRestrita_Id
+        WHERE RE.Id IN ((SELECT Event_id FROM @MatchingRegistoEventos))
+            AND CONVERT(DATE, RE.[Timestamp]) BETWEEN M.DataInicio AND M.DataFim
+    );
+
+    -- Check if the matching RegistoEventos IDs are in HORARIO_EXCLUSAO
+    INSERT INTO @MatchingRegistoEventos (Event_id)
+    SELECT RE.Id
+    FROM REGISTO_EVENTOS RE
+    INNER JOIN DISPOSITIVO_SEGURANCA DS ON RE.DispositivoSeguranca_Mac = DS.Dispositivo_Mac
+    INNER JOIN AREA_RESTRITA AR ON DS.AreaRestrita_Id = AR.Id
+    INNER JOIN AREA_RESTRITA_HORARIO_EXCLUSAO ARHE ON AR.Id = ARHE.AreaRestrita_Id
+    INNER JOIN HORARIO_EXCLUSAO HE ON ARHE.HorarioExclusao_Id = HE.Id
+    INNER JOIN AREA_RESTRITA_HORARIO_MONITORIZACAO ARHM ON AR.Id = ARHM.AreaRestrita_Id
+    INNER JOIN HORARIO_MONITORIZACAO HM ON ARHM.HorarioMonitorizacao_Id = HM.Id
+    WHERE RE.Id IN (SELECT Id FROM REGISTO_EVENTOS)
+        AND RE.[Timestamp] BETWEEN HE.DataInicio AND HE.DataFim
+        AND NOT EXISTS (SELECT Event_id FROM @MatchingRegistoEventos);
+
+    -- Return the final set of matching RegistoEventos IDs
+    RETURN;
+END;
+GO
+
+GO
+CREATE FUNCTION dbo.GetEventIdsInRepairingScheduleFunc()
+RETURNS TABLE
+AS
+RETURN (
+    SELECT RE.Id AS Event_id
+    FROM REGISTO_EVENTOS AS RE
+    INNER JOIN DISPOSITIVO_SEGURANCA AS DS ON RE.DispositivoSeguranca_Mac = DS.Dispositivo_Mac
+    INNER JOIN AREA_RESTRITA AS AR ON DS.AreaRestrita_Id = AR.Id
+    INNER JOIN MANUTENCOES AS MAN ON MAN.AreaRestrita_Id = AR.Id
+    WHERE CONVERT(DATE, RE.[Timestamp]) BETWEEN MAN.DataInicio AND MAN.DataFim
+);
+GO
+
+GO
+CREATE FUNCTION dbo.GetEventIdsInActiveScheduleFunc()
+RETURNS TABLE
+AS
+RETURN (
+    WITH MatchingRegistoEventos AS (
+        SELECT RE.Id AS RegistoEventos_Id
+        FROM REGISTO_EVENTOS RE
+        INNER JOIN DISPOSITIVO_SEGURANCA DS ON RE.DispositivoSeguranca_Mac = DS.Dispositivo_Mac
+        INNER JOIN AREA_RESTRITA AR ON DS.AreaRestrita_Id = AR.Id
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM AREA_RESTRITA_HORARIO_MONITORIZACAO ARHM
+            INNER JOIN HORARIO_MONITORIZACAO HM ON ARHM.HorarioMonitorizacao_Id = HM.Id
+            WHERE AR.Id = ARHM.AreaRestrita_Id
+                AND CONVERT(TIME, RE.[Timestamp]) BETWEEN HM.HoraInicio AND HM.HoraFim
+        )
+        AND NOT EXISTS (
+            SELECT 1
+            FROM AREA_RESTRITA_HORARIO_EXCLUSAO ARHE
+            INNER JOIN HORARIO_EXCLUSAO HE ON ARHE.HorarioExclusao_Id = HE.Id
+            WHERE AR.Id = ARHE.AreaRestrita_Id
+                AND CONVERT(DATE, RE.[Timestamp]) BETWEEN HE.DataInicio AND HE.DataFim
+        )
+        AND NOT EXISTS (
+            SELECT 1
+            FROM MANUTENCOES M
+            WHERE AR.Id = M.AreaRestrita_Id
+                AND CONVERT(DATE, RE.[Timestamp]) BETWEEN M.DataInicio AND M.DataFim
+        )
+    )
+    SELECT RegistoEventos_Id AS Event_id
+    FROM MatchingRegistoEventos
+);
+GO
+
+--SELECT * FROM dbo.GetEventIdsInExclusionTimeFunc();
+--SELECT * FROM dbo.GetEventIdsInRepairingScheduleFunc();
+--SELECT * FROM dbo.GetEventIdsInActiveScheduleFunc();
+
+/*
 GO
 CREATE FUNCTION dbo.PaginatedEvents(@offset INT, @fetch INT)
 RETURNS TABLE
@@ -75,3 +185,37 @@ RETURN
     FETCH NEXT @fetch ROWS ONLY
 );
 GO
+*/
+
+
+GO
+CREATE FUNCTION dbo.PaginatedEvents(@offset INT, @fetch INT, @type VARCHAR(50))
+RETURNS TABLE
+AS
+RETURN (
+    SELECT *
+    FROM (
+        SELECT *
+        FROM list_ordered_events
+        WHERE
+            (@type = 'all')
+            OR
+            (
+                (@type = 'active') AND (Reg_id IN (SELECT Event_id FROM dbo.GetEventIdsInActiveScheduleFunc()))
+            )
+            OR
+            (
+                (@type = 'excluded') AND (Reg_id IN (SELECT Event_id FROM dbo.GetEventIdsInExclusionTimeFunc()))
+            )
+            OR
+            (
+                (@type = 'maintenance') AND (Reg_id IN (SELECT Event_id FROM dbo.GetEventIdsInRepairingScheduleFunc()))
+            )
+    ) AS Subquery
+    ORDER BY Reg_timestamp DESC
+    OFFSET @offset ROWS
+    FETCH NEXT @fetch ROWS ONLY
+);
+GO
+
+--SELECT * FROM PaginatedEvents(0, 108, 'active');

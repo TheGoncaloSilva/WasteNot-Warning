@@ -106,12 +106,14 @@ import { useColors } from 'vuestic-ui';
     const offset = (activePage.value - 1) * numberOfEventsPerPage;
     get_paginated_Events(offset, numberOfEventsPerPage, defOption.value).then((res: EVENT_LIST[]) => {
       events.value = res;
+      //let numberPages = ref(Math.ceil((await getNumberEvents())[0]['row_count']/numberOfEventsPerPage))
+      //const activePage = ref(1)
     })
   }
 
   function filterEvent(rule: any) {
     defOption.value = rule;
-    paginated
+    paginated();
   };
 
 

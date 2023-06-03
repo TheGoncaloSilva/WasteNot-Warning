@@ -194,6 +194,21 @@ class BEAPI extends BaseCommunication
       return await super.get('events/get_number_of_events');
     }
 
+    async get_number_of_events_active(): Promise<NUMBER_STATS[]>
+    {
+      return await super.get('events/get_number_of_events_active');
+    }
+
+    async get_number_of_events_excluded(): Promise<NUMBER_STATS[]>
+    {
+      return await super.get('events/get_number_of_events_excluded');
+    }
+
+    async get_number_of_events_maintenance(): Promise<NUMBER_STATS[]>
+    {
+      return await super.get('events/get_number_of_events_maintenance');
+    }
+
     async get_number_of_areas(): Promise<NUMBER_STATS[]>
     {
       return await super.get('events/get_number_of_areas');
@@ -229,9 +244,9 @@ class BEAPI extends BaseCommunication
       return await super.get('events/list_events')
     }
 
-    async get_paginated_Events(offset: number, fetch: number): Promise<EVENT_LIST[]>
+    async get_paginated_Events(offset: number, fetch: number, type: string): Promise<EVENT_LIST[]>
     {
-      return await super.get('events/get_events_paginated', 'offset=' + String(offset), 'fetch=' + String(fetch))
+      return await super.get('events/get_events_paginated', 'offset=' + String(offset), 'fetch=' + String(fetch), 'type=' + type)
     }
 
     async get_trigger_alarm(): Promise<EVENT_LIST[]>

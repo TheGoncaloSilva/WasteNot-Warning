@@ -182,8 +182,9 @@ def list_events():
 def get_paginated_events():
     offset = request.args.get('offset', type=int)
     fetch = request.args.get('fetch', type=int)
+    type = request.args.get('type', type=str)
     
-    return databaseInteraction.get_paginated_events(offset, fetch)
+    return databaseInteraction.get_paginated_events(offset, fetch, type)
 
 @app.route('/devices/unused_devices', methods=['GET'])
 @jwt_required()

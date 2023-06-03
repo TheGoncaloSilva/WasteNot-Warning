@@ -1,8 +1,8 @@
 USE p1g6;
 
--- SP: 1 -> Not complete, verificar se está dentro do horário de monitorização
+------------------------------------------- sp: 1 -----------------------------------------------------
 GO
-CREATE PROCEDURE GetRowCountOfEventsInExclusionTime
+CREATE PROCEDURE GetEventIdsInExclusionTime
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -58,41 +58,79 @@ BEGIN
     );
 
     -- Return the final set of matching RegistoEventos IDs
-    SELECT DISTINCT COUNT(*) AS row_count FROM #MatchingRegistoEventos;
-    --
+    SELECT DISTINCT RegistoEventos_Id AS Event_id FROM #MatchingRegistoEventos;
+
 END;
 GO
-/* With Return
-DECLARE @Result INT;
-SELECT @Result;*/
---DROP PROCEDURE GetRowCountOfEventsInExclusionTime;
-GO
 
--- sp: 2
-CREATE PROCEDURE GetRowCountOfEventsInRepairingSchedule
+------------------------------------------- sp: 1.2 -----------------------------------------------------
+GO
+CREATE PROCEDURE GetRowCountOfEventsInExclusionTime
 AS
 BEGIN
     SET NOCOUNT ON;
-    DECLARE @RowCount INT;
 
-    SELECT @RowCount = COUNT(*)
+    -- Create a table variable to store the result of the called stored procedure
+    DECLARE @Result TABLE (
+        Event_id INT
+    );
+
+    -- Call the stored procedure and insert the result into the table variable
+    INSERT INTO @Result (Event_id)
+    EXEC GetEventIdsInExclusionTime;
+
+    -- Get the count of the result
+    DECLARE @Count INT;
+    SET @Count = (SELECT COUNT(*) FROM @Result);
+
+    -- Return the count
+    SELECT @Count AS row_count;
+END;
+GO
+
+------------------------------------------- sp: 2 -----------------------------------------------------
+CREATE PROCEDURE GetEventIdsInRepairingSchedule
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT RE.Id AS Event_id
     FROM REGISTO_EVENTOS AS RE
         INNER JOIN DISPOSITIVO_SEGURANCA AS DS ON RE.DispositivoSeguranca_Mac = DS.Dispositivo_Mac
             INNER JOIN AREA_RESTRITA AS AR ON DS.AreaRestrita_Id = AR.Id
                 INNER JOIN MANUTENCOES AS MAN ON MAN.AreaRestrita_Id = AR.Id
                         WHERE CONVERT(DATE, RE.[Timestamp]) BETWEEN MAN.DataInicio AND MAN.DataFim;
-
-    SELECT @RowCount as row_count;
 END;
 GO
 
---DROP PROCEDURE GetRowCountOfEventsInRepairingSchedule;
+------------------------------------------- sp: 2.2 -----------------------------------------------------
+GO
+CREATE PROCEDURE GetRowCountOfEventsInRepairingSchedule
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Create a table variable to store the result of the called stored procedure
+    DECLARE @Result TABLE (
+        Event_id INT
+    );
+
+    -- Call the stored procedure and insert the result into the table variable
+    INSERT INTO @Result (Event_id)
+    EXEC GetEventIdsInRepairingSchedule;
+
+    -- Get the count of the result
+    DECLARE @Count INT;
+    SET @Count = (SELECT COUNT(*) FROM @Result);
+
+    -- Return the count
+    SELECT @Count AS row_count;
+END;
 GO
 
---sp: 3
--- Este procedimento não é muito preciso, pois nem todas as as áreas têm registos em todas as tabelas 
+------------------------------------------- sp: 3 -----------------------------------------------------
 GO
-CREATE PROCEDURE GetRowCountOfEventsInActiveSchedule
+CREATE PROCEDURE GetEventIdsInActiveSchedule
 AS
 BEGIN 
     SET NOCOUNT ON;
@@ -145,14 +183,36 @@ BEGIN
     );
     
     -- Return the final set of matching RegistoEventos IDs
-    SELECT COUNT(*) AS row_count FROM #MatchingRegistoEventos;
+    SELECT RegistoEventos_Id AS Event_id FROM #MatchingRegistoEventos;
 END;
 GO
 
---DROP PROCEDURE GetRowCountOfEventsInActiveSchedule;
+------------------------------------------- sp: 3.2 -----------------------------------------------------
+GO
+CREATE PROCEDURE GetRowCountOfEventsInActiveSchedule
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Create a table variable to store the result of the called stored procedure
+    DECLARE @Result TABLE (
+        Event_id INT
+    );
+
+    -- Call the stored procedure and insert the result into the table variable
+    INSERT INTO @Result (Event_id)
+    EXEC GetEventIdsInActiveSchedule;
+
+    -- Get the count of the result
+    DECLARE @Count INT;
+    SET @Count = (SELECT COUNT(*) FROM @Result);
+
+    -- Return the count
+    SELECT @Count AS row_count;
+END;
 GO
 
---sp: 4
+------------------------------------------- sp: 4 -----------------------------------------------------
 GO
 CREATE PROCEDURE getAlarmActivated
 AS
@@ -229,8 +289,7 @@ BEGIN
 END;
 GO
 
-
-
+------------------------------------------- sp: 5 -----------------------------------------------------
 
 CREATE PROCEDURE AddUserEvent
     @timestamp TIMESTAMP,
@@ -263,3 +322,23 @@ BEGIN
     END CATCH;
 END;
 GO
+
+------------------------------------- Some SPs in this file -------------------------------------------
+/*EXEC GetEventIdsInExclusionTime;
+-- DROP PROC GetEventIdsInExclusionTime;
+GO
+EXEC GetRowCountOfEventsInExclusionTime;
+-- DROP PROC GetRowCountOfEventsInExclusionTime;
+GO
+EXEC GetEventIdsInRepairingSchedule;
+--DROP PROC GetEventIdsInRepairingSchedule;
+GO
+EXEC GetRowCountOfEventsInRepairingSchedule
+--DROP PROC GetRowCountOfEventsInRepairingSchedule;
+GO
+EXEC GetEventIdsInActiveSchedule;
+--DROP PROC GetEventIdsInActiveSchedule;
+GO
+EXEC GetRowCountOfEventsInActiveSchedule;
+--DROP PROC GetRowCountOfEventsInActiveSchedule;
+GO*/
