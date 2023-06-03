@@ -226,3 +226,10 @@ No desenvolvimento do website, foi dado um maior foco aos usos principais, que s
 Para acionar o alarme, dirija-se para o Dashboard e garanta que o botão de Alarme se encontra em `Armado` e o que o Estado do Sistema seja `O alarme está Armado e a Funcionar`. Após isso, execute o script `src/database/triggerAlarm.sql`.
 
 Dentro de aproximadamente 10 segundos, o Alarme deverá aparecer a vermelho e com o texto de `Acionado`.
+## Vídeo de demonstração da plataforma
+
+<video width="100%" controls>
+  <source src="/documentation/WasteNotWarningVideo.webm" type="video/webm">
+  Your browser does not support the video tag.
+</video>
+
