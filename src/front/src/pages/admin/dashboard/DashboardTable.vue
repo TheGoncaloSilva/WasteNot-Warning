@@ -65,9 +65,9 @@
 <script setup lang="ts">
   import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { getEventList, get_paginated_Events } from './stats'
+  import { getEventList, getNumberActivatedEvents, getNumberExcludedEvents, getNumberMaintenanceEvents, get_paginated_Events } from './stats'
   import { getNumberEvents } from './stats';
-  import { EVENT_LIST } from '../../../services/backend-api/interfaces';
+  import { EVENT_LIST, NUMBER_STATS } from '../../../services/backend-api/interfaces';
 import { useColors } from 'vuestic-ui';
 
   const { colors } = useColors()
@@ -77,8 +77,7 @@ import { useColors } from 'vuestic-ui';
   let intervalId: any = null
   const numberOfEventsPerPage: number = 9;
   let numberPages = ref(Math.ceil((await getNumberEvents())[0]['row_count']/numberOfEventsPerPage))
-  const activePage = ref(1)
-  //let events = ref(await getEventList());
+  let activePage = ref(1)
   let events = ref();
 
   const filterOptions = ref([
@@ -106,8 +105,28 @@ import { useColors } from 'vuestic-ui';
     const offset = (activePage.value - 1) * numberOfEventsPerPage;
     get_paginated_Events(offset, numberOfEventsPerPage, defOption.value).then((res: EVENT_LIST[]) => {
       events.value = res;
-      //let numberPages = ref(Math.ceil((await getNumberEvents())[0]['row_count']/numberOfEventsPerPage))
-      //const activePage = ref(1)
+      if(defOption.value == 'all'){
+        //let numberPages = ref(Math.ceil((await getNumberEvents())[0]['row_count']/numberOfEventsPerPage))
+        getNumberEvents().then((res: NUMBER_STATS[]) => {
+          numberPages.value = Math.ceil((res[0]['row_count']/numberOfEventsPerPage));
+          })
+      }else if(defOption.value == 'active'){
+        //let numberPages = ref(Math.ceil((await getNumberEvents())[0]['row_count']/numberOfEventsPerPage))
+        getNumberActivatedEvents().then((res: NUMBER_STATS[]) => {
+          numberPages.value = Math.ceil((res[0]['row_count']/numberOfEventsPerPage));
+        })
+      }else if(defOption.value == 'excluded'){
+        //let numberPages = ref(Math.ceil((await getNumberEvents())[0]['row_count']/numberOfEventsPerPage))
+        getNumberExcludedEvents().then((res: NUMBER_STATS[]) => {
+          numberPages.value = Math.ceil((res[0]['row_count']/numberOfEventsPerPage));
+        })
+      }else if(defOption.value == 'maintenance'){
+        //let numberPages = ref(Math.ceil((await getNumberEvents())[0]['row_count']/numberOfEventsPerPage))
+        getNumberMaintenanceEvents().then((res: NUMBER_STATS[]) => {
+          numberPages.value = Math.ceil((res[0]['row_count']/numberOfEventsPerPage));
+        })
+      }
+
     })
   }
 
