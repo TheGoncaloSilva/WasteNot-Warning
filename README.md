@@ -217,7 +217,13 @@ Para acionar o alarme, dirija-se para o Dashboard e garanta que o botão de Alar
 
 Dentro de aproximadamente 10 segundos, o Alarme deverá aparecer a vermelho e com o texto de `Acionado`.
 
----
+## Vídeo de demonstração da plataforma
+
+<video width="100%" controls>
+  <source src="/documentation/WasteNotWarningVideo.webm" type="video/webm">
+  Your browser does not support the video tag.
+</video>
+
 
 # Antigo
 
