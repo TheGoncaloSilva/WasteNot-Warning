@@ -91,7 +91,7 @@ export default {
         //   displayName: 'menu.dataTables',
         // },
       ],
-    },*/
+    },*//*
     {
       name: 'ui',
       displayName: 'menu.uiElements',

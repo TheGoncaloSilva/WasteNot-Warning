@@ -2,19 +2,30 @@
     <va-card>
       <va-card-title>
         Lista de últimos eventos
-        <!--<va-button-dropdown 
+        <va-button-dropdown 
           icon="fa-filter" 
           plain 
           class="mr-2 mb-2"
           round
-          :default="items"
         >
-        <template v-slot:default>
-          <va-button-dropdown-item label="Option 1"></va-button-dropdown-item>
-          <va-button-dropdown-item label="Option 2"></va-button-dropdown-item>
-          <va-button-dropdown-item label="Option 3"></va-button-dropdown-item>
-        </template>
-        </va-button-dropdown>-->
+          <va-dropdown-content class="language-dropdown__content pl-4 pr-4 pt-2 pb-2">
+              <div
+                v-for="(opt, idx) in filterOptions"
+                :key="opt.value"
+                class="language-dropdown__item row align--center pt-1 pb-1 mt-2 mb-2"
+                :default="defOption"
+                @click="filterEvent(opt.value)"
+              >
+                <span class="dropdown-item__text" style="font-weight:bold;color:blue;" v-if="opt.value == defOption">
+                  {{ opt.label }}
+                </span>
+                <span class="dropdown-item__text" v-else>
+                  {{ opt.label }}
+                </span>
+              </div>
+            </va-dropdown-content>
+        
+        </va-button-dropdown>
 
       </va-card-title>
       <va-card-content>
@@ -43,21 +54,8 @@
           </table>
         </div>
         <div class="row">
-          <div class="flex xs12 md4">
+          <div class="flex xs12 md12">
               <va-pagination v-model="activePage" :visible-pages="3" :pages="numberPages" />
-          </div>
-          <div class="flex xs12 md2">
-            <span>Filter by:</span>
-          </div>
-          <div class="grid xs12 md6">
-            <va-button-toggle
-              v-model="defOption"
-              preset="outline"
-              :options="filterOptions"
-              border-color="info"
-              round
-              :click="filterEvent"
-            />
           </div>
         </div>
       </va-card-content>
@@ -69,9 +67,11 @@
   import { useI18n } from 'vue-i18n'
   import { getEventList, get_paginated_Events } from './stats'
   import { getNumberEvents } from './stats';
-import { EVENT_LIST } from '../../../services/backend-api/interfaces';
+  import { EVENT_LIST } from '../../../services/backend-api/interfaces';
+import { useColors } from 'vuestic-ui';
 
-  const { t } = useI18n()
+  const { colors } = useColors()
+  const { t, locale } = useI18n()
 
   let elapsedTime = ref(0)
   let intervalId: any = null
@@ -104,13 +104,14 @@ import { EVENT_LIST } from '../../../services/backend-api/interfaces';
 
   function paginated(){
     const offset = (activePage.value - 1) * numberOfEventsPerPage;
-    get_paginated_Events(offset, numberOfEventsPerPage).then((res: EVENT_LIST[]) => {
+    get_paginated_Events(offset, numberOfEventsPerPage, defOption.value).then((res: EVENT_LIST[]) => {
       events.value = res;
     })
   }
 
-  function filterEvent(rule: string) {
-    console.log(rule)
+  function filterEvent(rule: any) {
+    defOption.value = rule;
+    paginated
   };
 
 
@@ -140,15 +141,43 @@ import { EVENT_LIST } from '../../../services/backend-api/interfaces';
     }
   }
 
-  .va-dropdown-item {
-    display: block;
-    padding: 0.5rem 1rem;
-    clear: both;
-    font-weight: normal;
-    color: #212529;
-    text-align: inherit;
-    white-space: nowrap;
-    background-color: transparent;
-    border: 0;
+  .language-dropdown {
+    cursor: pointer;
+
+    &__content {
+      .fi-size-small {
+        min-width: 1.5rem;
+        min-height: 1.5rem;
+        margin-right: 0.5rem;
+      }
+    }
+
+    &__item {
+      padding-bottom: 0.625rem;
+      cursor: pointer;
+      flex-wrap: nowrap;
+
+      &:last-of-type {
+        padding-bottom: 0 !important;
+      }
+
+      &:hover {
+        color: var(--va-primary);
+      }
+    }
+
+    .fi::before {
+      content: '';
+    }
+
+    .fi-size-large {
+      display: block;
+      width: 32px;
+      height: 24px;
+    }
+
+    .va-dropdown__anchor {
+      display: inline-block;
+    }
   }
 </style>

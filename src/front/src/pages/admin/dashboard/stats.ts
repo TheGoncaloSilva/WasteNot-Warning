@@ -62,10 +62,14 @@ export const getTriggerAlarm = async () => {
     })();
 };
 
-export const get_paginated_Events = async (offset : number, fetch:number) => {
+export const get_paginated_Events = async (offset : number, fetch:number, type: string) => {
     return await (async() => {
-        const res: EVENT_LIST[] = await BE_API.get_paginated_Events(offset, fetch);
-        
+        let res: EVENT_LIST[]
+        if(type == 'all')
+            res = await BE_API.get_paginated_Events(offset, fetch);
+        else
+            res = []
+
         if (res.length > 9) {
             res.splice(9);
         }
