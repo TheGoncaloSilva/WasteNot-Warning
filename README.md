@@ -86,6 +86,10 @@ Executando em seguida o comando para reiniciar a base de dados:
 DB_RESET_FLAG=true docker compose up
 ```
 
+# Interação entre o Backend e o Frontend
+
+
+
 # Requisitos
 
 1. Um utilizador é caracterizado pelo seu nome, nível de permissão, data de nascimento, um identificador único, password, email e numero de telefone.
@@ -140,7 +144,10 @@ As UDFs estão localizadas no ficheiro `src/database/udfs.sql` e cada uma efetua
 * **GetLastRepairsOfARestrictedArea**: Recebe como argumento o Id de uma área restrita e o número máximo de linhas da pesquisa, retorna as próximas manutenções da área restrita ordenadas pela data de início da manutenção
 * **GetDeviceListOfARestrictedArea**: Aceita como argumento o Id de uma Área Restrita e retorna o número de Dispositivos de Segurança associados a essa Área Restrita
 * **GetHorariosMonitorizacaoByRestrictedArea**: Aceita como argumento o Id de uma Área Restrita e retorna os Horários de Monitorização associados a essa Área Restrita
-* **PaginatedEvents**: Aceita como um argumento um offset e um fetch, para interagir com a paginação e ir buscar os eventos. O fetch representa o número de registos e o offset, é o index do registo inicial para retornar.
+* **PaginatedEvents**: Aceita como um argumento um offset, fetch e um type, para interagir com a paginação e ir buscar os eventos com base no tipo (acionaram alarme, excluidos e durante periodos de manutenção). O fetch representa o número de registos e o offset, é o index do registo inicial para retornar.
+* **GetEventIdsInRepairingScheduleFunc**: Retorna os Ids dos eventos que ocorreram em periodo de manutenção (Foi criados por causa da paginação e filtração)
+* **GetEventIdsInExclusionTimeFunc**: Retorna os Ids dos eventos que ocorreram em periodo de exclusão ou alarme desativado (Foi criados por causa da paginação e filtração)
+* **GetEventIdsInActiveScheduleFunc**: Retorna os Ids dos eventos que ocorreram em periodo de alarme ativo (Foi criados por causa da paginação e filtração)
 
 ## Stored Procedures
 
@@ -151,6 +158,9 @@ As Stored Procedures  estão localizadas no ficheiro `src/database/stored_proced
 * **GetRowCountOfEventsInActiveSchedule**: Seleciona o número de eventos que aconteceram numa altura em que o sistema foi acionado
   * Para o sistema ser acionado, um evento tem de ocorrer dentro do Horário de Monitorização da Área Restrita associada ao Dispositivo de Segurança, fora de alguma horário de exclusão associado e numa data em que a Área Restrita não tenha sofrido uma Manutenção
 * **getAlarmActivated**: Selecionar os eventos que podem acionar o alarme, de uma forma customizada, que ocorreram nos últimos 120 segundos. Quando este é chamado pelo website, o website fica com o alarme acionado até o utilizador pressionar para Desarmar o sistema.
+* **GetEventIdsInRepairingSchedule**: Seleciona os Ids dos eventos que ocorreram em periodo de manutenção
+* **GetEventIdsInExclusionTime**: Seleciona os Ids dos eventos que ocorreram em periodo de exclusão ou alarme desativado
+* **GetEventIdsInActiveSchedule**: Seleciona os Ids dos eventos que ocorreram em periodo de alarme ativo
 
 ## Views
 
@@ -176,9 +186,9 @@ No ficheiro `src/database/triggers.sql` estão localizados todos os triggers uti
 ## Transações
 * **AddUserEvent**: Adiciona um evento associado a um utilizador, o registo do evento é criado bem como a associação ao utilizador. Caso uma inserção falhe é feito um rollback à transação e é lançada uma excepção.
 
-## Paginação
+## Paginação e Filtração
 
-Usando a UDF *PaginatedEvents* definida anteriormente, foi possível implementar paginação, por chamar esta udf com um offset e um número de registos para obter. Esta UDF tira partido deste suporte já embutido no SQL Server com o seguinte código:
+Usando a UDF *PaginatedEvents* definida anteriormente, foi possível implementar paginação e filtração, por chamar esta udf com um offset, um número de registos para obter e o tipo de registo de evento (acionou alarme, excluido e em periodo de manutenção). Esta UDF tira partido deste suporte já embutido no SQL Server com o seguinte código:
 
 ```SQL
 OFFSET @offset ROWS
@@ -216,61 +226,3 @@ No desenvolvimento do website, foi dado um maior foco aos usos principais, que s
 Para acionar o alarme, dirija-se para o Dashboard e garanta que o botão de Alarme se encontra em `Armado` e o que o Estado do Sistema seja `O alarme está Armado e a Funcionar`. Após isso, execute o script `src/database/triggerAlarm.sql`.
 
 Dentro de aproximadamente 10 segundos, o Alarme deverá aparecer a vermelho e com o texto de `Acionado`.
-
----
-
-# Antigo
-
-## Login
-
-* Habilidade de fazer login e manter sessão, usando alguma espécie de encriptação na base de dados (Criar script para pegar em dummy password e encriptá-las)
-
-## Dashboard
-
-* Armar, Desarmar e Informar ao utilizador que o alarme foi acionado
-* Gráfico de Donut:
-  * Número Total de eventos (SELECT normal)
-  * Número Total de eventos ocorridos em horário de exclusão (SP)
-  * Número Total de eventos ocorridos em horário de manutenção
-  * Número Total de eventos que acionaram o sistema
-* Gráfico de Tarte:
-  * Número de Eventos por tipo
-* Gráfico de linhas:
-  * Eventos ordenados por data de adição (SELECT normal)
-  * Eventos ordenados por data ocorridos em horário de exclusão
-  * Eventos ordenados por data ocorridos em horário de manutenção
-  * Eventos ordenados por data que acionaram o sistema
-* Informação se o sistema se encontra em manutenção e quais as áreas afetadas, bem como o estado da manutenção (SELECT das manutenções, com Join das áreas e do estado da manutenção)
-* Informação das próximas manutenções e a que áreas (VIEW)
-* Lista dos ultimos eventos e informação a indicar qual é o seu status, como manutenção, fora de horário, "importante" (VIEW)
-* CRUD para dispositivos de acesso?
-
-## Users
-
-* CRUD os utilizadores, com permissões
-* (CRUD as permissões de utilizadores)?
-* CRUD para áreas que pertencem a utilizadores
-* CRUD para áreas que contactam utilizadores
-
-## Eventos
-
-* Listar, com funcionalidade de filtração
-  * Eventos dentro de horário de manutenção
-  * Eventos dentro de horário de exclusão
-  * Eventos dentro de horário de "trabalho"
-  * Eventos pertencentes a utilizadores
-  * Tipos de evento
-
-## Exclusões
-
-* Dispositivos e Áreas restritas (Ficam apenas definidos com dados pré-populados)
-
-## Geral
-
-* Quando inserido um registo de eventos, tem de ser verificado o tipo e é de um dispositivo que pertence a uma área restrita, se for. O sistema tem de verificar se está dentro das regras para ser acionado (dentro do horário da área e fora de exclusão ou manutenção), se estiver, aciona (trigger)
-* Temos que ter uma aplicação (CLI) externa para falsificar a ocorrência de um evento por um dispositivo
-* **Trigger** para quando se adiciona um evento, se o timestamp não for fornecido, ele preencher sozinho (Ou se for fornecido um no futuro, substituir pelo atual ou não executar)
-* Script para carregar a base de dados inteira para o docker
-* **Trigger** para garantir que as datas (por exemplo nas manutençoes) de inicio e fim são corretas (Inicio < Fim)
-* 1 dispositivo só pode pertencer a uma e uma só area restrita
-* Um horário de exclusão só pode estar associado a uma área restrita, se estiver dentro do horário de monitorização da mesma (Trigger)
