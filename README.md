@@ -212,7 +212,7 @@ Fazendo com que seja fácil ao selecionar uma página para ver os registos, este
 A funcionalidade de login está present no backend, no ficheiro  `src/back/App.py` e usa as queries estabelecidas no ficheiro  `src/back/queries.sql`. Na base de dados é guardada uma *Hash* da palavra passe e um *Salt*. Quando o utilizador introduz a sua palavra passe, esta e o *Salt* são juntas e formam uma *Hash* que será comparada com a que está registada na base de dados. Para efetuar-mos isto, fazemos uso do algoritmo [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2). Desta maneira, mesmo que um atacante obtenha acesso à base de dados, não conseguirá deduzir a palavra-passe dos utilizadores.
 
 ## Interação entre o backend e a interface
-O backend (flask) disponibiliza vários endpoints, sempre que o frontend pede informação ao backend estes endpoints são utilizados. Cada endpoint é capaz de aceder à base de dados, obtendo assim informações de forma segura.
+O backend (flask) disponibiliza vários endpoints, sempre que o frontend pede informação ao backend estes endpoints são utilizados. Cada endpoint é capaz de aceder à base de dados, obtendo assim informações >de forma segura. Os endpoints estão no ficheiro `src/back/App.py`
 
 ## Segurança por tokens
 
