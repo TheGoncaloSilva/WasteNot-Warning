@@ -90,10 +90,6 @@ Executando em seguida o comando para reiniciar a base de dados:
 DB_RESET_FLAG=true docker compose up
 ```
 
-# Interação entre o Backend e o Frontend
-
-
-
 # Requisitos
 
 1. Um utilizador é caracterizado pelo seu nome, nível de permissão, data de nascimento, um identificador único, password, email e numero de telefone.
@@ -212,7 +208,8 @@ Fazendo com que seja fácil ao selecionar uma página para ver os registos, este
 A funcionalidade de login está present no backend, no ficheiro  `src/back/App.py` e usa as queries estabelecidas no ficheiro  `src/back/queries.sql`. Na base de dados é guardada uma *Hash* da palavra passe e um *Salt*. Quando o utilizador introduz a sua palavra passe, esta e o *Salt* são juntas e formam uma *Hash* que será comparada com a que está registada na base de dados. Para efetuar-mos isto, fazemos uso do algoritmo [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2). Desta maneira, mesmo que um atacante obtenha acesso à base de dados, não conseguirá deduzir a palavra-passe dos utilizadores.
 
 ## Interação entre o backend e a interface
-O backend (flask) disponibiliza vários endpoints, sempre que o frontend pede informação ao backend estes endpoints são utilizados. Cada endpoint é capaz de aceder à base de dados, obtendo assim informações de forma segura. Os endpoints estão no ficheiro `src/back/App.py`
+
+O backend (flask) disponibiliza vários endpoints, sempre que o frontend pede informação ao backend estes endpoints são utilizados. Cada endpoint é capaz de aceder à base de dados, obtendo assim informações de forma segura. Os endpoints estão no ficheiro `src/back/App.py`. Para comunicação entre a API e o frontend, estes endpoints da API são usados em conjunção com os do frontend, localizados na pasta `src/front/src/services/backend-api`.
 
 ## Segurança por tokens
 
@@ -227,6 +224,10 @@ No desenvolvimento do website, foi dado um maior foco aos usos principais, que s
 * Interação com os utilizadores (Ver, eliminar e adicionar)
 * Inicio de Sessão
 * Visualização das Áreas Restritas e associação de dispositivos a Áreas Restritas
+
+### Template
+
+Como referido no [README](./src/front/README.md) na pasta do frontend, nós optámos por usar um template de VueJs com bastantes components já criados e construímos os nós desenvolvimentos "por cima".
 
 ### Acionar o alarme
 
