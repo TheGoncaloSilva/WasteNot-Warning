@@ -9,6 +9,10 @@ Grupo p1g6:
 * Gonçalo Silva, 103244
 * Tiago Silvestre, 103554
 
+# Contribuições
+Tiago Silvestre: 50%
+Gonçalo Silva: 50%
+
 # Tecnologias Usadas
 
 As seguintes tecnologias foram usadas neste projeto:
@@ -207,6 +211,9 @@ Fazendo com que seja fácil ao selecionar uma página para ver os registos, este
 
 A funcionalidade de login está present no backend, no ficheiro  `src/back/App.py` e usa as queries estabelecidas no ficheiro  `src/back/queries.sql`. Na base de dados é guardada uma *Hash* da palavra passe e um *Salt*. Quando o utilizador introduz a sua palavra passe, esta e o *Salt* são juntas e formam uma *Hash* que será comparada com a que está registada na base de dados. Para efetuar-mos isto, fazemos uso do algoritmo [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2). Desta maneira, mesmo que um atacante obtenha acesso à base de dados, não conseguirá deduzir a palavra-passe dos utilizadores.
 
+## Interação entre o backend e a interface
+O backend (flask) disponibiliza vários endpoints, sempre que o frontend pede informação ao backend estes endpoints são utilizados. Cada endpoint é capaz de aceder à base de dados, obtendo assim informações de forma segura.
+
 ## Segurança por tokens
 
 Para aumentar a segurança entre o backend e fronted, foi usado um token, que é gerado e enviado pelo backend quando um utilizador inicia sessão. O módulo usado foi o *JWTManager* pertencente à package *flask_jwt_extended*. Isto também significa que a plataforma tem implementado a funcionalidade de caso o utilizador não interaja com a mesma durante algum tempo, a sua sessão irá ser terminada e terá de efetuar login novamente.
@@ -230,3 +237,4 @@ Dentro de aproximadamente 10 segundos, o Alarme deverá aparecer a vermelho e co
 
 Video está localizado no seguinte caminho `/documentation/WasteNotWarningVideo.mp4`
 
+[video de demonstracao](./documentation/WasteNotWarningVideo.mp4)
