@@ -17,83 +17,6 @@ Grupo p1g6:
 Tiago Silvestre: 50%
 Gonçalo Silva: 50%
 
-# Tecnologias Usadas
-
-As seguintes tecnologias foram usadas neste projeto:
-
-* Frontend: [VUEjs](https://vuejs.org/)
-* Backend: Python [Flask](https://flask.palletsprojects.com/en/2.3.x/)
-* Base de Dados: [Microsoft Sql Server](https://www.microsoft.com/en-us/sql-server)
-* Ambiente: [Docker](https://www.docker.com/)
-
-# Sistema Operativo utilizado
-
-Esta plataforma foi desenvolvida e testada para executar em Ubuntu 22.04, configurações extras podem ter de ser efetuadas para suporte de outros Sistemas Operativos.
-
-# Configuração
-
-Antes de continuar com a execução, vai ser preciso ter as ferramentas Docker e Docker compose na sua máquina. Caso não as tenha, for favor siga as instruções em [get docker](https://docs.docker.com/get-docker/) e [install compose](https://docs.docker.com/compose/install/).
-
-Após ter as ferramentas instaladas, execute uma das seguintes opções.
-
-### Desenvolvimento
-
-Com esta configuração o sistema usará a base de dados local do Docker.
-
-```bash
-docker compose build
-```
-
-### Produção
-
-Com esta configuração o sistema usará a base de dados de produção, localizada no IEETA.
-
-```bash
-docker compose -f docker-compose-prod.yml build
-```
-
-Para construir o ambiente docker, com todas as dependências e serviços.
-
-# Execução
-
-Para executar a plataforma, execute uma das seguintes opções
-
-### Desenvolvimento
-
-Com esta configuração o sistema usará a base de dados local do Docker.
-
-```bash
-docker compose up
-```
-
-### Produção
-
-Com esta configuração o sistema usará a base de dados de produção, localizada no IEETA.
-
-```bash
-DB_RESET_FLAG=true docker compose -f docker-compose-prod.yml up
-```
-
-**Nota**: Para reiniciar a base de dados, pode tirar partido de um script para esse efeito, por executar o comando com a seguinte Flag:
-
-```bash
-DB_RESET_FLAG=true <opcao_de_execucao (docker compose ...)>
-```
-
-### Primeira execução
-
-Na primeira execução, execute primeiro só o container só com o sql server:
-
-```bash
-docker compose up sql-server
-```
-
-Executando em seguida o comando para reiniciar a base de dados:
-
-```bash
-DB_RESET_FLAG=true docker compose up
-```
-
 # Requisitos
 
 1. Um utilizador é caracterizado pelo seu nome, nível de permissão, data de nascimento, um identificador único, password, email e numero de telefone.
@@ -212,12 +135,6 @@ Fazendo com que seja fácil ao selecionar uma página para ver os registos, este
 
 A funcionalidade de login está present no backend, no ficheiro  `src/back/App.py` e usa as queries estabelecidas no ficheiro  `src/back/queries.sql`. Na base de dados é guardada uma *Hash* da palavra passe e um *Salt*. Quando o utilizador introduz a sua palavra passe, esta e o *Salt* são juntas e formam uma *Hash* que será comparada com a que está registada na base de dados. Para efetuar-mos isto, fazemos uso do algoritmo [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2). Desta maneira, mesmo que um atacante obtenha acesso à base de dados, não conseguirá deduzir a palavra-passe dos utilizadores.
 
-## Interação entre o backend e a interface
-
-O backend (flask) disponibiliza vários endpoints, sempre que o frontend pede informação ao backend estes endpoints são utilizados. Cada endpoint é capaz de aceder à base de dados, obtendo assim informações de forma segura. Os endpoints estão no ficheiro `src/back/App.py`. Para comunicação entre a API e o frontend, estes endpoints da API são usados em conjunção com os do frontend, localizados na pasta `src/front/src/services/backend-api`. 
-
-A filtragem de dados, pesquisas são sempre feitas pelas queries da base de dados, ou seja a interface só mostra informação proveniente destes endpoints.
-
 ## Segurança por tokens
 
 Para aumentar a segurança entre o backend e fronted, foi usado um token, que é gerado e enviado pelo backend quando um utilizador inicia sessão. O módulo usado foi o *JWTManager* pertencente à package *flask_jwt_extended*. Isto também significa que a plataforma tem implementado a funcionalidade de caso o utilizador não interaja com a mesma durante algum tempo, a sua sessão irá ser terminada e terá de efetuar login novamente.
@@ -231,10 +148,6 @@ No desenvolvimento do website, foi dado um maior foco aos usos principais, que s
 * Interação com os utilizadores (Ver, eliminar e adicionar) (`src/front/pages/admin/users`)
 * Inicio de Sessão (`src/front/pages/auth/Login.vue`)
 * Visualização das Áreas Restritas e associação de dispositivos a Áreas Restritas (`src/front/pages/admin/restricted-areas`)
-
-### Template
-
-Como referido no [README](./src/front/README.md) na pasta do frontend, nós optámos por usar um template de VueJs com bastantes components já criados e construímos os nós desenvolvimentos "por cima".
 
 ### Acionar o alarme
 
