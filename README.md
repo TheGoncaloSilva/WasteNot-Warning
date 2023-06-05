@@ -13,6 +13,10 @@ Grupo p1g6:
 * Gonçalo Silva, 103244
 * Tiago Silvestre, 103554
 
+# Contribuições
+Tiago Silvestre: 50%
+Gonçalo Silva: 50%
+
 # Tecnologias Usadas
 
 As seguintes tecnologias foram usadas neste projeto:
@@ -89,8 +93,6 @@ Executando em seguida o comando para reiniciar a base de dados:
 ```bash
 DB_RESET_FLAG=true docker compose up
 ```
-
-# Interação entre o Backend e o Frontend
 
 # Requisitos
 
@@ -210,19 +212,29 @@ Fazendo com que seja fácil ao selecionar uma página para ver os registos, este
 
 A funcionalidade de login está present no backend, no ficheiro  `src/back/App.py` e usa as queries estabelecidas no ficheiro  `src/back/queries.sql`. Na base de dados é guardada uma *Hash* da palavra passe e um *Salt*. Quando o utilizador introduz a sua palavra passe, esta e o *Salt* são juntas e formam uma *Hash* que será comparada com a que está registada na base de dados. Para efetuar-mos isto, fazemos uso do algoritmo [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2). Desta maneira, mesmo que um atacante obtenha acesso à base de dados, não conseguirá deduzir a palavra-passe dos utilizadores.
 
+## Interação entre o backend e a interface
+
+O backend (flask) disponibiliza vários endpoints, sempre que o frontend pede informação ao backend estes endpoints são utilizados. Cada endpoint é capaz de aceder à base de dados, obtendo assim informações de forma segura. Os endpoints estão no ficheiro `src/back/App.py`. Para comunicação entre a API e o frontend, estes endpoints da API são usados em conjunção com os do frontend, localizados na pasta `src/front/src/services/backend-api`. 
+
+A filtragem de dados, pesquisas são sempre feitas pelas queries da base de dados, ou seja a interface só mostra informação proveniente destes endpoints.
+
 ## Segurança por tokens
 
 Para aumentar a segurança entre o backend e fronted, foi usado um token, que é gerado e enviado pelo backend quando um utilizador inicia sessão. O módulo usado foi o *JWTManager* pertencente à package *flask_jwt_extended*. Isto também significa que a plataforma tem implementado a funcionalidade de caso o utilizador não interaja com a mesma durante algum tempo, a sua sessão irá ser terminada e terá de efetuar login novamente.
 
-## Website
+## Website (interface)
 
 No desenvolvimento do website, foi dado um maior foco aos usos principais, que são:
 
-* Dashboard sólido, com bastantes funcionalidades e métricas
+* Dashboard sólido, com bastantes funcionalidades e métricas (`src/front/pages/admin/dashboard/`)
 * Funcionalidade de acionar e desativar alarme
-* Interação com os utilizadores (Ver, eliminar e adicionar)
-* Inicio de Sessão
-* Visualização das Áreas Restritas e associação de dispositivos a Áreas Restritas
+* Interação com os utilizadores (Ver, eliminar e adicionar) (`src/front/pages/admin/users`)
+* Inicio de Sessão (`src/front/pages/auth/Login.vue`)
+* Visualização das Áreas Restritas e associação de dispositivos a Áreas Restritas (`src/front/pages/admin/restricted-areas`)
+
+### Template
+
+Como referido no [README](./src/front/README.md) na pasta do frontend, nós optámos por usar um template de VueJs com bastantes components já criados e construímos os nós desenvolvimentos "por cima".
 
 ### Acionar o alarme
 
@@ -232,7 +244,6 @@ Dentro de aproximadamente 10 segundos, o Alarme deverá aparecer a vermelho e co
 
 ## Vídeo de demonstração da plataforma
 
-<video width="100%" controls>
-  <source src="/documentation/WasteNotWarningVideo.webm" type="video/webm">
-  Your browser does not support the video tag.
-</video>
+Video está localizado no seguinte caminho `/documentation/WasteNotWarningVideo.mp4`
+
+[video de demonstracao](./documentation/WasteNotWarningVideo.mp4)
