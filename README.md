@@ -2,6 +2,10 @@
 
 Este projeto consiste em um sistema de alarme hipotético no qual possamos usar equipamentos, como câmaras, sensores, computadores que já tenhamos, ou de outras marcas, para integrarem o sistema.
 
+[Link](https://www.canva.com/design/DAFkbEFGrMY/ZyW0eSRY6CRl3X25Wc1jCQ/edit?utm_content=DAFkbEFGrMY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) para apresentação final.
+
+O relatório complementar está localizado no [ficheiro](./README-EXTRA.md) `README-EXTRA.md`.
+
 # Autoria
 
 Grupo p1g6:
@@ -87,8 +91,6 @@ DB_RESET_FLAG=true docker compose up
 ```
 
 # Interação entre o Backend e o Frontend
-
-
 
 # Requisitos
 
@@ -184,6 +186,7 @@ No ficheiro `src/database/triggers.sql` estão localizados todos os triggers uti
 * **idx_utilizador_telefone**: Quando é feito o login é feita uma pesquisa à base de dados pelo utilizador através da coluna Telefone, como podem existir muitos utilizadores de forma a aumentar a eficiência desta query colocou-se um index na coluna "Telefone".
 
 ## Transações
+
 * **AddUserEvent**: Adiciona um evento associado a um utilizador, o registo do evento é criado bem como a associação ao utilizador. Caso uma inserção falhe é feito um rollback à transação e é lançada uma excepção.
 
 ## Paginação e Filtração
@@ -226,10 +229,10 @@ No desenvolvimento do website, foi dado um maior foco aos usos principais, que s
 Para acionar o alarme, dirija-se para o Dashboard e garanta que o botão de Alarme se encontra em `Armado` e o que o Estado do Sistema seja `O alarme está Armado e a Funcionar`. Após isso, execute o script `src/database/triggerAlarm.sql`.
 
 Dentro de aproximadamente 10 segundos, o Alarme deverá aparecer a vermelho e com o texto de `Acionado`.
+
 ## Vídeo de demonstração da plataforma
 
 <video width="100%" controls>
   <source src="/documentation/WasteNotWarningVideo.webm" type="video/webm">
   Your browser does not support the video tag.
 </video>
-
